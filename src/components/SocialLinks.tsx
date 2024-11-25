@@ -5,7 +5,7 @@ export default function SocialLinks() {
   return (
     <div className="flex justify-center gap-6 mb-8">
       <a
-        href="https://open.spotify.com/show/magicalfm"
+        href="https://open.spotify.com/show/14hhOIT7FeMOQomciCN7ac"
         target="_blank"
         rel="noopener noreferrer"
         className="text-gray-600 hover:text-spotify dark:text-gray-400 dark:hover:text-spotify transition-colors"
@@ -14,7 +14,7 @@ export default function SocialLinks() {
         <Icon icon="mdi:spotify" className="w-8 h-8" />
       </a>
       <a
-        href="https://podcasts.apple.com/podcast/magicalfm"
+        href="https://podcasts.apple.com/us/podcast/%E3%83%9E%E3%83%82%E3%82%AB%E3%83%AB-fm/id1723445201"
         target="_blank"
         rel="noopener noreferrer"
         className="text-gray-600 hover:text-apple dark:text-gray-400 dark:hover:text-apple transition-colors"
@@ -23,7 +23,7 @@ export default function SocialLinks() {
         <Icon icon="mdi:podcast" className="w-8 h-8" />
       </a>
       <a
-        href="https://youtube.com/@magicalfm"
+        href="https://music.youtube.com/playlist?list=PL-CmGAXMh0sLM1HwNQhSmLazMhBuvVHZE&si=-nTseXVn_li15PxW"
         target="_blank"
         rel="noopener noreferrer"
         className="text-gray-600 hover:text-youtube dark:text-gray-400 dark:hover:text-youtube transition-colors"
