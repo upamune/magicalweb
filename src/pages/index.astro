@@ -1,0 +1,163 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header';
+import SocialLinks from '../components/SocialLinks';
+import MerchCarousel from '../components/MerchCarousel';
+import { getLatestEpisodes } from '../utils/rss';
+
+const episodes = await getLatestEpisodes(3);
+---
+
+<Layout title="マヂカル.fm - テクノロジーと人生のポッドキャスト">
+  <Header client:load />
+  
+  <main class="pt-20">
+    <!-- Hero Section -->
+    <section class="container mx-auto px-4 py-20 text-center">
+      <h1 class="text-5xl font-bold mb-6 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+        マヂカル.fm
+      </h1>
+      <p class="text-xl mb-8 max-w-2xl mx-auto">
+        マヂカル.fmは、関西人のプロダクトマネージャー@michiru_daと関西人(?)のソフトウェアエンジニアの@upamuneがほぼ週2で配信する雑談Podcast
+      </p>
+      
+      <SocialLinks client:load />
+
+      <div class="flex justify-center gap-4">
+        <a
+          href="/episodes"
+          class="bg-primary text-white px-6 py-3 rounded-lg hover:opacity-90 transition"
+        >
+          エピソード一覧
+        </a>
+        <a
+          href="#contact"
+          class="border border-primary text-primary dark:text-white px-6 py-3 rounded-lg hover:bg-primary hover:text-white transition"
+        >
+          お便り
+        </a>
+      </div>
+    </section>
+
+    <!-- Latest Episodes -->
+    <section id="episodes" class="bg-gray-50 dark:bg-gray-800 py-20">
+      <div class="container mx-auto px-4">
+        <h2 class="text-3xl font-bold mb-12 text-center">最新エピソード</h2>
+        {episodes.length > 0 ? (
+          <div class="grid md:grid-cols-3 gap-8">
+            {episodes.map((episode) => (
+              <article class="bg-white dark:bg-gray-900 rounded-lg shadow-lg overflow-hidden transform hover:scale-[1.02] transition-all duration-300">
+                <div class="p-6">
+                  <h3 class="text-xl font-bold mb-2">
+                    <a href={`/ep/${episode.number}`} class="hover:text-primary transition-colors">
+                      {episode.title}
+                    </a>
+                  </h3>
+                  <p class="text-gray-600 dark:text-gray-400 mb-4">
+                    {episode.pubDate}
+                  </p>
+                  <div 
+                    class="prose dark:prose-invert prose-sm max-h-32 overflow-hidden relative"
+                    set:html={episode.description}
+                  >
+                    <div class="absolute bottom-0 left-0 right-0 h-12 bg-gradient-to-t from-white dark:from-gray-800"></div>
+                  </div>
+                  <a 
+                    href={`/ep/${episode.number}`}
+                    class="inline-flex items-center gap-2 mt-4 text-primary hover:text-secondary transition-colors"
+                  >
+                    続きを読む
+                    <span class="i-[ri:arrow-right-line]"></span>
+                  </a>
+                </div>
+              </article>
+            ))}
+          </div>
+        ) : (
+          <div class="text-center py-12">
+            <p class="text-lg text-gray-600 dark:text-gray-400">
+              エピソードを読み込んでいます...
+            </p>
+          </div>
+        )}
+      </div>
+    </section>
+
+    <!-- Hosts -->
+    <section id="hosts" class="py-20">
+      <div class="container mx-auto px-4">
+        <h2 class="text-3xl font-bold mb-12 text-center">パーソナリティ</h2>
+        <div class="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+          <div class="text-center">
+            <img
+              src="https://unavatar.io/twitter/applism118"
+              alt="michiru_da"
+              class="w-32 h-32 rounded-full mx-auto mb-4 shadow-lg"
+            />
+            <h3 class="text-xl font-bold mb-2">@michiru_da</h3>
+            <p class="text-gray-600 dark:text-gray-400 mb-4">関西人のプロダクトマネージャー</p>
+            <a
+              href="https://x.com/applism118"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="text-primary hover:text-secondary transition-colors"
+            >
+              Follow on X
+            </a>
+          </div>
+          <div class="text-center">
+            <img
+              src="https://unavatar.io/twitter/upamune"
+              alt="upamune"
+              class="w-32 h-32 rounded-full mx-auto mb-4 shadow-lg"
+            />
+            <h3 class="text-xl font-bold mb-2">@upamune</h3>
+            <p class="text-gray-600 dark:text-gray-400 mb-4">関西人(?)のソフトウェアエンジニア</p>
+            <a
+              href="https://x.com/upamune"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="text-primary hover:text-secondary transition-colors"
+            >
+              Follow on X
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Merchandise -->
+    <section id="merch" class="bg-gray-50 dark:bg-gray-800 py-20">
+      <div class="container mx-auto px-4">
+        <h2 class="text-3xl font-bold mb-12 text-center">グッズ</h2>
+        <MerchCarousel client:load />
+      </div>
+    </section>
+
+    <!-- Contact -->
+    <section id="contact" class="py-20">
+      <div class="container mx-auto px-4">
+        <h2 class="text-3xl font-bold mb-12 text-center">お便り</h2>
+        <div class="max-w-2xl mx-auto">
+          <iframe
+            src="https://docs.google.com/forms/d/e/1FAIpQLSfCMUYzqk_q4YtIXoRQVQ4sj9wKGmqOGbUqZglpJxzR_z4IYw/viewform?embedded=true"
+            width="100%"
+            height="800"
+            frameborder="0"
+            marginheight="0"
+            marginwidth="0"
+            class="bg-white dark:bg-gray-800 rounded-lg shadow-lg"
+          >
+            お便りフォームを読み込んでいます...
+          </iframe>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="bg-gray-900 text-white py-12">
+    <div class="container mx-auto px-4 text-center">
+      <p>&copy; {new Date().getFullYear()} マヂカル.fm. All rights reserved.</p>
+    </div>
+  </footer>
+</Layout>

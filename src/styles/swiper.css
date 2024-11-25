@@ -1,0 +1,24 @@
+/* Swiper styles */
+.swiper-button-next,
+.swiper-button-prev {
+  color: theme('colors.primary.DEFAULT') !important;
+}
+
+.swiper-pagination-bullet-active {
+  background-color: theme('colors.primary.DEFAULT') !important;
+}
+
+/* Dark mode styles */
+.dark .swiper-button-next,
+.dark .swiper-button-prev {
+  color: theme('colors.white') !important;
+}
+
+.dark .swiper-pagination-bullet {
+  background-color: theme('colors.white') !important;
+  opacity: 0.5;
+}
+
+.dark .swiper-pagination-bullet-active {
+  opacity: 1;
+}

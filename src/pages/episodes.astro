@@ -1,0 +1,158 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header';
+import { getLatestEpisodes } from '../utils/rss';
+
+const initialEpisodes = await getLatestEpisodes(12);
+---
+
+<Layout 
+  title="エピソード一覧 - マヂカル.fm"
+  description="マヂカル.fmの全エピソード一覧です。関西人のプロダクトマネージャー@michiru_daと関西人(?)のソフトウェアエンジニアの@upamuneがほぼ週2で配信する雑談Podcastをお楽しみください。"
+  type="website"
+>
+  <Header client:load />
+  
+  <main class="pt-20 min-h-screen bg-gradient-to-b from-gray-50 to-white dark:from-gray-900 dark:to-gray-800">
+    <div class="container mx-auto px-4 py-12">
+      <h1 class="text-4xl font-bold mb-12 text-center bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+        エピソード一覧
+      </h1>
+      
+      <div id="episodes-grid" class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {initialEpisodes.map((episode) => (
+          <article class="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden transform hover:scale-[1.02] transition-all duration-300">
+            <div class="p-6">
+              <h3 class="text-xl font-bold mb-2">
+                <a href={`/ep/${episode.number}`} class="hover:text-primary transition-colors">
+                  {episode.title}
+                </a>
+              </h3>
+              <p class="text-gray-600 dark:text-gray-400 mb-4">
+                {episode.pubDate}
+              </p>
+              <div 
+                class="prose dark:prose-invert prose-sm max-h-32 overflow-hidden relative"
+                set:html={episode.description}
+              >
+                <div class="absolute bottom-0 left-0 right-0 h-12 bg-gradient-to-t from-white dark:from-gray-800"></div>
+              </div>
+              <a 
+                href={`/ep/${episode.number}`}
+                class="inline-flex items-center gap-2 mt-4 text-primary hover:text-secondary transition-colors"
+              >
+                続きを読む
+                <span class="i-[ri:arrow-right-line]"></span>
+              </a>
+            </div>
+          </article>
+        ))}
+      </div>
+
+      <div id="loading" class="text-center py-8 hidden">
+        <div class="inline-block h-12 w-12 animate-spin rounded-full border-4 border-primary border-r-transparent"></div>
+      </div>
+    </div>
+  </main>
+</Layout>
+
+<script>
+  let page = 1;
+  let loading = false;
+  let hasMore = true;
+  const ITEMS_PER_PAGE = 12;
+
+  const loadingEl = document.getElementById('loading');
+  const episodesGrid = document.getElementById('episodes-grid');
+  const options = {
+    root: null,
+    rootMargin: '100px',
+    threshold: 0.1
+  };
+
+  async function loadMoreEpisodes() {
+    if (loading || !hasMore) return;
+    
+    loading = true;
+    loadingEl?.classList.remove('hidden');
+    
+    try {
+      const response = await fetch(`/api/episodes?page=${page + 1}&limit=${ITEMS_PER_PAGE}`);
+      const data = await response.json();
+      
+      if (data.episodes.length < ITEMS_PER_PAGE) {
+        hasMore = false;
+      }
+      
+      if (data.episodes.length > 0) {
+        page += 1;
+        
+        data.episodes.forEach(episode => {
+          const article = document.createElement('article');
+          article.className = 'bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden transform hover:scale-[1.02] transition-all duration-300';
+          article.innerHTML = `
+            <div class="p-6">
+              <h3 class="text-xl font-bold mb-2">
+                <a href="/ep/${episode.number}" class="hover:text-primary transition-colors">
+                  ${episode.title}
+                </a>
+              </h3>
+              <p class="text-gray-600 dark:text-gray-400 mb-4">
+                ${episode.pubDate}
+              </p>
+              <div class="prose dark:prose-invert prose-sm max-h-32 overflow-hidden relative">
+                ${episode.description}
+                <div class="absolute bottom-0 left-0 right-0 h-12 bg-gradient-to-t from-white dark:from-gray-800"></div>
+              </div>
+              <a 
+                href="/ep/${episode.number}"
+                class="inline-flex items-center gap-2 mt-4 text-primary hover:text-secondary transition-colors"
+              >
+                続きを読む
+                <span class="i-[ri:arrow-right-line]"></span>
+              </a>
+            </div>
+          `;
+          episodesGrid?.appendChild(article);
+        });
+      }
+    } catch (error) {
+      console.error('Error loading more episodes:', error);
+    } finally {
+      loading = false;
+      loadingEl?.classList.add('hidden');
+    }
+  }
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        loadMoreEpisodes();
+      }
+    });
+  }, options);
+
+  if (loadingEl) {
+    observer.observe(loadingEl);
+  }
+
+  // ダークモード切り替え時のグラデーションの更新
+  const observer2 = new MutationObserver((mutations) => {
+    mutations.forEach((mutation) => {
+      if (mutation.attributeName === 'class') {
+        const isDark = document.documentElement.classList.contains('dark');
+        document.querySelectorAll('.prose').forEach(el => {
+          const gradient = el.querySelector('.absolute');
+          if (gradient) {
+            gradient.className = `absolute bottom-0 left-0 right-0 h-12 bg-gradient-to-t from-${isDark ? 'gray-800' : 'white'}`;
+          }
+        });
+      }
+    });
+  });
+
+  observer2.observe(document.documentElement, {
+    attributes: true,
+    attributeFilter: ['class'],
+  });
+</script>

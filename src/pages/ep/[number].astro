@@ -1,0 +1,164 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/Header';
+import SocialLinks from '../../components/SocialLinks';
+import { getEpisodeByNumber, getAllEpisodeNumbers } from '../../utils/rss';
+
+export async function getStaticPaths() {
+  const numbers = await getAllEpisodeNumbers();
+  return numbers.map(number => ({
+    params: { number: number.toString() }
+  }));
+}
+
+const { number } = Astro.params;
+const episode = await getEpisodeByNumber(parseInt(number ?? '0'));
+
+if (!episode) {
+  return Astro.redirect('/404');
+}
+
+const ogImage = `https://www.magical.fm/api/og/${number}`;
+---
+
+<Layout 
+  title={`${episode.title} - マヂカル.fm`}
+  description={episode.description.replace(/<[^>]*>/g, '').slice(0, 200) + '...'}
+  image={ogImage}
+  type="article"
+  publishedTime={new Date(episode.pubDate.replace(/年|月/g, '-').replace('日', '')).toISOString()}
+>
+  <Header client:load />
+  
+  <main class="pt-20 min-h-screen bg-gradient-to-b from-gray-50 to-white dark:from-gray-900 dark:to-gray-800">
+    <div class="container mx-auto px-4 py-12">
+      <article class="max-w-4xl mx-auto">
+        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl overflow-hidden">
+          {/* ヘッダー部分 */}
+          <div class="bg-gradient-to-r from-primary/10 to-secondary/10 dark:from-primary/20 dark:to-secondary/20 p-6 md:p-8">
+            <div class="flex flex-col gap-4">
+              <div class="flex flex-col md:flex-row justify-between items-start gap-4">
+                <h1 class="text-2xl md:text-3xl lg:text-4xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+                  {episode.title}
+                </h1>
+                <a
+                  href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(`${episode.title} を聴いています | マヂカル.fm`)}&url=${encodeURIComponent(`https://www.magical.fm/ep/${number}`)}&hashtags=magicalfm`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary text-white hover:bg-secondary transition-colors whitespace-nowrap self-end"
+                >
+                  <span class="i-[ri:twitter-x-fill]"></span>
+                  共有する
+                </a>
+              </div>
+              <p class="text-gray-600 dark:text-gray-400">
+                {episode.pubDate}
+              </p>
+              <SocialLinks client:load />
+            </div>
+          </div>
+
+          {/* オーディオプレイヤー */}
+          <div class="p-6 md:p-8 border-b dark:border-gray-700">
+            <div class="bg-gray-50 dark:bg-gray-900 rounded-xl p-4">
+              <audio
+                controls
+                class="w-full mb-4"
+                src={episode.audioUrl}
+              >
+                お使いのブラウザは音声再生に対応していません。
+              </audio>
+              <div class="flex flex-wrap gap-4">
+                <a 
+                  href={episode.audioUrl}
+                  download
+                  class="inline-flex items-center gap-2 text-primary hover:text-secondary transition-colors"
+                >
+                  <span class="i-[ri:download-line]"></span>
+                  音声をダウンロード
+                </a>
+                <a
+                  href="/episodes"
+                  class="inline-flex items-center gap-2 text-primary hover:text-secondary transition-colors"
+                >
+                  <span class="i-[ri:arrow-left-line]"></span>
+                  エピソード一覧
+                </a>
+              </div>
+            </div>
+          </div>
+
+          {/* エピソード本文 */}
+          <div class="p-6 md:p-8">
+            <div 
+              class="prose dark:prose-invert max-w-none"
+              set:html={episode.description}
+            />
+          </div>
+
+          {/* パーソナリティ */}
+          <div class="p-6 md:p-8 bg-gray-50 dark:bg-gray-900">
+            <h2 class="text-xl font-bold mb-6">パーソナリティ</h2>
+            <div class="grid md:grid-cols-2 gap-8">
+              <div class="flex items-center gap-4">
+                <img
+                  src="https://unavatar.io/twitter/applism118"
+                  alt="michiru_da"
+                  class="w-16 h-16 rounded-full"
+                />
+                <div>
+                  <h3 class="font-bold">@michiru_da</h3>
+                  <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">関西人のプロダクトマネージャー</p>
+                  <a
+                    href="https://x.com/applism118"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="text-primary hover:text-secondary transition-colors text-sm"
+                  >
+                    𝕏でフォロー
+                  </a>
+                </div>
+              </div>
+              <div class="flex items-center gap-4">
+                <img
+                  src="https://unavatar.io/twitter/upamune"
+                  alt="upamune"
+                  class="w-16 h-16 rounded-full"
+                />
+                <div>
+                  <h3 class="font-bold">@upamune</h3>
+                  <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">関西人(?)のソフトウェアエンジニア</p>
+                  <a
+                    href="https://x.com/upamune"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="text-primary hover:text-secondary transition-colors text-sm"
+                  >
+                    𝕏でフォロー
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
+    </div>
+  </main>
+</Layout>
+
+<style>
+  audio::-webkit-media-controls-panel {
+    background-color: theme('colors.gray.100');
+  }
+  .dark audio::-webkit-media-controls-panel {
+    background-color: theme('colors.gray.800');
+  }
+  audio::-webkit-media-controls-current-time-display,
+  audio::-webkit-media-controls-time-remaining-display {
+    color: theme('colors.gray.900');
+  }
+  .dark audio::-webkit-media-controls-current-time-display,
+  .dark audio::-webkit-media-controls-time-remaining-display {
+    color: theme('colors.gray.100');
+  }
+</style></content>

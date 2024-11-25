@@ -1,0 +1,62 @@
+# Site Information
+site:
+  name: "マヂカル.fm"
+  description: "マヂカル.fmは、関西人のプロダクトマネージャー@michiru_daと関西人(?)のソフトウェアエンジニアの@upamuneがほぼ週2で配信する雑談Podcast。"
+  url: "https://www.magical.fm"
+  ogImage: "https://www.magical.fm/ogp.jpg"
+  rss: "https://listen.style/p/magicalfm/rss"
+
+# Social Media
+social:
+  twitter: "magicalfm"
+  hashtag: "magicalfm"
+  contactForm: "https://magical.fm/hello"
+
+# Hosts
+hosts:
+  michiru:
+    name: "@michiru_da"
+    role: "関西人のプロダクトマネージャー"
+    twitter: "applism118"
+    avatar: "https://unavatar.io/twitter/applism118"
+  upamune:
+    name: "@upamune"
+    role: "関西人(?)のソフトウェアエンジニア"
+    twitter: "upamune"
+    avatar: "https://unavatar.io/twitter/upamune"
+
+# Platform Links
+platforms:
+  spotify:
+    name: "Spotify"
+    url: "https://open.spotify.com/show/magicalfm"
+    icon: "mdi:spotify"
+    color: "#1DB954"
+  apple:
+    name: "Apple Podcasts"
+    url: "https://podcasts.apple.com/podcast/magicalfm"
+    icon: "mdi:podcast"
+    color: "#FB5BC5"
+  youtube:
+    name: "YouTube"
+    url: "https://youtube.com/@magicalfm"
+    icon: "mdi:youtube"
+    color: "#FF0000"
+  rss:
+    name: "RSS"
+    url: "https://listen.style/p/magicalfm/rss"
+    icon: "mdi:rss"
+    color: "#FFA500"
+
+# Merchandise
+merchandise:
+  - id: "sticker"
+    name: "マヂカル.fm ステッカー"
+    price: 500
+    image: "/merch/sticker.jpg"
+    url: "https://suzuri.jp/magicalfm/sticker"
+  - id: "tshirt"
+    name: "マヂカル.fm Tシャツ"
+    price: 3500
+    image: "/merch/tshirt.jpg"
+    url: "https://suzuri.jp/magicalfm/tshirt"
