@@ -29,17 +29,17 @@ hosts:
 platforms:
   spotify:
     name: "Spotify"
-    url: "https://open.spotify.com/show/magicalfm"
+    url: "https://open.spotify.com/show/14hhOIT7FeMOQomciCN7ac"
     icon: "mdi:spotify"
     color: "#1DB954"
   apple:
     name: "Apple Podcasts"
-    url: "https://podcasts.apple.com/podcast/magicalfm"
+    url: "https://podcasts.apple.com/us/podcast/%E3%83%9E%E3%83%82%E3%82%AB%E3%83%AB-fm/id1723445201"
     icon: "mdi:podcast"
     color: "#FB5BC5"
   youtube:
     name: "YouTube"
-    url: "https://youtube.com/@magicalfm"
+    url: "https://music.youtube.com/playlist?list=PL-CmGAXMh0sLM1HwNQhSmLazMhBuvVHZE&si=-nTseXVn_li15PxW"
     icon: "mdi:youtube"
     color: "#FF0000"
   rss:
@@ -48,15 +48,20 @@ platforms:
     icon: "mdi:rss"
     color: "#FFA500"
 
-# Merchandise
+# グッズ
 merchandise:
   - id: "sticker"
     name: "マヂカル.fm ステッカー"
-    price: 500
-    image: "/merch/sticker.jpg"
-    url: "https://suzuri.jp/magicalfm/sticker"
+    price: 512
+    image: "https://i.gyazo.com/c17d0d8cbb67e4fc6a65ea980c3de7a0.png"
+    url: "https://suzuri.jp/magicalfm/16066952/sticker/m/white"
   - id: "tshirt"
     name: "マヂカル.fm Tシャツ"
-    price: 3500
-    image: "/merch/tshirt.jpg"
-    url: "https://suzuri.jp/magicalfm/tshirt"
+    price: 3553
+    image: "https://i.gyazo.com/088c1dcd1d33d85f5397bd1be5204464.png"
+    url: "https://suzuri.jp/magicalfm/16568649/t-shirt/s/black"
+  - id: "keyholder"
+    name: "マヂカル.fm キーホルダー"
+    price: 999
+    image: "https://i.gyazo.com/4116f7b8ef34418770f26608924ec233.png"
+    url: "https://suzuri.jp/magicalfm/16066952/acrylic-keychain/50x50mm/clear"
