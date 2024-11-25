@@ -3,7 +3,7 @@ import Layout from '../layouts/Layout.astro';
 import Header from '../components/Header';
 import { getLatestEpisodes } from '../utils/rss';
 
-const initialEpisodes = await getLatestEpisodes(12);
+const initialEpisodes = await getLatestEpisodes(1000);
 ---
 
 <Layout 

@@ -12,7 +12,7 @@ export async function getStaticPaths() {
 }
 
 const { number } = Astro.params;
-const episode = await getEpisodeByNumber(parseInt(number ?? '0'));
+const episode = await getEpisodeByNumber(Number.parseInt(number ?? '0'));
 
 if (!episode) {
   return Astro.redirect('/404');

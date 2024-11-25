@@ -1,21 +1,21 @@
 /* Swiper styles */
 .swiper-button-next,
 .swiper-button-prev {
-  color: theme('colors.primary.DEFAULT') !important;
+  color: #6366f1 !important;
 }
 
 .swiper-pagination-bullet-active {
-  background-color: theme('colors.primary.DEFAULT') !important;
+  background-color: #6366f1 !important;
 }
 
 /* Dark mode styles */
 .dark .swiper-button-next,
 .dark .swiper-button-prev {
-  color: theme('colors.white') !important;
+  color: #fff !important;
 }
 
 .dark .swiper-pagination-bullet {
-  background-color: theme('colors.white') !important;
+  background-color: #fff !important;
   opacity: 0.5;
 }
 

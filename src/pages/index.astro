@@ -2,7 +2,7 @@
 import Layout from '../layouts/Layout.astro';
 import Header from '../components/Header';
 import SocialLinks from '../components/SocialLinks';
-import MerchCarousel from '../components/MerchCarousel';
+import MerchGrid from '../components/MerchCarousel';
 import { getLatestEpisodes } from '../utils/rss';
 
 const episodes = await getLatestEpisodes(3);
@@ -102,7 +102,7 @@ const episodes = await getLatestEpisodes(3);
               rel="noopener noreferrer"
               class="text-primary hover:text-secondary transition-colors"
             >
-              Follow on X
+              𝕏でフォロー
             </a>
           </div>
           <div class="text-center">
@@ -119,7 +119,7 @@ const episodes = await getLatestEpisodes(3);
               rel="noopener noreferrer"
               class="text-primary hover:text-secondary transition-colors"
             >
-              Follow on X
+              𝕏でフォロー
             </a>
           </div>
         </div>
@@ -130,7 +130,7 @@ const episodes = await getLatestEpisodes(3);
     <section id="merch" class="bg-gray-50 dark:bg-gray-800 py-20">
       <div class="container mx-auto px-4">
         <h2 class="text-3xl font-bold mb-12 text-center">グッズ</h2>
-        <MerchCarousel client:load />
+        <MerchGrid client:load />
       </div>
     </section>
 

@@ -5,8 +5,16 @@ export default {
   theme: {
     extend: {
       colors: {
-        primary: '#6366f1',
-        secondary: '#ec4899',
+        primary: {
+          DEFAULT: '#6366f1',
+          light: '#818cf8',
+          dark: '#4f46e5'
+        },
+        secondary: {
+          DEFAULT: '#ec4899',
+          light: '#f472b6',
+          dark: '#db2777'
+        },
         spotify: '#1DB954',
         apple: '#FB5BC5',
         youtube: '#FF0000',
