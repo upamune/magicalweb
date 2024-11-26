@@ -1,4 +1,5 @@
-import React, { useEffect, useRef, useState } from 'react';
+import type React from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Icon } from '@iconify/react';
 import { useAudioStore } from '../store/audioStore';
 
@@ -27,6 +28,14 @@ export default function AudioPlayer() {
     setPlaybackRate,
     close,
   } = useAudioStore();
+
+  useEffect(() => {
+    if (!episodeNumber) {
+      document.body.classList.remove('has-player');
+    } else {
+      document.body.classList.add('has-player');
+    }
+  }, [episodeNumber]);
 
   useEffect(() => {
     if (audioRef.current && currentTime > 0) {

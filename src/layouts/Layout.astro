@@ -74,8 +74,12 @@ const canonicalURL = new URL(Astro.url.pathname, "https://www.magical.fm");
       }
     </script>
   </head>
-  <body class="bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 pb-16">
-    <slot />
+  <body class="bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100">
+    <div class="min-h-screen flex flex-col">
+      <main class="flex-grow">
+        <slot />
+      </main>
+    </div>
     <AudioPlayer client:load />
   </body>
 </html>
@@ -86,16 +90,25 @@ const canonicalURL = new URL(Astro.url.pathname, "https://www.magical.fm");
     --accent-light: 224, 204, 250;
     --accent-dark: 49, 10, 101;
   }
+  
   html {
     font-family: system-ui, sans-serif;
     scroll-behavior: smooth;
   }
-  body {
-    min-height: 100vh;
-  }
+  
   @media (prefers-reduced-motion: reduce) {
     html {
       scroll-behavior: auto;
+    }
+  }
+
+  body.has-player {
+    padding-bottom: 8rem;
+  }
+
+  @media (max-width: 640px) {
+    body.has-player {
+      padding-bottom: 10rem;
     }
   }
 </style>
