@@ -2,6 +2,7 @@
 import Layout from '../../layouts/Layout.astro';
 import Header from '../../components/Header';
 import SocialLinks from '../../components/SocialLinks';
+import PlayButton from '../../components/PlayButton';
 import { getEpisodeByNumber, getAllEpisodeNumbers } from '../../utils/rss';
 
 export async function getStaticPaths() {
@@ -12,7 +13,7 @@ export async function getStaticPaths() {
 }
 
 const { number } = Astro.params;
-const episode = await getEpisodeByNumber(Number.parseInt(number ?? '0'));
+const episode = await getEpisodeByNumber(parseInt(number ?? '0'));
 
 if (!episode) {
   return Astro.redirect('/404');
@@ -58,34 +59,14 @@ const ogImage = `https://www.magical.fm/api/og/${number}`;
             </div>
           </div>
 
-          {/* オーディオプレイヤー */}
+          {/* 再生ボタン */}
           <div class="p-6 md:p-8 border-b dark:border-gray-700">
-            <div class="bg-gray-50 dark:bg-gray-900 rounded-xl p-4">
-              <audio
-                controls
-                class="w-full mb-4"
-                src={episode.audioUrl}
-              >
-                お使いのブラウザは音声再生に対応していません。
-              </audio>
-              <div class="flex flex-wrap gap-4">
-                <a 
-                  href={episode.audioUrl}
-                  download
-                  class="inline-flex items-center gap-2 text-primary hover:text-secondary transition-colors"
-                >
-                  <span class="i-[ri:download-line]"></span>
-                  音声をダウンロード
-                </a>
-                <a
-                  href="/episodes"
-                  class="inline-flex items-center gap-2 text-primary hover:text-secondary transition-colors"
-                >
-                  <span class="i-[ri:arrow-left-line]"></span>
-                  エピソード一覧
-                </a>
-              </div>
-            </div>
+            <PlayButton
+              client:load
+              episodeNumber={episode.number}
+              episodeTitle={episode.title}
+              audioUrl={episode.audioUrl}
+            />
           </div>
 
           {/* エピソード本文 */}
@@ -161,4 +142,4 @@ const ogImage = `https://www.magical.fm/api/og/${number}`;
   .dark audio::-webkit-media-controls-time-remaining-display {
     color: theme('colors.gray.100');
   }
-</style></content>
+</style>

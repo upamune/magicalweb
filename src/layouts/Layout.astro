@@ -1,5 +1,7 @@
 ---
 import { ViewTransitions } from 'astro:transitions';
+import AudioPlayer from '../components/AudioPlayer';
+
 interface Props {
   title: string;
   description?: string;
@@ -72,8 +74,9 @@ const canonicalURL = new URL(Astro.url.pathname, "https://www.magical.fm");
       }
     </script>
   </head>
-  <body class="bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100">
+  <body class="bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 pb-16">
     <slot />
+    <AudioPlayer client:load />
   </body>
 </html>
 
