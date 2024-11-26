@@ -17,6 +17,7 @@ interface AudioState {
   setPlaybackRate: (rate: number) => void;
   setEpisode: (number: number, title: string, url: string) => void;
   reset: () => void;
+  close: () => void;
 }
 
 export const useAudioStore = create<AudioState>()(
@@ -43,6 +44,14 @@ export const useAudioStore = create<AudioState>()(
         isPlaying: true,
       })),
       reset: () => set({
+        isPlaying: false,
+        currentTime: 0,
+        duration: 0,
+        episodeNumber: null,
+        episodeTitle: '',
+        audioUrl: '',
+      }),
+      close: () => set({
         isPlaying: false,
         currentTime: 0,
         duration: 0,

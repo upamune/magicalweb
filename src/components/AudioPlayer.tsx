@@ -23,6 +23,7 @@ export default function AudioPlayer() {
     setDuration,
     setVolume,
     setPlaybackRate,
+    close,
   } = useAudioStore();
 
   useEffect(() => {
@@ -54,6 +55,60 @@ export default function AudioPlayer() {
       audioRef.current.playbackRate = playbackRate;
     }
   }, [playbackRate]);
+
+  // キーボードショートカットの処理
+  useEffect(() => {
+    const handleKeyPress = (e: KeyboardEvent) => {
+      // テキスト入力中は無視
+      if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) {
+        return;
+      }
+
+      switch (e.code) {
+        case 'Space':
+          e.preventDefault();
+          setPlaying(!isPlaying);
+          break;
+        case 'ArrowLeft':
+          e.preventDefault();
+          handleSkip(-SKIP_SECONDS);
+          break;
+        case 'ArrowRight':
+          e.preventDefault();
+          handleSkip(SKIP_SECONDS);
+          break;
+        case 'KeyM':
+          e.preventDefault();
+          setVolume(volume === 0 ? 1 : 0);
+          break;
+        case 'Comma':
+          if (e.shiftKey) {
+            e.preventDefault();
+            const currentIndex = PLAYBACK_RATES.indexOf(playbackRate);
+            if (currentIndex > 0) {
+              setPlaybackRate(PLAYBACK_RATES[currentIndex - 1]);
+            }
+          }
+          break;
+        case 'Period':
+          if (e.shiftKey) {
+            e.preventDefault();
+            const currentIndex = PLAYBACK_RATES.indexOf(playbackRate);
+            if (currentIndex < PLAYBACK_RATES.length - 1) {
+              setPlaybackRate(PLAYBACK_RATES[currentIndex + 1]);
+            }
+          }
+          break;
+        case 'Escape':
+          e.preventDefault();
+          close();
+          break;
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyPress);
+    return () => window.removeEventListener('keydown', handleKeyPress);
+  }, [isPlaying, volume, playbackRate, setPlaying, setVolume, setPlaybackRate, close]);
 
   const formatTime = (time: number) => {
     const minutes = Math.floor(time / 60);
@@ -147,6 +202,14 @@ export default function AudioPlayer() {
               再生中のエピソード
             </p>
           </div>
+          <button
+            onClick={close}
+            className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+            aria-label="プレーヤーを閉じる"
+            title="Escキーでプレーヤーを閉じる"
+          >
+            <Icon icon="ri:close-line" className="w-5 h-5" />
+          </button>
         </div>
 
         {/* Controls Row */}
@@ -154,8 +217,9 @@ export default function AudioPlayer() {
           {/* Skip Backward */}
           <button
             onClick={() => handleSkip(-SKIP_SECONDS)}
-            className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+            className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors group"
             aria-label={`${SKIP_SECONDS}秒戻る`}
+            title="←キーで10秒戻る"
           >
             <Icon icon="ri:arrow-go-back-line" className="w-5 h-5" />
           </button>
@@ -165,6 +229,7 @@ export default function AudioPlayer() {
             onClick={() => setPlaying(!isPlaying)}
             className="p-3 rounded-full bg-primary hover:bg-primary-dark text-white transition-colors"
             aria-label={isPlaying ? '一時停止' : '再生'}
+            title="スペースキーで再生/一時停止"
           >
             <Icon 
               icon={isPlaying ? 'ri:pause-fill' : 'ri:play-fill'} 
@@ -177,6 +242,7 @@ export default function AudioPlayer() {
             onClick={() => handleSkip(SKIP_SECONDS)}
             className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
             aria-label={`${SKIP_SECONDS}秒進む`}
+            title="→キーで10秒進む"
           >
             <Icon icon="ri:arrow-go-forward-line" className="w-5 h-5" />
           </button>
@@ -194,6 +260,7 @@ export default function AudioPlayer() {
               onClick={() => setShowSpeedMenu(!showSpeedMenu)}
               className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors text-sm font-medium"
               aria-label="再生速度"
+              title="Shift + < または > で再生速度を変更"
             >
               {playbackRate}x
             </button>
@@ -221,6 +288,7 @@ export default function AudioPlayer() {
               onClick={() => setVolume(volume === 0 ? 1 : 0)}
               className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
               aria-label="音量"
+              title="Mキーでミュート切り替え"
             >
               <Icon 
                 icon={
