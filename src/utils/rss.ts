@@ -1,6 +1,7 @@
 import { format, parseISO } from 'date-fns';
 import { ja } from 'date-fns/locale';
 import DOMPurify from 'isomorphic-dompurify';
+import { Window } from 'happy-dom';
 import episodesData from '../data/episodes.json';
 
 export interface Episode {
@@ -11,17 +12,33 @@ export interface Episode {
   audioUrl: string;
 }
 
-// HTMLをサニタイズする関数
+// HTMLをサニタイズし、img要素にloading="lazy"を追加する関数
 export function sanitizeHtml(html: string): string {
-  return DOMPurify.sanitize(html, {
+  // happy-domを使用してHTMLを解析
+  const window = new Window();
+  const document = window.document;
+  document.body.innerHTML = html;
+  
+  // すべてのimg要素にloading="lazy"を追加
+  for (const img of document.querySelectorAll('img')) {
+    img.setAttribute('loading', 'lazy');
+    if (!img.hasAttribute('alt')) {
+      img.setAttribute('alt', '');
+    }
+  }
+
+  // サニタイズされたHTMLを取得
+  const sanitized = DOMPurify.sanitize(document.body.innerHTML, {
     USE_PROFILES: { html: true },
     ALLOWED_TAGS: [
       'p', 'br', 'strong', 'em', 'a', 'ul', 'ol', 'li',
       'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
-      'blockquote', 'code', 'pre'
+      'blockquote', 'code', 'pre', 'img'
     ],
-    ALLOWED_ATTR: ['href', 'target', 'rel', 'class'],
+    ALLOWED_ATTR: ['href', 'target', 'rel', 'class', 'src', 'alt', 'loading']
   });
+
+  return sanitized;
 }
 
 // 日付を日本語フォーマットに変換
