@@ -1,8 +1,13 @@
 import { parse } from 'yaml';
 import fs from 'fs';
-import path from 'path';
+import { fileURLToPath } from 'url';
+import { dirname, join } from 'path';
 
-const configPath = path.join(process.cwd(), 'src/config/site.yaml');
+// Get the directory name of the current module
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+const configPath = join(__dirname, '../config/site.yaml');
 const configFile = fs.readFileSync(configPath, 'utf8');
 
 export const config = parse(configFile);
