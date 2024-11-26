@@ -1,5 +1,4 @@
-import type React from 'react';
-import { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Icon } from '@iconify/react';
 import { useAudioStore } from '../store/audioStore';
 
@@ -8,7 +7,10 @@ const SKIP_SECONDS = 10;
 
 export default function AudioPlayer() {
   const audioRef = useRef<HTMLAudioElement>(null);
+  const progressRef = useRef<HTMLDivElement>(null);
   const [showSpeedMenu, setShowSpeedMenu] = useState(false);
+  const [hoverTime, setHoverTime] = useState<number | null>(null);
+  const [hoverPosition, setHoverPosition] = useState<number | null>(null);
   const {
     isPlaying,
     currentTime,
@@ -131,6 +133,37 @@ export default function AudioPlayer() {
     }
   };
 
+  const handleProgressClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!progressRef.current) return;
+    
+    const rect = progressRef.current.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const percentage = x / rect.width;
+    const newTime = percentage * duration;
+    
+    if (audioRef.current) {
+      audioRef.current.currentTime = newTime;
+      setCurrentTime(newTime);
+    }
+  };
+
+  const handleProgressHover = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!progressRef.current) return;
+    
+    const rect = progressRef.current.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const percentage = x / rect.width;
+    const time = percentage * duration;
+    
+    setHoverTime(time);
+    setHoverPosition(x);
+  };
+
+  const handleProgressLeave = () => {
+    setHoverTime(null);
+    setHoverPosition(null);
+  };
+
   const handleSeek = (e: React.ChangeEvent<HTMLInputElement>) => {
     const time = parseFloat(e.target.value);
     setCurrentTime(time);
@@ -174,11 +207,25 @@ export default function AudioPlayer() {
       
       <div className="container mx-auto px-4">
         {/* Progress Bar */}
-        <div className="h-1 -mt-[1px] bg-gray-200 dark:bg-gray-700">
+        <div 
+          ref={progressRef}
+          className="h-2 -mt-[1px] bg-gray-200 dark:bg-gray-700 cursor-pointer relative group"
+          onClick={handleProgressClick}
+          onMouseMove={handleProgressHover}
+          onMouseLeave={handleProgressLeave}
+        >
           <div
-            className="h-full bg-primary"
+            className="h-full bg-primary transition-all duration-100 group-hover:bg-primary-light"
             style={{ width: `${(currentTime / duration) * 100}%` }}
           />
+          {hoverTime !== null && hoverPosition !== null && (
+            <div 
+              className="absolute bottom-full mb-2 -translate-x-1/2 bg-gray-900 dark:bg-gray-700 text-white px-2 py-1 rounded text-xs"
+              style={{ left: hoverPosition }}
+            >
+              {formatTime(hoverTime)}
+            </div>
+          )}
         </div>
 
         {/* Title Row */}
