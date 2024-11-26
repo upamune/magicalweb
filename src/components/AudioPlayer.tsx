@@ -1,9 +1,9 @@
-import type React from 'react';
-import { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Icon } from '@iconify/react';
 import { useAudioStore } from '../store/audioStore';
 
 const PLAYBACK_RATES = [0.5, 0.75, 1, 1.25, 1.5, 1.75, 2];
+const SKIP_SECONDS = 10;
 
 export default function AudioPlayer() {
   const audioRef = useRef<HTMLAudioElement>(null);
@@ -93,6 +93,17 @@ export default function AudioPlayer() {
     setShowSpeedMenu(false);
   };
 
+  const handleSkip = (seconds: number) => {
+    if (audioRef.current) {
+      const newTime = Math.min(
+        Math.max(0, audioRef.current.currentTime + seconds),
+        duration
+      );
+      audioRef.current.currentTime = newTime;
+      setCurrentTime(newTime);
+    }
+  };
+
   if (!episodeNumber) return null;
 
   return (
@@ -108,7 +119,7 @@ export default function AudioPlayer() {
       <div className="container mx-auto px-4 py-3">
         <div className="flex items-center gap-4">
           {/* Episode Info */}
-          <div className="flex-1 min-w-0">
+          <div className="hidden sm:block flex-1 min-w-0">
             <h3 className="text-sm font-medium truncate">
               <a 
                 href={`/ep/${episodeNumber}`}
@@ -120,7 +131,16 @@ export default function AudioPlayer() {
           </div>
 
           {/* Controls */}
-          <div className="flex items-center gap-4">
+          <div className="flex-1 sm:flex-none flex items-center justify-center gap-4">
+            {/* Skip Backward */}
+            <button
+              onClick={() => handleSkip(-SKIP_SECONDS)}
+              className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+              aria-label={`${SKIP_SECONDS}秒戻る`}
+            >
+              <Icon icon="ri:arrow-go-back-line" className="w-5 h-5" />
+            </button>
+
             {/* Play/Pause Button */}
             <button
               onClick={() => setPlaying(!isPlaying)}
@@ -131,6 +151,15 @@ export default function AudioPlayer() {
                 icon={isPlaying ? 'ri:pause-fill' : 'ri:play-fill'} 
                 className="w-6 h-6"
               />
+            </button>
+
+            {/* Skip Forward */}
+            <button
+              onClick={() => handleSkip(SKIP_SECONDS)}
+              className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+              aria-label={`${SKIP_SECONDS}秒進む`}
+            >
+              <Icon icon="ri:arrow-go-forward-line" className="w-5 h-5" />
             </button>
 
             {/* Time Display */}
