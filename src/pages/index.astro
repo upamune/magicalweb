@@ -4,10 +4,8 @@ import Header from '../components/Header';
 import SocialLinks from '../components/SocialLinks';
 import MerchGrid from '../components/MerchCarousel';
 import { getLatestEpisodes } from '../utils/rss';
-import { getMerchandise } from '../utils/config';
 
 const episodes = await getLatestEpisodes(3);
-const merchandise = getMerchandise();
 ---
 
 <Layout title="マヂカル.fm - テクノロジーと人生のポッドキャスト">
@@ -62,7 +60,7 @@ const merchandise = getMerchandise();
                     class="prose dark:prose-invert prose-sm max-h-32 overflow-hidden relative"
                     set:html={episode.description}
                   >
-                    <div class="absolute bottom-0 left-0 right-0 h-12 bg-gradient-to-t from-white dark:from-gray-900"></div>
+                    <div class="absolute bottom-0 left-0 right-0 h-12 bg-gradient-to-t from-white dark:from-gray-800"></div>
                   </div>
                   <a 
                     href={`/ep/${episode.number}`}
@@ -92,10 +90,10 @@ const merchandise = getMerchandise();
         <div class="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
           <div class="text-center">
             <img
+              loading="lazy"
               src="https://unavatar.io/twitter/applism118"
               alt="michiru_da"
               class="w-32 h-32 rounded-full mx-auto mb-4 shadow-lg"
-              loading="lazy"
             />
             <h3 class="text-xl font-bold mb-2">@michiru_da</h3>
             <p class="text-gray-600 dark:text-gray-400 mb-4">関西人のプロダクトマネージャー</p>
@@ -110,10 +108,10 @@ const merchandise = getMerchandise();
           </div>
           <div class="text-center">
             <img
+              loading="lazy"
               src="https://unavatar.io/twitter/upamune"
               alt="upamune"
               class="w-32 h-32 rounded-full mx-auto mb-4 shadow-lg"
-              loading="lazy"
             />
             <h3 class="text-xl font-bold mb-2">@upamune</h3>
             <p class="text-gray-600 dark:text-gray-400 mb-4">関西人(?)のソフトウェアエンジニア</p>
@@ -134,7 +132,7 @@ const merchandise = getMerchandise();
     <section id="merch" class="bg-gray-50 dark:bg-gray-800 py-20">
       <div class="container mx-auto px-4">
         <h2 class="text-3xl font-bold mb-12 text-center">グッズ</h2>
-        <MerchGrid client:load items={merchandise} />
+        <MerchGrid client:load />
       </div>
     </section>
 
