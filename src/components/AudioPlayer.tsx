@@ -1,4 +1,5 @@
-import React, { useEffect, useRef, useState } from 'react';
+import type React from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Icon } from '@iconify/react';
 import { useAudioStore } from '../store/audioStore';
 
@@ -116,10 +117,24 @@ export default function AudioPlayer() {
         onEnded={() => setPlaying(false)}
       />
       
-      <div className="container mx-auto px-4 py-3">
-        <div className="flex items-center gap-4">
-          {/* Episode Info */}
-          <div className="hidden sm:block flex-1 min-w-0">
+      <div className="container mx-auto px-4">
+        {/* Progress Bar */}
+        <div className="h-1 -mt-[1px] bg-gray-200 dark:bg-gray-700">
+          <div
+            className="h-full bg-primary"
+            style={{ width: `${(currentTime / duration) * 100}%` }}
+          />
+        </div>
+
+        {/* Title Row */}
+        <div className="py-2 flex items-center gap-3 border-b border-gray-200 dark:border-gray-700">
+          <div className="w-8 h-8 flex items-center justify-center">
+            <Icon 
+              icon={isPlaying ? 'ri:volume-up-fill' : 'ri:volume-mute-fill'} 
+              className="w-5 h-5 text-primary"
+            />
+          </div>
+          <div className="flex-1 min-w-0">
             <h3 className="text-sm font-medium truncate">
               <a 
                 href={`/ep/${episodeNumber}`}
@@ -128,112 +143,105 @@ export default function AudioPlayer() {
                 {episodeTitle}
               </a>
             </h3>
+            <p className="text-xs text-gray-500 dark:text-gray-400">
+              再生中のエピソード
+            </p>
+          </div>
+        </div>
+
+        {/* Controls Row */}
+        <div className="py-3 flex items-center justify-center gap-4">
+          {/* Skip Backward */}
+          <button
+            onClick={() => handleSkip(-SKIP_SECONDS)}
+            className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+            aria-label={`${SKIP_SECONDS}秒戻る`}
+          >
+            <Icon icon="ri:arrow-go-back-line" className="w-5 h-5" />
+          </button>
+
+          {/* Play/Pause Button */}
+          <button
+            onClick={() => setPlaying(!isPlaying)}
+            className="p-3 rounded-full bg-primary hover:bg-primary-dark text-white transition-colors"
+            aria-label={isPlaying ? '一時停止' : '再生'}
+          >
+            <Icon 
+              icon={isPlaying ? 'ri:pause-fill' : 'ri:play-fill'} 
+              className="w-6 h-6"
+            />
+          </button>
+
+          {/* Skip Forward */}
+          <button
+            onClick={() => handleSkip(SKIP_SECONDS)}
+            className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+            aria-label={`${SKIP_SECONDS}秒進む`}
+          >
+            <Icon icon="ri:arrow-go-forward-line" className="w-5 h-5" />
+          </button>
+
+          {/* Time Display */}
+          <div className="hidden sm:flex items-center gap-2 text-sm tabular-nums">
+            <span>{formatTime(currentTime)}</span>
+            <span>/</span>
+            <span>{formatTime(duration)}</span>
           </div>
 
-          {/* Controls */}
-          <div className="flex-1 sm:flex-none flex items-center justify-center gap-4">
-            {/* Skip Backward */}
+          {/* Playback Speed */}
+          <div className="relative">
             <button
-              onClick={() => handleSkip(-SKIP_SECONDS)}
-              className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
-              aria-label={`${SKIP_SECONDS}秒戻る`}
+              onClick={() => setShowSpeedMenu(!showSpeedMenu)}
+              className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors text-sm font-medium"
+              aria-label="再生速度"
             >
-              <Icon icon="ri:arrow-go-back-line" className="w-5 h-5" />
+              {playbackRate}x
             </button>
+            
+            {showSpeedMenu && (
+              <div className="absolute bottom-full right-0 mb-2 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 py-2">
+                {PLAYBACK_RATES.map((rate) => (
+                  <button
+                    key={rate}
+                    onClick={() => handleSpeedChange(rate)}
+                    className={`w-full px-4 py-2 text-left hover:bg-gray-100 dark:hover:bg-gray-700 text-sm ${
+                      rate === playbackRate ? 'text-primary font-medium' : ''
+                    }`}
+                  >
+                    {rate}x
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
 
-            {/* Play/Pause Button */}
+          {/* Volume Control */}
+          <div className="hidden sm:flex items-center gap-2">
             <button
-              onClick={() => setPlaying(!isPlaying)}
+              onClick={() => setVolume(volume === 0 ? 1 : 0)}
               className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
-              aria-label={isPlaying ? '一時停止' : '再生'}
+              aria-label="音量"
             >
               <Icon 
-                icon={isPlaying ? 'ri:pause-fill' : 'ri:play-fill'} 
-                className="w-6 h-6"
+                icon={
+                  volume === 0 
+                    ? 'ri:volume-mute-fill' 
+                    : volume < 0.5 
+                      ? 'ri:volume-down-fill' 
+                      : 'ri:volume-up-fill'
+                }
+                className="w-5 h-5"
               />
             </button>
-
-            {/* Skip Forward */}
-            <button
-              onClick={() => handleSkip(SKIP_SECONDS)}
-              className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
-              aria-label={`${SKIP_SECONDS}秒進む`}
-            >
-              <Icon icon="ri:arrow-go-forward-line" className="w-5 h-5" />
-            </button>
-
-            {/* Time Display */}
-            <div className="hidden sm:flex items-center gap-2 text-sm tabular-nums">
-              <span>{formatTime(currentTime)}</span>
-              <span>/</span>
-              <span>{formatTime(duration)}</span>
-            </div>
-
-            {/* Progress Bar */}
             <input
               type="range"
               min={0}
-              max={duration}
-              value={currentTime}
-              onChange={handleSeek}
-              className="w-32 sm:w-48 md:w-64 h-1 bg-gray-200 dark:bg-gray-700 rounded-full appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:h-3 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-primary"
+              max={1}
+              step={0.1}
+              value={volume}
+              onChange={handleVolumeChange}
+              className="w-20 h-1 bg-gray-200 dark:bg-gray-700 rounded-full appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:h-3 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-primary"
             />
-
-            {/* Playback Speed */}
-            <div className="relative">
-              <button
-                onClick={() => setShowSpeedMenu(!showSpeedMenu)}
-                className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors text-sm font-medium"
-                aria-label="再生速度"
-              >
-                {playbackRate}x
-              </button>
-              
-              {showSpeedMenu && (
-                <div className="absolute bottom-full right-0 mb-2 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 py-2">
-                  {PLAYBACK_RATES.map((rate) => (
-                    <button
-                      key={rate}
-                      onClick={() => handleSpeedChange(rate)}
-                      className={`w-full px-4 py-2 text-left hover:bg-gray-100 dark:hover:bg-gray-700 text-sm ${
-                        rate === playbackRate ? 'text-primary font-medium' : ''
-                      }`}
-                    >
-                      {rate}x
-                    </button>
-                  ))}
-                </div>
-              )}
-            </div>
-
-            {/* Volume Control */}
-            <div className="hidden sm:flex items-center gap-2">
-              <button
-                onClick={() => setVolume(volume === 0 ? 1 : 0)}
-                className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
-                aria-label="音量"
-              >
-                <Icon 
-                  icon={
-                    volume === 0 
-                      ? 'ri:volume-mute-fill' 
-                      : volume < 0.5 
-                        ? 'ri:volume-down-fill' 
-                        : 'ri:volume-up-fill'
-                  }
-                  className="w-5 h-5"
-                />
-              </button>
-              <input
-                type="range"
-                min={0}
-                max={1}
-                step={0.1}
-                value={volume}
-                onChange={handleVolumeChange}
-                className="w-20 h-1 bg-gray-200 dark:bg-gray-700 rounded-full appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:h-3 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-primary"
-              />
-            </div>
           </div>
         </div>
       </div>
