@@ -53,15 +53,15 @@ merchandise:
   - id: "sticker"
     name: "マヂカル.fm ステッカー"
     price: 512
-    image: "https://i.gyazo.com/c17d0d8cbb67e4fc6a65ea980c3de7a0.png"
+    image: "https://i.gyazo.com/c3cd2c8e04783ab886c26e0ea263a211.webp"
     url: "https://suzuri.jp/magicalfm/16066952/sticker/m/white"
   - id: "tshirt"
     name: "マヂカル.fm Tシャツ"
     price: 3553
-    image: "https://i.gyazo.com/088c1dcd1d33d85f5397bd1be5204464.png"
+    image: "https://i.gyazo.com/b49574018bdfe55079a3def715631e6e.webp"
     url: "https://suzuri.jp/magicalfm/16568649/t-shirt/s/black"
   - id: "keyholder"
     name: "マヂカル.fm キーホルダー"
     price: 999
-    image: "https://i.gyazo.com/4116f7b8ef34418770f26608924ec233.png"
+    image: "https://i.gyazo.com/70802321166a64955067b3527f9d2aa7.webp"
     url: "https://suzuri.jp/magicalfm/16066952/acrylic-keychain/50x50mm/clear"
