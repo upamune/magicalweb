@@ -17,7 +17,14 @@ export default function Header() {
             <a href="/episodes" className="hover:text-primary transition-colors">エピソード</a>
             <a href="/#hosts" className="hover:text-primary transition-colors">パーソナリティ</a>
             <a href="/#merch" className="hover:text-primary transition-colors">グッズ</a>
-            <a href="/#contact" className="hover:text-primary transition-colors">お便り</a>
+            <a 
+              href="https://go.magical.fm/hello" 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className="hover:text-primary transition-colors"
+            >
+              お便り
+            </a>
             <ThemeToggle />
           </div>
 
@@ -86,7 +93,9 @@ export default function Header() {
               グッズ
             </a>
             <a
-              href="/#contact"
+              href="https://go.magical.fm/hello"
+              target="_blank"
+              rel="noopener noreferrer"
               className="px-4 py-2 rounded-lg hover:bg-primary/10 transition-colors"
               onClick={() => setIsMenuOpen(false)}
             >

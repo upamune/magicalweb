@@ -23,19 +23,21 @@ const episodes = await getLatestEpisodes(3);
       
       <SocialLinks client:load />
 
-      <div class="flex justify-center gap-4">
+      <div class="flex flex-col sm:flex-row justify-center gap-4 mt-8">
         <a
           href="/episodes"
-          class="bg-primary text-white px-6 py-3 rounded-lg hover:opacity-90 transition"
+          class="bg-primary text-white px-8 py-4 rounded-lg hover:bg-primary-dark transition-colors duration-300 shadow-lg hover:shadow-xl"
         >
           エピソード一覧
         </a>
         <a
-          href="#contact"
-          class="border border-primary text-primary dark:text-white px-6 py-3 rounded-lg hover:bg-primary hover:text-white transition"
-        >
-          お便り
-        </a>
+        href="https://go.magical.fm/hello"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="border-2 border-primary text-primary hover:text-white dark:text-white px-8 py-4 rounded-lg hover:bg-primary hover:border-primary transition-colors duration-300"
+      >
+        お便り
+      </a>
       </div>
     </section>
 
@@ -133,16 +135,6 @@ const episodes = await getLatestEpisodes(3);
       <div class="container mx-auto px-4">
         <h2 class="text-3xl font-bold mb-12 text-center">グッズ</h2>
         <MerchGrid client:load />
-      </div>
-    </section>
-
-    <!-- Contact -->
-    <section id="contact" class="py-20">
-      <div class="container mx-auto px-4">
-        <h2 class="text-3xl font-bold mb-12 text-center">お便り</h2>
-        <div class="max-w-2xl mx-auto">
-          <iframe data-tally-src="https://tally.so/embed/wLp9bp?hideTitle=1&dynamicHeight=1" loading="lazy" width="100%" height="839" frameborder="0" marginheight="0" marginwidth="0" title="マヂカル.fm へのお便り"></iframe><script>var d=document,w="https://tally.so/widgets/embed.js",v=function(){"undefined"!=typeof Tally?Tally.loadEmbeds():d.querySelectorAll("iframe[data-tally-src]:not([src])").forEach((function(e){e.src=e.dataset.tallySrc}))};if("undefined"!=typeof Tally)v();else if(d.querySelector('script[src="'+w+'"]')==null){var s=d.createElement("script");s.src=w,s.onload=v,s.onerror=v,d.body.appendChild(s);}</script>
-        </div>
       </div>
     </section>
   </main>
