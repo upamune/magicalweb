@@ -4,7 +4,7 @@ on:
   push:
     branches: [ main ]
   schedule:
-    - cron: '30 18 * * 0,3'  # 3:30 AM JST Monday and Thursday
+    - cron: '0 19,21 * * 0,3'  # 3:30 AM JST Monday and Thursday
   workflow_dispatch:
 
 jobs:
