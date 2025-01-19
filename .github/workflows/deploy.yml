@@ -6,6 +6,8 @@ on:
   schedule:
     - cron: '0 19,21 * * 0,3'  # 3:30 AM JST Monday and Thursday
   workflow_dispatch:
+  repository_dispatch:
+    types: [update_content]
 
 jobs:
   build:
