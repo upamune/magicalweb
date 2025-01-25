@@ -14,24 +14,24 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          submodules: recursive
 
       - name: Install pnpm
         uses: pnpm/action-setup@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - uses: oven-sh/setup-bun@v2
         with:
-          node-version: 22.11.0
-          cache: 'pnpm'
+          bun-version-file: ".bun-version"
 
       - name: Install dependencies
-        run: pnpm install
+        run: bun install
 
       - name: Fetch latest episodes
-        run: node scripts/fetch-episodes.js
+        run: bun run scripts/fetch-episodes.js
 
       - name: Build
-        run: pnpm run build
+        run: bun run build
 
       - uses: actions/upload-pages-artifact@v3
         with:

@@ -1,0 +1,3 @@
+[submodule "fonts/morisawa-biz-ud-gothic"]
+	path = fonts/morisawa-biz-ud-gothic
+	url = https://github.com/googlefonts/morisawa-biz-ud-gothic.git
