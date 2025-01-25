@@ -12,6 +12,8 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v4
         with:
@@ -35,6 +37,21 @@ jobs:
 
       - name: Build
         run: bun run build
+
+      - name: Check for changes
+        id: git-check
+        run: |
+          git add .
+          git status --porcelain
+          echo "changes=$(git status --porcelain | wc -l)" >> $GITHUB_OUTPUT
+
+      - name: Commit and push if changes
+        if: steps.git-check.outputs.changes > 0
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          git commit -am "Update content"
+          git push
 
       - uses: actions/upload-pages-artifact@v3
         with:
