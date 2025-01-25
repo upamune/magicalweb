@@ -13,6 +13,7 @@
 
 ## 🛠️ 技術スタック
 
+- [Bun](https://bun.sh) - パッケージマネージャー
 - [Astro](https://astro.build) - 静的サイトジェネレーター
 - [React](https://reactjs.org) - UIコンポーネント
 - [Tailwind CSS](https://tailwindcss.com) - スタイリング
@@ -22,16 +23,16 @@
 
 ```bash
 # 依存関係のインストール
-pnpm install
+bun install
 
 # 開発サーバーの起動
-pnpm dev
+bun dev
 
 # 本番用ビルド
-pnpm build
+bun build
 
 # ビルドのプレビュー
-pnpm preview
+bun preview
 ```
 
 ## 🔄 自動更新の仕組み
@@ -50,8 +51,7 @@ pnpm preview
 最新のエピソード情報をRSSフィードから取得し、JSONファイルとして保存するスクリプトです。
 
 ```bash
-# スクリプトの実行
-node scripts/fetch-episodes.js
+bun scripts/fetch-episodes.js
 ```
 
 主な機能：
@@ -60,6 +60,19 @@ node scripts/fetch-episodes.js
 - JSONファイルへの保存
 - エピソード番号の自動抽出
 - 日付のフォーマット（日本語表記）
+
+### generate-og.jsx
+
+OGP画像を生成するスクリプト
+
+| オプション | 説明 |
+| --- | --- |
+| `--latest` | 最新のn件のエピソードを対象にする |
+| `--force` | 既存のOGP画像を上書きする |
+
+```bash
+bun scripts/generate-og.jsx
+```
 
 ## 📝 コントリビューション
 
