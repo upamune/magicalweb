@@ -19,7 +19,7 @@ if (!episode) {
   return Astro.redirect('/404');
 }
 
-const ogImage = `https://www.magical.fm/api/og/${number}`;
+const ogImage = `/og/ep-${number}.png`;
 ---
 
 <Layout 

@@ -24,6 +24,111 @@ if (latestIndex !== -1 && (!Number.isFinite(latestCount) || latestCount <= 0)) {
 
 const fontData = fs.readFileSync("./fonts/morisawa-biz-ud-gothic/fonts/ttf/BIZUDPGothic-Regular.ttf", null);
 
+async function generateOGP(options) {
+	const { title, subtitle, outPath } = options;
+
+	// satori用のReact仮想DOMを定義
+	const element = (
+		<div
+			style={{
+				width: WIDTH,
+				height: HEIGHT,
+				display: "flex",
+				justifyContent: "center",
+				alignItems: "center",
+				backgroundImage: "linear-gradient(135deg, #C084FC 0%, #A5F3FC 100%)",
+				fontSize: "48px",
+				fontFamily: "BIZUDPGothic",
+				position: "relative",
+			}}
+		>
+			<div
+				style={{
+					width: "90%",
+					maxWidth: "1100px",
+					background: "rgba(255, 255, 255, 0.97)",
+					backdropFilter: "blur(8px)",
+					borderRadius: "24px",
+					boxShadow: "0 8px 32px rgba(0, 0, 0, 0.1)",
+					padding: "64px 48px",
+					lineHeight: 1.4,
+					color: "#111",
+					textAlign: "center",
+					display: "flex",
+					flexDirection: "column",
+					gap: "24px",
+					alignItems: "center",
+				}}
+			>
+				<div 
+					style={{ 
+						wordBreak: "break-word",
+						display: "flex",
+						flexDirection: "column",
+						gap: "16px",
+						maxWidth: "90%",
+					}}
+				>
+					<div
+						style={{
+							display: "flex",
+							justifyContent: "center",
+							fontSize: "56px",
+							fontWeight: "bold",
+							color: "#7E22CE",
+							letterSpacing: "-1px",
+							textShadow: "0 1px 2px rgba(0, 0, 0, 0.1)",
+						}}
+					>
+						{title}
+					</div>
+					{subtitle && (
+						<div
+							style={{
+								display: "flex",
+								justifyContent: "center",
+								fontSize: "36px",
+								color: "#9333EA",
+							}}
+						>
+							{subtitle}
+						</div>
+					)}
+				</div>
+			</div>
+		</div>
+	);
+
+	// satoriでSVGを生成
+	const svg = await satori(element, {
+		width: WIDTH,
+		height: HEIGHT,
+		fonts: [
+			{
+				name: "BIZUDPGothic",
+				data: fontData,
+				weight: 400,
+				style: "normal",
+			},
+		],
+	});
+
+	// SVG → PNG変換
+	const resvg = new Resvg(svg, {
+		fitTo: {
+			mode: "width",
+			value: WIDTH,
+		},
+		background: "white",
+	});
+	const pngData = resvg.render();
+	const pngBuffer = pngData.asPng();
+
+	// 保存
+	fs.writeFileSync(outPath, pngBuffer);
+	console.log(`Generated -> ${outPath}`);
+}
+
 async function main() {
 	// 生成先ディレクトリがなければ作成
 	if (!fs.existsSync(OUT_DIR)) {
@@ -44,8 +149,8 @@ async function main() {
 		// サブタイトルを抽出
 		const match = fullTitle.match(/^(.*?)〜(.+?)〜(.*)$/);
 		const [title, subtitle] = match 
-			? [match[1] + match[3], match[2]] // サブタイトルがある場合
-			: [fullTitle, null];               // サブタイトルがない場合
+			? [match[1] + match[3], match[2]]
+			: [fullTitle, null];
 
 		const outPath = path.join(OUT_DIR, `ep-${epNumber}.png`);
 
@@ -55,110 +160,7 @@ async function main() {
 			continue;
 		}
 
-		// satori用のReact仮想DOMを定義
-		const element = (
-			<div
-				style={{
-					width: WIDTH,
-					height: HEIGHT,
-					display: "flex",
-					justifyContent: "center",
-					alignItems: "center",
-					backgroundImage: "linear-gradient(135deg, #f6f8ff 0%, #f1f8ff 100%)",
-					fontSize: "48px",
-					fontFamily: "BIZUDPGothic",
-				}}
-			>
-				<div
-					style={{
-						width: "90%",
-						maxWidth: "1100px",
-						background: "rgba(255, 255, 255, 0.9)",
-						backdropFilter: "blur(8px)",
-						borderRadius: "16px",
-						boxShadow: "0 8px 32px rgba(0, 0, 0, 0.1)",
-						padding: "48px",
-						lineHeight: 1.4,
-						color: "#111",
-						textAlign: "center",
-						display: "flex",
-						flexDirection: "column",
-						justifyContent: "center",
-					}}
-				>
-					<div 
-						style={{ 
-							wordBreak: "break-word",
-							display: "flex",
-							flexDirection: "column",
-							gap: "16px",
-						}}
-					>
-						<div
-							style={{
-								display: "flex",
-								justifyContent: "center",
-								fontSize: "52px",
-								fontWeight: "bold",
-								backgroundImage: "linear-gradient(90deg, #6366f1, #8b5cf6)",
-								backgroundClip: "text",
-								"-webkit-background-clip": "text",
-								color: "transparent",
-								letterSpacing: "-1px",
-							}}
-						>
-							{title}
-						</div>
-						{subtitle && (
-							<div
-								style={{
-									display: "flex",
-									justifyContent: "center",
-									fontSize: "32px",
-									backgroundImage: "linear-gradient(90deg, #64748b, #94a3b8)",
-									backgroundClip: "text",
-									"-webkit-background-clip": "text",
-									color: "transparent",
-								}}
-							>
-								{subtitle}
-							</div>
-						)}
-					</div>
-				</div>
-			</div>
-		);
-
-		// satoriでSVGを生成
-		const svg = await satori(element, {
-			width: WIDTH,
-			height: HEIGHT,
-			// フォント設定
-			fonts: [
-				{
-					name: "BIZUDPGothic",
-					data: fontData,
-					weight: 400,
-					style: "normal",
-				},
-			],
-		});
-
-		// SVG → PNG変換
-		const resvg = new Resvg(svg, {
-			fitTo: {
-				mode: "width",
-				value: WIDTH,
-			},
-			// 背景を白にしたい場合
-			background: "white",
-		});
-		const pngData = resvg.render();
-		const pngBuffer = pngData.asPng();
-
-		// 保存
-		fs.writeFileSync(outPath, pngBuffer);
-		console.log(`Generated -> ${outPath}`);
+		await generateOGP({ title, subtitle, outPath });
 	}
 }
 
