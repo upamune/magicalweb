@@ -1,5 +1,12 @@
 [
   {
+    "title": "#126: 冪等性（べきとうせい）って何? ~再現性と、もう間違えない~",
+    "description": "<p>今回は「冪等性」について話しました。</p><p>再現性との違い/同じ操作を何回繰り返しても最終的な状態は最初にやった操作と変わらない性質/<span style=\"background-color:rgb(255,255,255);color:rgb(71,71,71);\">idempotency</span>/状態/月額利用料の引き落としでみる冪等性/自然界には存在しない概念/ラスト1マイルが大変<br><br><strong>▼ 名言ステッカーやアクリルキーホルダーなどのグッズが増えました</strong>🙌<br><a href=\"https://suzuri.jp/magicalfm\">https://suzuri.jp/magicalfm</a></p><p>&nbsp;</p><p><strong>▼ マヂカル.fmとは</strong><br>関西人のプロダクトマネージャー@michiru_daと関西人(?)のソフトウェアエンジニアの@upamuneがほぼ週で配信する雑談Podcast。</p><p>&nbsp;</p><p><strong>▼ お便りや感想はこちらからおまちしています。</strong></p><p>X(旧Twitter):&nbsp;<a href=\"https://x.com/magical_fm\">#magicalfm</a>&nbsp;<br>おたよりフォーム:&nbsp;<a href=\"https://magical.fm/hello\">https://magical.fm/hello</a><br>マシュマロ:<a href=\"https://marshmallow-qa.com/xno94s1ortkw63w?t=e1P9wQ\">https://marshmallow-qa.com/xno94s1ortkw63w?t=e1P9wQ</a></p> <a href=\"https://listen.style/p/magicalfm/5eb2uekd\">LISTENで開く</a>",
+    "pubDate": "2025年3月9日",
+    "number": 126,
+    "audioUrl": "https://cdn.listen.style/p/01hjdw98tcjs33kxbv6wgm02jy/audio/Ydi8uwFzyaysLt5F_e3OdPb1dkergu6et4nhLU8DL90MRkOzk3a9VDWQS_normalized.mp3"
+  },
+  {
     "title": "#125: 動物偏見クイズ ~タワマンに住む奥さんみたいな動物は?~",
     "description": "<p>今回は「動物偏見クイズ」をやりました。ぶどうぐみさん、おたよりありがとうございます。<br><br>ラランドの偏見クイズ/動物偏見クイズをやってみよう/家が脆弱/タワマンに住んでそう/家に持って帰ったら喜ばれそう/職業偏見クイズもちょっとだけやってみよう/おたより:グミ<br><br><strong>▼ 名言ステッカーやアクリルキーホルダーなどのグッズが増えました</strong>🙌<br><a href=\"https://suzuri.jp/magicalfm\">https://suzuri.jp/magicalfm</a></p><p>&nbsp;</p><p><strong>▼ マヂカル.fmとは</strong><br>関西人のプロダクトマネージャー@michiru_daと関西人(?)のソフトウェアエンジニアの@upamuneがほぼ週で配信する雑談Podcast。</p><p>&nbsp;</p><p><strong>▼ お便りや感想はこちらからおまちしています。</strong></p><p>X(旧Twitter):&nbsp;<a href=\"https://x.com/magical_fm\">#magicalfm</a>&nbsp;<br>おたよりフォーム:&nbsp;<a href=\"https://magical.fm/hello\">https://magical.fm/hello</a><br>マシュマロ:<a href=\"https://marshmallow-qa.com/xno94s1ortkw63w?t=e1P9wQ\">https://marshmallow-qa.com/xno94s1ortkw63w?t=e1P9wQ</a></p> <a href=\"https://listen.style/p/magicalfm/bcew2gzs\">LISTENで開く</a>",
     "pubDate": "2025年3月5日",
