@@ -33,9 +33,12 @@ async function fetchAndSaveEpisodes() {
 
 		const episodes = feed.items.map((item) => {
 			const number = extractEpisodeNumber(item.title ?? "");
+			const titleContent = item.title?.split(":").slice(1).join(":").trim() || item.title;
 			const title = item.title?.startsWith("#")
 				? item.title
-				: `#${number}: ${item.title?.split(":").slice(1).join(":").trim()}`;
+				: number === 0
+					? titleContent
+					: `#${number}: ${titleContent}`;
 			const pubDate = format(
 				new Date(item.pubDate ?? new Date()),
 				"yyyy年M月d日",
