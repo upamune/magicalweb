@@ -1,8 +1,8 @@
-import Parser from "rss-parser";
-import fs from "fs/promises";
-import path from "path";
-import { format, parseISO } from "date-fns";
+import fs from "node:fs/promises";
+import path from "node:path";
+import { format, isValid, parseISO } from "date-fns";
 import { ja } from "date-fns/locale";
+import Parser from "rss-parser";
 
 const FEED_URL = "https://listen.style/p/magicalfm/rss";
 const OUTPUT_DIR = "src/data";
@@ -21,7 +21,7 @@ const parser = new Parser({
 function extractEpisodeNumber(title) {
 	const match = title.match(/(\d+):/);
 	if (match) {
-		return parseInt(match[1], 10);
+		return Number.parseInt(match[1], 10);
 	}
 	return 0;
 }
@@ -33,24 +33,26 @@ async function fetchAndSaveEpisodes() {
 
 		const episodes = feed.items.map((item) => {
 			const number = extractEpisodeNumber(item.title ?? "");
-			const titleContent = item.title?.split(":").slice(1).join(":").trim() || item.title;
+			const titleContent =
+				item.title?.split(":").slice(1).join(":").trim() || item.title;
 			const title = item.title?.startsWith("#")
 				? item.title
 				: number === 0
 					? titleContent
 					: `#${number}: ${titleContent}`;
-			const pubDate = format(
-				new Date(item.pubDate ?? new Date()),
-				"yyyy年M月d日",
-				{ locale: ja },
-			);
+
+			// Parse the date and validate it before formatting
+			const dateObj = new Date(item.pubDate ?? new Date());
+			const pubDate = isValid(dateObj)
+				? format(dateObj, "yyyy年M月d日", { locale: ja })
+				: format(new Date(), "yyyy年M月d日", { locale: ja });
 
 			return {
 				title,
-				description: item["content"] ?? item.contentSnippet ?? "",
+				description: item.content ?? item.contentSnippet ?? "",
 				pubDate,
 				number,
-				audioUrl: item["enclosure"]?.url ?? "",
+				audioUrl: item.enclosure?.url ?? "",
 			};
 		});
 
