@@ -7,6 +7,7 @@ import Parser from "rss-parser";
 const FEED_URL = "https://listen.style/p/magicalfm/rss";
 const OUTPUT_DIR = "src/data";
 const OUTPUT_FILE = "episodes.json";
+const CUSTOM_PATHS_FILE = "custom-paths.json";
 
 const parser = new Parser({
 	customFields: {
@@ -26,10 +27,28 @@ function extractEpisodeNumber(title) {
 	return 0;
 }
 
+function extractListenId(content) {
+	if (!content) return null;
+	const match = content.match(/https:\/\/listen\.style\/p\/magicalfm\/([a-z0-9]+)/);
+	return match ? match[1] : null;
+}
+
 async function fetchAndSaveEpisodes() {
 	try {
 		console.log("Fetching RSS feed...");
 		const feed = await parser.parseURL(FEED_URL);
+
+		// Load custom paths mapping
+		let customPathsMap = {};
+		try {
+			const customPathsContent = await fs.readFile(
+				path.join(OUTPUT_DIR, CUSTOM_PATHS_FILE),
+				"utf-8"
+			);
+			customPathsMap = JSON.parse(customPathsContent);
+		} catch (error) {
+			console.log("No custom paths file found, continuing without custom paths");
+		}
 
 		const episodes = feed.items.map((item) => {
 			const number = extractEpisodeNumber(item.title ?? "");
@@ -47,13 +66,24 @@ async function fetchAndSaveEpisodes() {
 				? format(dateObj, "yyyy年M月d日", { locale: ja })
 				: format(new Date(), "yyyy年M月d日", { locale: ja });
 
-			return {
+			// Extract LISTEN ID and check for custom path
+			const listenId = extractListenId(item.content ?? "");
+			const customPath = listenId && customPathsMap[listenId] ? customPathsMap[listenId] : undefined;
+
+			const episode = {
 				title,
 				description: item.content ?? item.contentSnippet ?? "",
 				pubDate,
 				number,
 				audioUrl: item.enclosure?.url ?? "",
 			};
+
+			// Only add customPath if it exists
+			if (customPath) {
+				episode.customPath = customPath;
+			}
+
+			return episode;
 		});
 
 		await fs.mkdir(OUTPUT_DIR, { recursive: true });

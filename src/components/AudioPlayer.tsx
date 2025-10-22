@@ -19,6 +19,7 @@ export default function AudioPlayer() {
     volume,
     playbackRate,
     episodeNumber,
+    episodeSlug,
     episodeTitle,
     audioUrl,
     setPlaying,
@@ -248,7 +249,7 @@ export default function AudioPlayer() {
           <div className="flex-1 min-w-0">
             <h3 className="text-sm font-medium truncate">
               <a 
-                href={`/ep/${episodeNumber}`}
+                href={`/ep/${episodeSlug || episodeNumber}`}
                 className="hover:text-primary transition-colors"
               >
                 {episodeTitle}
