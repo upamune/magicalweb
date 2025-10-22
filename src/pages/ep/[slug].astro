@@ -3,23 +3,24 @@ import Layout from '../../layouts/Layout.astro';
 import Header from '../../components/Header';
 import SocialLinks from '../../components/SocialLinks';
 import PlayButton from '../../components/PlayButton';
-import { getEpisodeByNumber, getAllEpisodeNumbers } from '../../utils/rss';
+import { getEpisodeBySlug, getAllEpisodeSlugs, getEpisodeSlug } from '../../utils/rss';
 
 export async function getStaticPaths() {
-  const numbers = await getAllEpisodeNumbers();
-  return numbers.map(number => ({
-    params: { number: number.toString() }
+  const slugs = await getAllEpisodeSlugs();
+  return slugs.map(slug => ({
+    params: { slug }
   }));
 }
 
-const { number } = Astro.params;
-const episode = await getEpisodeByNumber(parseInt(number ?? '0'));
+const { slug } = Astro.params;
+const episode = await getEpisodeBySlug(slug ?? '');
 
 if (!episode) {
   return Astro.redirect('/404');
 }
 
-const ogImage = `/og/ep-${number}.png`;
+const episodeSlug = getEpisodeSlug(episode);
+const ogImage = `/og/ep-${episodeSlug}.png`;
 ---
 
 <Layout 
@@ -43,7 +44,7 @@ const ogImage = `/og/ep-${number}.png`;
                   {episode.title}
                 </h1>
                 <a
-                  href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(`${episode.title} を聴いています | マヂカル.fm`)}&url=${encodeURIComponent(`https://www.magical.fm/ep/${number}`)}&hashtags=magicalfm`}
+                  href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(`${episode.title} を聴いています | マヂカル.fm`)}&url=${encodeURIComponent(`https://www.magical.fm/ep/${episodeSlug}`)}&hashtags=magicalfm`}
                   target="_blank"
                   rel="noopener noreferrer"
                   class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary text-white hover:bg-secondary transition-colors whitespace-nowrap self-end"
@@ -64,6 +65,7 @@ const ogImage = `/og/ep-${number}.png`;
             <PlayButton
               client:load
               episodeNumber={episode.number}
+              episodeSlug={episodeSlug}
               episodeTitle={episode.title}
               audioUrl={episode.audioUrl}
             />

@@ -8,6 +8,7 @@ interface AudioState {
   volume: number;
   playbackRate: number;
   episodeNumber: number | null;
+  episodeSlug: string;
   episodeTitle: string;
   audioUrl: string;
   setPlaying: (isPlaying: boolean) => void;
@@ -15,7 +16,7 @@ interface AudioState {
   setDuration: (duration: number) => void;
   setVolume: (volume: number) => void;
   setPlaybackRate: (rate: number) => void;
-  setEpisode: (number: number, title: string, url: string) => void;
+  setEpisode: (number: number, slug: string, title: string, url: string) => void;
   reset: () => void;
   close: () => void;
 }
@@ -29,6 +30,7 @@ export const useAudioStore = create<AudioState>()(
       volume: 1,
       playbackRate: 1,
       episodeNumber: null,
+      episodeSlug: '',
       episodeTitle: '',
       audioUrl: '',
       setPlaying: (isPlaying) => set({ isPlaying }),
@@ -36,8 +38,9 @@ export const useAudioStore = create<AudioState>()(
       setDuration: (duration) => set({ duration }),
       setVolume: (volume) => set({ volume }),
       setPlaybackRate: (rate) => set({ playbackRate: rate }),
-      setEpisode: (number, title, url) => set((state) => ({
+      setEpisode: (number, slug, title, url) => set((state) => ({
         episodeNumber: number,
+        episodeSlug: slug,
         episodeTitle: title,
         audioUrl: url,
         currentTime: state.episodeNumber === number ? state.currentTime : 0,
@@ -48,6 +51,7 @@ export const useAudioStore = create<AudioState>()(
         currentTime: 0,
         duration: 0,
         episodeNumber: null,
+        episodeSlug: '',
         episodeTitle: '',
         audioUrl: '',
       }),
@@ -56,6 +60,7 @@ export const useAudioStore = create<AudioState>()(
         currentTime: 0,
         duration: 0,
         episodeNumber: null,
+        episodeSlug: '',
         episodeTitle: '',
         audioUrl: '',
       }),
@@ -67,6 +72,7 @@ export const useAudioStore = create<AudioState>()(
         volume: state.volume,
         playbackRate: state.playbackRate,
         episodeNumber: state.episodeNumber,
+        episodeSlug: state.episodeSlug,
         episodeTitle: state.episodeTitle,
         audioUrl: state.audioUrl,
       }),

@@ -9,6 +9,7 @@ export interface Episode {
   pubDate: string;
   number: number;
   audioUrl: string;
+  customPath?: string;
 }
 
 //// HTMLをサニタイズし、img要素にloading="lazy"を追加する関数
@@ -72,4 +73,33 @@ export async function getEpisodeByNumber(number: number): Promise<Episode | null
     description: episode.description,
     pubDate: formatJapaneseDate(episode.pubDate),
   };
+}
+
+export async function getEpisodeBySlug(slug: string): Promise<Episode | null> {
+  // First try to find by custom path
+  let episode = episodesData.find(ep => ep.customPath === slug);
+  
+  // If not found, try to parse as number
+  if (!episode) {
+    const number = parseInt(slug);
+    if (!isNaN(number)) {
+      episode = episodesData.find(ep => ep.number === number);
+    }
+  }
+  
+  if (!episode) return null;
+  
+  return {
+    ...episode,
+    description: episode.description,
+    pubDate: formatJapaneseDate(episode.pubDate),
+  };
+}
+
+export function getEpisodeSlug(episode: Episode): string {
+  return episode.customPath || episode.number.toString();
+}
+
+export async function getAllEpisodeSlugs(): Promise<string[]> {
+  return episodesData.map(episode => getEpisodeSlug(episode));
 }
