@@ -97,7 +97,7 @@ async function generateOGP(options) {
 								letterSpacing: "-0.3px",
 							}}
 						>
-							{subtitle}
+							〜{subtitle}〜
 						</div>
 					)}
 				</div>
