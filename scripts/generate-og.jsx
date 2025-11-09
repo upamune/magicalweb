@@ -22,7 +22,9 @@ if (latestIndex !== -1 && (!Number.isFinite(latestCount) || latestCount <= 0)) {
 	process.exit(1);
 }
 
-const fontData = fs.readFileSync("./fonts/morisawa-biz-ud-gothic/fonts/ttf/BIZUDPGothic-Regular.ttf", null);
+// M PLUS Roundedフォントを読み込み
+const fontRegular = fs.readFileSync("./fonts/m-plus-rounded/MPLUSRounded1c-Regular.ttf", null);
+const fontBold = fs.readFileSync("./fonts/m-plus-rounded/MPLUSRounded1c-Bold.ttf", null);
 
 async function generateOGP(options) {
 	const { title, subtitle, outPath } = options;
@@ -38,7 +40,7 @@ async function generateOGP(options) {
 				alignItems: "center",
 				backgroundImage: "linear-gradient(135deg, #C084FC 0%, #A5F3FC 100%)",
 				fontSize: "48px",
-				fontFamily: "BIZUDPGothic",
+				fontFamily: "MPLUSRounded1c",
 				position: "relative",
 			}}
 		>
@@ -74,10 +76,11 @@ async function generateOGP(options) {
 							display: "flex",
 							justifyContent: "center",
 							fontSize: "56px",
-							fontWeight: "bold",
+							fontWeight: 700,
+							fontFamily: "MPLUSRounded1c",
 							color: "#7E22CE",
-							letterSpacing: "-1px",
-							textShadow: "0 1px 2px rgba(0, 0, 0, 0.1)",
+							letterSpacing: "-0.5px",
+							textShadow: "0 2px 4px rgba(0, 0, 0, 0.08)",
 						}}
 					>
 						{title}
@@ -88,7 +91,10 @@ async function generateOGP(options) {
 								display: "flex",
 								justifyContent: "center",
 								fontSize: "36px",
+								fontFamily: "MPLUSRounded1c",
+								fontWeight: 400,
 								color: "#9333EA",
+								letterSpacing: "-0.3px",
 							}}
 						>
 							{subtitle}
@@ -105,9 +111,15 @@ async function generateOGP(options) {
 		height: HEIGHT,
 		fonts: [
 			{
-				name: "BIZUDPGothic",
-				data: fontData,
+				name: "MPLUSRounded1c",
+				data: fontRegular,
 				weight: 400,
+				style: "normal",
+			},
+			{
+				name: "MPLUSRounded1c",
+				data: fontBold,
+				weight: 700,
 				style: "normal",
 			},
 		],
