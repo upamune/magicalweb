@@ -19,6 +19,11 @@ const {
 } = Astro.props;
 
 const canonicalURL = new URL(Astro.url.pathname, "https://www.magical.fm");
+
+// 画像URLが相対パスの場合は絶対URLに変換
+const ogImageUrl = image.startsWith('http') 
+  ? image 
+  : new URL(image, "https://www.magical.fm").toString();
 ---
 
 <!doctype html>
@@ -40,17 +45,22 @@ const canonicalURL = new URL(Astro.url.pathname, "https://www.magical.fm");
     <meta property="og:url" content={canonicalURL} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
-    <meta property="og:image" content={image} />
+    <meta property="og:image" content={ogImageUrl} />
+    <meta property="og:image:secure_url" content={ogImageUrl} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:alt" content={title} />
     <meta property="og:site_name" content="マヂカル.fm" />
     <meta property="og:locale" content="ja_JP" />
     {publishedTime && <meta property="article:published_time" content={publishedTime} />}
 
     <!-- Twitter -->
-    <meta property="twitter:card" content="summary_large_image" />
-    <meta property="twitter:url" content={canonicalURL} />
-    <meta property="twitter:title" content={title} />
-    <meta property="twitter:description" content={description} />
-    <meta property="twitter:image" content={image} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content={canonicalURL} />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImageUrl} />
     <meta name="twitter:creator" content="@magicalfm" />
     <meta name="twitter:site" content="@magicalfm" />
 
