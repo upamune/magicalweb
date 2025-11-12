@@ -68,7 +68,12 @@ async function fetchAndSaveEpisodes() {
 
 			// Extract LISTEN ID and check for custom path
 			const listenId = extractListenId(item.content ?? "");
-			const customPath = listenId && customPathsMap[listenId] ? customPathsMap[listenId] : undefined;
+			// 優先順位: 1. 手動設定 (custom-paths.json) 2. 番号なしの場合はLISTEN ID 3. undefined
+			const customPath = listenId && customPathsMap[listenId]
+				? customPathsMap[listenId]
+				: (number === 0 && listenId)
+					? listenId
+					: undefined;
 
 			const episode = {
 				title,

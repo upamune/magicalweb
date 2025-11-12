@@ -1,8 +1,9 @@
 import fs from "node:fs";
 import path from "node:path";
+import React from "react";
 import satori from "satori";
 import { Resvg } from "@resvg/resvg-js";
-import episodesData from "../src/data/episodes.json";
+import episodesData from "../src/data/episodes.json" with { type: "json" };
 
 // OGP画像のサイズ
 const WIDTH = 1200;
@@ -348,7 +349,7 @@ export const STYLE_VARIANTS = {
 };
 
 export async function generateOGP(options) {
-	const { title, subtitle, outPath, styleVariant = null } = options;
+	const { title, subtitle, outPath, styleVariant = null, episodeNumber = null } = options;
 	
 	// スタイルバリエーションの選択
 	const variant = styleVariant || STYLE_VARIANTS.brandBottomRightNoIconStrongBlur;
@@ -368,6 +369,9 @@ export async function generateOGP(options) {
 		textShadow: '0 3px 12px rgba(0, 0, 0, 0.7), 0 1px 3px rgba(0, 0, 0, 0.5)',
 	};
 
+	// エピソード番号がない場合の背景色
+	const backgroundColor = episodeNumber === 0 ? "#4EACAB" : "#B753E7";
+
 	// satori用のReact仮想DOMを定義
 	const element = (
 		<div
@@ -380,7 +384,7 @@ export async function generateOGP(options) {
 				fontSize: "48px",
 				fontFamily: "MPLUSRounded1c",
 				position: "relative",
-				backgroundColor: useBackgroundImage ? "#B753E7" : "#B753E7",
+				backgroundColor: backgroundColor,
 			}}
 		>
 			{/* 背景画像（ブラー効果付き） - 現在は使用していません */}
@@ -580,30 +584,31 @@ async function main() {
 	// episodes.json からエピソード一覧を取得
 	for (const episode of targetEpisodes) {
 		const epNumber = episode.number;
+		const epSlug = episode.customPath || epNumber.toString();
 		const fullTitle = episode.title.replace(/~/g, '〜');
-		
+
 		// サブタイトルを抽出
 		const match = fullTitle.match(/^(.*?)〜(.+?)〜(.*)$/);
-		const [title, subtitle] = match 
+		const [title, subtitle] = match
 			? [match[1] + match[3], match[2]]
 			: [fullTitle, null];
 
 		// バリエーション生成モードの場合
 		if (generateVariants) {
 			for (const [key, variant] of Object.entries(STYLE_VARIANTS)) {
-				const outPath = path.join(OUT_DIR, `ep-${epNumber}-${variant.name}.png`);
-				await generateOGP({ title, subtitle, outPath, styleVariant: variant });
+				const outPath = path.join(OUT_DIR, `ep-${epSlug}-${variant.name}.png`);
+				await generateOGP({ title, subtitle, outPath, styleVariant: variant, episodeNumber: epNumber });
 			}
 		} else {
-			const outPath = path.join(OUT_DIR, `ep-${epNumber}.png`);
+			const outPath = path.join(OUT_DIR, `ep-${epSlug}.png`);
 
 			// 既に生成済みで上書きしたくない場合はスキップ
 			if (fs.existsSync(outPath) && !forceOverwrite) {
-				console.log(`ep-${epNumber}.png が既に存在します。スキップします。`);
+				console.log(`ep-${epSlug}.png が既に存在します。スキップします。`);
 				continue;
 			}
 
-			await generateOGP({ title, subtitle, outPath });
+			await generateOGP({ title, subtitle, outPath, episodeNumber: epNumber });
 		}
 	}
 }
