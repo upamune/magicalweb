@@ -3,7 +3,22 @@ import path from "node:path";
 import React from "react";
 import satori from "satori";
 import { Resvg } from "@resvg/resvg-js";
+import { loadDefaultJapaneseParser } from "budoux";
 import episodesData from "../src/data/episodes.json" with { type: "json" };
+
+// budoux日本語パーサーを初期化
+const parser = loadDefaultJapaneseParser();
+
+// budouxでテキストを分割し、各セグメントをspanで囲む
+// satoriではdisplay: flex | block | noneのみサポート
+function wrapWithBudoux(text, style = {}) {
+	const segments = parser.parse(text);
+	return segments.map((segment, index) => (
+		<span key={index} style={{ ...style }}>
+			{segment}
+		</span>
+	));
+}
 
 // OGP画像のサイズ
 const WIDTH = 1200;
@@ -498,6 +513,7 @@ export async function generateOGP(options) {
 					<div
 						style={{
 							display: "flex",
+							flexWrap: "wrap",
 							justifyContent: "center",
 							fontSize: "56px",
 							fontWeight: 700,
@@ -505,27 +521,24 @@ export async function generateOGP(options) {
 							color: "#7E22CE",
 							letterSpacing: "-0.5px",
 							textShadow: "0 2px 4px rgba(0, 0, 0, 0.08)",
-							wordBreak: "keep-all",
-							overflowWrap: "break-word",
 						}}
 					>
-						{title}
+						{wrapWithBudoux(title)}
 					</div>
 					{subtitle && (
 						<div
 							style={{
 								display: "flex",
+								flexWrap: "wrap",
 								justifyContent: "center",
 								fontSize: "36px",
 								fontFamily: "MPLUSRounded1c",
 								fontWeight: 400,
 								color: "#9333EA",
 								letterSpacing: "-0.3px",
-								wordBreak: "keep-all",
-								overflowWrap: "break-word",
 							}}
 						>
-							〜{subtitle}〜
+							〜{wrapWithBudoux(subtitle)}〜
 						</div>
 					)}
 				</div>
