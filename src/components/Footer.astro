@@ -1,0 +1,84 @@
+---
+import PlatformLinks from "./PlatformLinks.astro";
+
+const year = new Date().getFullYear();
+
+const links = [
+	{ href: "/episodes", label: "エピソード一覧" },
+	{
+		href: "https://go.magical.fm/hello",
+		label: "お便りフォーム",
+		external: true,
+	},
+	{
+		href: "https://suzuri.jp/magicalfm",
+		label: "グッズストア",
+		external: true,
+	},
+	{ href: "/support", label: "サポート" },
+];
+
+const tickerItems = [
+	"マヂカル.fm",
+	"ほぼ週2で配信中",
+	"雑談100%",
+	"お便り募集中 #magicalfm",
+	"たまに関西弁",
+];
+---
+
+<footer class="mt-24">
+	<!-- ティッカー帯 -->
+	<div class="ticker border-y-3 border-edge bg-sun py-2 font-display text-sm text-[rgb(29,26,46)]" aria-hidden="true">
+		{
+			[0, 1].map(() => (
+				<div>
+					{[...tickerItems, ...tickerItems].map((item) => (
+						<span class="flex items-center gap-3 px-3">
+							{item}
+							<span class="text-tangerine">✦</span>
+						</span>
+					))}
+				</div>
+			))
+		}
+	</div>
+
+	<div class="dotted bg-paper">
+		<div class="mx-auto max-w-5xl px-5 py-14">
+			<div class="flex flex-col justify-between gap-10 sm:flex-row">
+				<div class="max-w-xs">
+					<p class="font-display text-lg tracking-tight">
+						マヂカル<span class="text-tangerine">.fm</span>
+					</p>
+					<p class="mt-3 text-sm leading-relaxed text-muted">
+						関西人のPMと関西人(?)のエンジニアが、ほぼ週2でお届けする雑談ポッドキャスト。
+					</p>
+					<div class="mt-6">
+						<PlatformLinks variant="icons" />
+					</div>
+				</div>
+				<nav class="flex flex-col items-start gap-2" aria-label="フッター">
+					{
+						links.map((link) => (
+							<a
+								href={link.href}
+								target={link.external ? "_blank" : undefined}
+								rel={link.external ? "noopener noreferrer" : undefined}
+								class="rounded-full py-1 text-sm font-bold text-muted underline decoration-transparent decoration-[3px] underline-offset-4 transition-[color,text-decoration-color] duration-150 hover:text-ink hover:decoration-tangerine"
+							>
+								{link.label}
+							</a>
+						))
+					}
+				</nav>
+			</div>
+			<div class="mt-12 flex flex-col items-center justify-between gap-3 border-t-3 border-edge/20 pt-6 sm:flex-row">
+				<p class="text-xs text-muted">&copy; 2023–{year} マヂカル.fm</p>
+				<p class="font-display text-[10px] tracking-[0.25em] text-muted/80">
+					MAGICAL.FM — TALK PODCAST
+				</p>
+			</div>
+		</div>
+	</div>
+</footer>

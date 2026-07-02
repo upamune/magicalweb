@@ -1,15 +1,15 @@
-import { format, parseISO } from 'date-fns';
-import { ja } from 'date-fns/locale';
-import DOMPurify from 'isomorphic-dompurify';
-import episodesData from '../data/episodes.json';
+import { format, parseISO } from "date-fns";
+import { ja } from "date-fns/locale";
+import DOMPurify from "isomorphic-dompurify";
+import episodesData from "../data/episodes.json";
 
 export interface Episode {
-  title: string;
-  description: string;
-  pubDate: string;
-  number: number;
-  audioUrl: string;
-  customPath?: string;
+	title: string;
+	description: string;
+	pubDate: string;
+	number: number;
+	audioUrl: string;
+	customPath?: string;
 }
 
 //// HTMLをサニタイズし、img要素にloading="lazy"を追加する関数
@@ -19,7 +19,7 @@ export interface Episode {
 //  const window = new Window();
 //  const document = window.document;
 //  document.body.innerHTML = html;
-//  
+//
 //  // すべてのimg要素にloading="lazy"を追加
 //  for (const img of document.querySelectorAll('img')) {
 //    img.setAttribute('loading', 'lazy');
@@ -44,62 +44,94 @@ export interface Episode {
 //
 // 日付を日本語フォーマットに変換
 export function formatJapaneseDate(dateStr: string): string {
-  try {
-    const date = parseISO(dateStr);
-    return format(date, 'yyyy年M月d日', { locale: ja });
-  } catch {
-    return dateStr;
-  }
+	try {
+		const date = parseISO(dateStr);
+		return format(date, "yyyy年M月d日", { locale: ja });
+	} catch {
+		return dateStr;
+	}
 }
 
 export async function getLatestEpisodes(count: number): Promise<Episode[]> {
-  return episodesData.slice(0, count).map(episode => ({
-    ...episode,
-    description: episode.description,
-    pubDate: formatJapaneseDate(episode.pubDate),
-  }));
+	return episodesData.slice(0, count).map((episode) => ({
+		...episode,
+		description: episode.description,
+		pubDate: formatJapaneseDate(episode.pubDate),
+	}));
 }
 
 export async function getAllEpisodeNumbers(): Promise<number[]> {
-  return episodesData.map(episode => episode.number);
+	return episodesData.map((episode) => episode.number);
 }
 
-export async function getEpisodeByNumber(number: number): Promise<Episode | null> {
-  const episode = episodesData.find(ep => ep.number === number);
-  if (!episode) return null;
-  
-  return {
-    ...episode,
-    description: episode.description,
-    pubDate: formatJapaneseDate(episode.pubDate),
-  };
+export async function getEpisodeByNumber(
+	number: number,
+): Promise<Episode | null> {
+	const episode = episodesData.find((ep) => ep.number === number);
+	if (!episode) return null;
+
+	return {
+		...episode,
+		description: episode.description,
+		pubDate: formatJapaneseDate(episode.pubDate),
+	};
 }
 
 export async function getEpisodeBySlug(slug: string): Promise<Episode | null> {
-  // First try to find by custom path
-  let episode = episodesData.find(ep => ep.customPath === slug);
-  
-  // If not found, try to parse as number
-  if (!episode) {
-    const number = parseInt(slug);
-    if (!isNaN(number)) {
-      episode = episodesData.find(ep => ep.number === number);
-    }
-  }
-  
-  if (!episode) return null;
-  
-  return {
-    ...episode,
-    description: episode.description,
-    pubDate: formatJapaneseDate(episode.pubDate),
-  };
+	// First try to find by custom path
+	let episode = episodesData.find((ep) => ep.customPath === slug);
+
+	// If not found, try to parse as number
+	if (!episode) {
+		const number = Number.parseInt(slug);
+		if (!Number.isNaN(number)) {
+			episode = episodesData.find((ep) => ep.number === number);
+		}
+	}
+
+	if (!episode) return null;
+
+	return {
+		...episode,
+		description: episode.description,
+		pubDate: formatJapaneseDate(episode.pubDate),
+	};
 }
 
 export function getEpisodeSlug(episode: Episode): string {
-  return episode.customPath || episode.number.toString();
+	return episode.customPath || episode.number.toString();
+}
+
+// タイトル先頭の「#263: 」は話数表示と重複するため表示用には取り除く
+export function getEpisodeDisplayTitle(episode: Episode): string {
+	return episode.title.replace(/^#\d+[:：]\s*/, "");
+}
+
+// 説明文の本文部分（定型の案内文より前）をプレーンテキストで抜き出す
+export function getEpisodeSnippet(episode: Episode, maxLength = 120): string {
+	const text = episode.description
+		.split("▼")[0]
+		.replace(/<[^>]*>/g, " ")
+		.replace(/&nbsp;/g, " ")
+		.replace(/&amp;/g, "&")
+		.replace(/\s+/g, " ")
+		.trim();
+
+	return text.length > maxLength ? `${text.slice(0, maxLength)}…` : text;
+}
+
+// エピソード一覧コンポーネントに渡す軽量データ
+export function toEpisodeListItem(episode: Episode) {
+	return {
+		number: episode.number,
+		slug: getEpisodeSlug(episode),
+		title: getEpisodeDisplayTitle(episode),
+		pubDate: episode.pubDate,
+		audioUrl: episode.audioUrl,
+		snippet: getEpisodeSnippet(episode),
+	};
 }
 
 export async function getAllEpisodeSlugs(): Promise<string[]> {
-  return episodesData.map(episode => getEpisodeSlug(episode));
+	return episodesData.map((episode) => getEpisodeSlug(episode));
 }

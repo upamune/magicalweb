@@ -1,147 +1,188 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import Header from '../components/Header';
-import SocialLinks from '../components/SocialLinks';
-import MerchGrid from '../components/MerchCarousel';
-import { getLatestEpisodes, getEpisodeSlug } from '../utils/rss';
+import EpisodeList from "../components/EpisodeList";
+import Footer from "../components/Footer.astro";
+import Header from "../components/Header";
+import Hosts from "../components/Hosts.astro";
+import MerchGrid from "../components/MerchGrid.astro";
+import PlatformLinks from "../components/PlatformLinks.astro";
+import PlayButton from "../components/PlayButton";
+import Layout from "../layouts/Layout.astro";
+import { getLatestEpisodes, toEpisodeListItem } from "../utils/rss";
 
-const episodes = await getLatestEpisodes(3);
+const episodes = await getLatestEpisodes(5);
+const listItems = episodes.map(toEpisodeListItem);
+const latest = listItems[0];
+
+const tickerItems = [
+	"マヂカル.fm",
+	`#${latest?.number} 公開!`,
+	"ほぼ週2で配信中",
+	"雑談100%",
+	"お便り募集中 #magicalfm",
+];
 ---
 
-<Layout title="マヂカル.fm - テクノロジーと人生のポッドキャスト">
-  <Header client:load />
-  
-  <main class="pt-20">
-    <!-- Hero Section -->
-    <section class="container mx-auto px-4 py-20 text-center">
-      <h1 class="text-5xl font-bold mb-6 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-        マヂカル.fm
-      </h1>
-      <p class="text-xl mb-8 max-w-2xl mx-auto">
-        マヂカル.fmは、関西人のプロダクトマネージャー@michiru_daと関西人(?)のソフトウェアエンジニアの@upamuneがほぼ週2で配信する雑談Podcast
-      </p>
-      
-      <SocialLinks client:load />
+<Layout title="マヂカル.fm - ほぼ週2の雑談ポッドキャスト">
+	<Header client:load />
 
-      <div class="flex flex-col sm:flex-row justify-center gap-4 mt-8">
-        <a
-          href="/episodes"
-          class="bg-primary text-white px-8 py-4 rounded-lg hover:bg-primary-dark transition-colors duration-300 shadow-lg hover:shadow-xl"
-        >
-          エピソード一覧
-        </a>
-        <a
-        href="https://go.magical.fm/hello"
-        target="_blank"
-        rel="noopener noreferrer"
-        class="border-2 border-primary text-primary hover:text-white dark:text-white px-8 py-4 rounded-lg hover:bg-primary hover:border-primary transition-colors duration-300"
-      >
-        お便り
-      </a>
-      </div>
-    </section>
+	<!-- Hero（ライラック） -->
+	<section class="dotted border-b-3 border-edge bg-lilac">
+		<div class="mx-auto max-w-5xl px-5 pb-16 pt-12 text-center sm:pb-20 sm:pt-16">
+			<div class="rise rise-1 flex flex-wrap items-center justify-center gap-3">
+				<span class="float-a inline-block rounded-full border-3 border-edge bg-sun px-4 py-1.5 font-display text-sm text-[rgb(29,26,46)] shadow-pop-sm">ほぼ週2!</span>
+				<span class="float-b inline-block rounded-full border-3 border-edge bg-lime px-4 py-1.5 font-display text-sm text-[rgb(29,26,46)] shadow-pop-sm">雑談100%</span>
+				<span class="float-a inline-block rounded-full border-3 border-edge bg-sky px-4 py-1.5 font-display text-sm text-[rgb(29,26,46)] shadow-pop-sm" style="animation-delay: -2s">たまに関西弁</span>
+			</div>
 
-    <!-- Latest Episodes -->
-    <section id="episodes" class="bg-gray-50 dark:bg-gray-800 py-20">
-      <div class="container mx-auto px-4">
-        <h2 class="text-3xl font-bold mb-12 text-center">最新エピソード</h2>
-        {episodes.length > 0 ? (
-          <div class="grid md:grid-cols-3 gap-8">
-            {episodes.map((episode) => (
-              <article class="bg-white dark:bg-gray-900 rounded-lg shadow-lg overflow-hidden transform hover:scale-[1.02] transition-all duration-300">
-                <div class="p-6">
-                  <h3 class="text-xl font-bold mb-2">
-                    <a href={`/ep/${getEpisodeSlug(episode)}`} class="hover:text-primary transition-colors">
-                      {episode.title}
-                    </a>
-                  </h3>
-                  <p class="text-gray-600 dark:text-gray-400 mb-4">
-                    {episode.pubDate}
-                  </p>
-                  <div 
-                    class="prose dark:prose-invert prose-sm max-h-32 overflow-hidden relative"
-                    set:html={episode.description}
-                  >
-                    <div class="absolute bottom-0 left-0 right-0 h-12 bg-gradient-to-t from-white dark:from-gray-800"></div>
-                  </div>
-                  <a 
-                    href={`/ep/${getEpisodeSlug(episode)}`}
-                    class="inline-flex items-center gap-2 mt-4 text-primary hover:text-secondary transition-colors"
-                  >
-                    続きを読む
-                    <span class="i-[ri:arrow-right-line]"></span>
-                  </a>
-                </div>
-              </article>
-            ))}
-          </div>
-        ) : (
-          <div class="text-center py-12">
-            <p class="text-lg text-gray-600 dark:text-gray-400">
-              エピソードを読み込んでいます...
-            </p>
-          </div>
-        )}
-      </div>
-    </section>
+			<h1
+				class="rise rise-2 mt-8 font-display text-5xl leading-[1.15] tracking-tight text-[rgb(29,26,46)] sm:text-7xl"
+				style="text-shadow: 4px 4px 0 rgb(255 255 255 / 0.55)"
+			>
+				マヂカル<span class="text-tangerine" style="-webkit-text-stroke: 2px rgb(29 26 46)">.fm</span>
+			</h1>
 
-    <!-- Hosts -->
-    <section id="hosts" class="py-20">
-      <div class="container mx-auto px-4">
-        <h2 class="text-3xl font-bold mb-12 text-center">パーソナリティ</h2>
-        <div class="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-          <div class="text-center">
-            <img
-              loading="lazy"
-              src="https://unavatar.io/twitter/applism118"
-              alt="michiru_da"
-              class="w-32 h-32 rounded-full mx-auto mb-4 shadow-lg"
-            />
-            <h3 class="text-xl font-bold mb-2">@michiru_da</h3>
-            <p class="text-gray-600 dark:text-gray-400 mb-4">関西人のプロダクトマネージャー</p>
-            <a
-              href="https://x.com/applism118"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="text-primary hover:text-secondary transition-colors"
-            >
-              𝕏でフォロー
-            </a>
-          </div>
-          <div class="text-center">
-            <img
-              loading="lazy"
-              src="https://unavatar.io/twitter/upamune"
-              alt="upamune"
-              class="w-32 h-32 rounded-full mx-auto mb-4 shadow-lg"
-            />
-            <h3 class="text-xl font-bold mb-2">@upamune</h3>
-            <p class="text-gray-600 dark:text-gray-400 mb-4">関西人(?)のソフトウェアエンジニア</p>
-            <a
-              href="https://x.com/upamune"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="text-primary hover:text-secondary transition-colors"
-            >
-              𝕏でフォロー
-            </a>
-          </div>
-        </div>
-      </div>
-    </section>
+			<div class="rise rise-3 mx-auto mt-8 max-w-xl rounded-3xl border-3 border-edge bg-surface px-6 py-5 shadow-pop">
+				<p class="leading-relaxed">
+					関西人のプロダクトマネージャー
+					<a
+						href="https://x.com/applism118"
+						target="_blank"
+						rel="noopener noreferrer"
+						class="font-bold text-tangerine underline decoration-[3px] underline-offset-4 transition-colors duration-150 hover:text-candy">@michiru_da</a
+					>
+					と、関西人(?)のソフトウェアエンジニア
+					<a
+						href="https://x.com/upamune"
+						target="_blank"
+						rel="noopener noreferrer"
+						class="font-bold text-tangerine underline decoration-[3px] underline-offset-4 transition-colors duration-150 hover:text-candy">@upamune</a
+					>
+					が、ほぼ週2でお届けする雑談ポッドキャスト。
+				</p>
+			</div>
 
-    <!-- Merchandise -->
-    <section id="merch" class="bg-gray-50 dark:bg-gray-800 py-20">
-      <div class="container mx-auto px-4">
-        <h2 class="text-3xl font-bold mb-12 text-center">グッズ</h2>
-        <MerchGrid client:load />
-      </div>
-    </section>
-  </main>
+			<div class="rise rise-4 mt-8 flex flex-wrap items-center justify-center gap-4">
+				{
+					latest && (
+						<PlayButton
+							client:load
+							episodeNumber={latest.number}
+							episodeSlug={latest.slug}
+							episodeTitle={latest.title}
+							audioUrl={latest.audioUrl}
+							label={`最新回 #${latest.number} を聴く`}
+						/>
+					)
+				}
+				<a
+					href="/episodes"
+					class="btn-pop inline-flex items-center gap-2 rounded-full bg-surface px-6 py-3.5 font-bold"
+				>
+					エピソード一覧
+					<span aria-hidden="true">→</span>
+				</a>
+			</div>
 
-  <footer class="bg-gray-900 text-white py-12">
-    <div class="container mx-auto px-4 text-center">
-      <p>&copy; {new Date().getFullYear()} マヂカル.fm. All rights reserved.</p>
-    </div>
-  </footer>
+			<div class="rise rise-4 mt-10 flex justify-center">
+				<PlatformLinks variant="chips" />
+			</div>
+		</div>
+	</section>
+
+	<!-- ティッカー帯 -->
+	<div class="ticker border-b-3 border-edge bg-sun py-2 font-display text-sm text-[rgb(29,26,46)]" aria-hidden="true">
+		{
+			[0, 1].map(() => (
+				<div>
+					{[...tickerItems, ...tickerItems].map((item) => (
+						<span class="flex items-center gap-3 px-3">
+							{item}
+							<span class="text-tangerine">✦</span>
+						</span>
+					))}
+				</div>
+			))
+		}
+	</div>
+
+	<!-- 最新エピソード（ライム） -->
+	<section id="episodes" class="border-b-3 border-edge bg-lime">
+		<div class="mx-auto max-w-5xl px-5 py-16 sm:py-20">
+			<div class="mb-8 flex flex-wrap items-end justify-between gap-4">
+				<h2 class="font-display text-3xl text-[rgb(29,26,46)]">最新エピソード</h2>
+				<a
+					href="/episodes"
+					class="btn-pop rounded-full bg-surface px-5 py-2 text-sm font-bold"
+				>
+					ぜんぶ見る →
+				</a>
+			</div>
+			<EpisodeList client:load episodes={listItems} />
+		</div>
+	</section>
+
+	<!-- パーソナリティ（タンジェリン） -->
+	<section id="hosts" class="dotted border-b-3 border-edge bg-tangerine">
+		<div class="mx-auto max-w-5xl px-5 py-16 sm:py-20">
+			<h2 class="mb-8 font-display text-3xl text-[rgb(29,26,46)]">パーソナリティ</h2>
+			<Hosts />
+		</div>
+	</section>
+
+	<!-- お便り（スカイ） -->
+	<section class="border-b-3 border-edge bg-sky">
+		<div class="mx-auto max-w-5xl px-5 py-16 text-center sm:py-20">
+			<div class="mx-auto max-w-2xl -rotate-1 rounded-3xl border-3 border-edge bg-surface px-6 py-12 shadow-pop sm:py-14">
+				<h2 class="font-display text-3xl text-ink">お便り、待ってます 📮</h2>
+				<p class="mx-auto mt-4 max-w-md text-sm leading-relaxed text-muted">
+					感想・質問・お悩み、なんでもどうぞ。X のハッシュタグ
+					<a
+						href="https://x.com/hashtag/magicalfm"
+						target="_blank"
+						rel="noopener noreferrer"
+						class="font-bold text-tangerine underline decoration-[3px] underline-offset-4">#magicalfm</a
+					>
+					でのポストも全部読んでいます。
+				</p>
+				<div class="mt-8 flex flex-wrap justify-center gap-3">
+					<a
+						href="https://go.magical.fm/hello"
+						target="_blank"
+						rel="noopener noreferrer"
+						class="btn-pop inline-flex items-center gap-2 rounded-full bg-tangerine px-7 py-3 font-bold text-[rgb(29,26,46)]"
+					>
+						お便りフォーム
+					</a>
+					<a
+						href="https://marshmallow-qa.com/xno94s1ortkw63w?t=e1P9wQ"
+						target="_blank"
+						rel="noopener noreferrer"
+						class="btn-pop inline-flex items-center gap-2 rounded-full bg-surface px-7 py-3 font-bold"
+					>
+						マシュマロを投げる
+					</a>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<!-- グッズ（キャンディピンク） -->
+	<section id="merch" class="dotted bg-candy">
+		<div class="mx-auto max-w-5xl px-5 py-16 sm:py-20">
+			<div class="mb-10 flex flex-wrap items-end justify-between gap-4">
+				<h2 class="font-display text-3xl text-[rgb(29,26,46)]">グッズ</h2>
+				<a
+					href="https://suzuri.jp/magicalfm"
+					target="_blank"
+					rel="noopener noreferrer"
+					class="btn-pop rounded-full bg-surface px-5 py-2 text-sm font-bold"
+				>
+					SUZURIで見る →
+				</a>
+			</div>
+			<MerchGrid />
+		</div>
+	</section>
+
+	<Footer />
 </Layout>

@@ -1,0 +1,81 @@
+---
+interface Props {
+	variant?: "chips" | "icons";
+}
+
+const { variant = "chips" } = Astro.props;
+
+const platforms = [
+	{
+		name: "Spotify",
+		url: "https://open.spotify.com/show/14hhOIT7FeMOQomciCN7ac",
+		color: "#1DB954",
+		path: "M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z",
+	},
+	{
+		name: "Apple Podcasts",
+		url: "https://podcasts.apple.com/us/podcast/%E3%83%9E%E3%83%82%E3%82%AB%E3%83%AB-fm/id1723445201",
+		color: "#B150E2",
+		path: "M17 18.25V21.5H7v-3.25C7 16.87 9.24 15.75 12 15.75s5 1.12 5 2.5zM12 5.5A6.5 6.5 0 0 1 18.5 12c0 1.25-.35 2.42-.96 3.41L16 14.04c.32-.61.5-1.31.5-2.04 0-2.5-2-4.5-4.5-4.5S7.5 9.5 7.5 12c0 .73.18 1.43.5 2.04l-1.54 1.37A6.44 6.44 0 0 1 5.5 12 6.5 6.5 0 0 1 12 5.5zm0-4A10.5 10.5 0 0 1 22.5 12c0 2.28-.73 4.39-1.96 6.11l-1.5-1.35A8.44 8.44 0 0 0 20.5 12 8.5 8.5 0 0 0 12 3.5 8.5 8.5 0 0 0 3.5 12c0 1.76.54 3.4 1.46 4.76l-1.5 1.35A10.44 10.44 0 0 1 1.5 12 10.5 10.5 0 0 1 12 1.5zm0 8a2.5 2.5 0 0 1 2.5 2.5 2.5 2.5 0 0 1-2.5 2.5A2.5 2.5 0 0 1 9.5 12 2.5 2.5 0 0 1 12 9.5z",
+	},
+	{
+		name: "YouTube Music",
+		url: "https://music.youtube.com/playlist?list=PL-CmGAXMh0sLM1HwNQhSmLazMhBuvVHZE&si=-nTseXVn_li15PxW",
+		color: "#FF0000",
+		path: "M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z",
+	},
+	{
+		name: "RSS",
+		url: "https://listen.style/p/magicalfm/rss",
+		color: "#F59E0B",
+		path: "M6.18 15.64a2.18 2.18 0 0 1 2.18 2.18C8.36 19 7.38 20 6.18 20 5 20 4 19 4 17.82a2.18 2.18 0 0 1 2.18-2.18M4 4.44A15.56 15.56 0 0 1 19.56 20h-2.83A12.73 12.73 0 0 0 4 7.27V4.44m0 5.66a9.9 9.9 0 0 1 9.9 9.9h-2.83A7.07 7.07 0 0 0 4 12.93V10.1z",
+	},
+];
+---
+
+{
+	variant === "chips" ? (
+		<ul class="flex flex-wrap gap-3">
+			{platforms.map((platform) => (
+				<li>
+					<a
+						href={platform.url}
+						target="_blank"
+						rel="noopener noreferrer"
+						class="btn-pop inline-flex items-center gap-2 rounded-full bg-surface px-4 py-2 text-sm font-bold"
+					>
+						<svg
+							viewBox="0 0 24 24"
+							class="h-4 w-4"
+							fill="currentColor"
+							style={`color: ${platform.color}`}
+							aria-hidden="true"
+						>
+							<path d={platform.path} />
+						</svg>
+						{platform.name}
+					</a>
+				</li>
+			))}
+		</ul>
+	) : (
+		<ul class="flex items-center gap-2">
+			{platforms.map((platform) => (
+				<li>
+					<a
+						href={platform.url}
+						target="_blank"
+						rel="noopener noreferrer"
+						class="btn-pop grid h-10 w-10 place-items-center rounded-full bg-surface"
+						aria-label={platform.name}
+						style={`color: ${platform.color}`}
+					>
+						<svg viewBox="0 0 24 24" class="h-[18px] w-[18px]" fill="currentColor" aria-hidden="true">
+							<path d={platform.path} />
+						</svg>
+					</a>
+				</li>
+			))}
+		</ul>
+	)
+}

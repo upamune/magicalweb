@@ -1,147 +1,153 @@
 ---
-import Layout from '../../layouts/Layout.astro';
-import Header from '../../components/Header';
-import SocialLinks from '../../components/SocialLinks';
-import PlayButton from '../../components/PlayButton';
-import { getEpisodeBySlug, getAllEpisodeSlugs, getEpisodeSlug } from '../../utils/rss';
+import Footer from "../../components/Footer.astro";
+import Header from "../../components/Header";
+import Hosts from "../../components/Hosts.astro";
+import PlayButton from "../../components/PlayButton";
+import Layout from "../../layouts/Layout.astro";
+import {
+	getAllEpisodeSlugs,
+	getEpisodeBySlug,
+	getEpisodeDisplayTitle,
+	getEpisodeSlug,
+	getLatestEpisodes,
+} from "../../utils/rss";
 
 export async function getStaticPaths() {
-  const slugs = await getAllEpisodeSlugs();
-  return slugs.map(slug => ({
-    params: { slug }
-  }));
+	const slugs = await getAllEpisodeSlugs();
+	return slugs.map((slug) => ({
+		params: { slug },
+	}));
 }
 
 const { slug } = Astro.params;
-const episode = await getEpisodeBySlug(slug ?? '');
+const episode = await getEpisodeBySlug(slug ?? "");
 
 if (!episode) {
-  return Astro.redirect('/404');
+	return Astro.redirect("/404");
 }
 
 const episodeSlug = getEpisodeSlug(episode);
 const ogImage = `/og/ep-${episodeSlug}.png`;
+
+// 前後のエピソード（配列は新しい順）
+const allEpisodes = await getLatestEpisodes(1000);
+const index = allEpisodes.findIndex((ep) => ep.number === episode.number);
+const newerEpisode = index > 0 ? allEpisodes[index - 1] : null;
+const olderEpisode =
+	index < allEpisodes.length - 1 ? allEpisodes[index + 1] : null;
+
+const displayTitle = getEpisodeDisplayTitle(episode);
+
+const shareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(
+	`${episode.title} を聴いています | マヂカル.fm`,
+)}&url=${encodeURIComponent(`https://www.magical.fm/ep/${episodeSlug}`)}&hashtags=magicalfm`;
 ---
 
-<Layout 
-  title={`${episode.title} - マヂカル.fm`}
-  description={episode.description.replace(/<[^>]*>/g, '').slice(0, 200) + '...'}
-  image={ogImage}
-  type="article"
-  publishedTime={new Date(episode.pubDate.replace(/年|月/g, '-').replace('日', '')).toISOString()}
+<Layout
+	title={`${episode.title} - マヂカル.fm`}
+	description={episode.description.replace(/<[^>]*>/g, "").slice(0, 200) + "..."}
+	image={ogImage}
+	type="article"
+	publishedTime={new Date(episode.pubDate.replace(/年|月/g, "-").replace("日", "")).toISOString()}
 >
-  <Header client:load />
-  
-  <main class="pt-20 min-h-screen bg-gradient-to-b from-gray-50 to-white dark:from-gray-900 dark:to-gray-800">
-    <div class="container mx-auto px-4 py-12">
-      <article class="max-w-4xl mx-auto">
-        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl overflow-hidden">
-          {/* ヘッダー部分 */}
-          <div class="bg-gradient-to-r from-primary/10 to-secondary/10 dark:from-primary/20 dark:to-secondary/20 p-6 md:p-8">
-            <div class="flex flex-col gap-4">
-              <div class="flex flex-col md:flex-row justify-between items-start gap-4">
-                <h1 class="text-2xl md:text-3xl lg:text-4xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-                  {episode.title}
-                </h1>
-                <a
-                  href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(`${episode.title} を聴いています | マヂカル.fm`)}&url=${encodeURIComponent(`https://www.magical.fm/ep/${episodeSlug}`)}&hashtags=magicalfm`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary text-white hover:bg-secondary transition-colors whitespace-nowrap self-end"
-                >
-                  <span class="i-[ri:twitter-x-fill]"></span>
-                  共有する
-                </a>
-              </div>
-              <p class="text-gray-600 dark:text-gray-400">
-                {episode.pubDate}
-              </p>
-              <SocialLinks client:load />
-            </div>
-          </div>
+	<Header client:load />
 
-          {/* 再生ボタン */}
-          <div class="p-6 md:p-8 border-b dark:border-gray-700">
-            <PlayButton
-              client:load
-              episodeNumber={episode.number}
-              episodeSlug={episodeSlug}
-              episodeTitle={episode.title}
-              audioUrl={episode.audioUrl}
-            />
-          </div>
+	<!-- ヘッダー（スカイ） -->
+	<section class="dotted border-b-3 border-edge bg-sky">
+		<div class="mx-auto max-w-3xl px-5 py-10 sm:py-14">
+			<a
+				href="/episodes"
+				class="btn-pop inline-flex items-center gap-2 rounded-full bg-surface px-4 py-1.5 text-xs font-bold"
+			>
+				<span aria-hidden="true">←</span>
+				エピソード一覧
+			</a>
 
-          {/* エピソード本文 */}
-          <div class="p-6 md:p-8">
-            <div 
-              class="prose dark:prose-invert max-w-none"
-              set:html={episode.description}
-            />
-          </div>
+			<div class="mt-6 flex flex-wrap items-center gap-3">
+				<span class="inline-block -rotate-2 rounded-xl border-3 border-edge bg-sun px-3.5 py-1.5 font-display text-sm text-[rgb(29,26,46)] shadow-pop-xs">
+					#{episode.number}
+				</span>
+				<span class="text-sm font-bold text-[rgb(29,26,46)]/80">{episode.pubDate}</span>
+			</div>
+			<h1
+				class="mt-4 font-display text-2xl leading-snug tracking-tight text-[rgb(29,26,46)] sm:text-4xl"
+				style="text-shadow: 3px 3px 0 rgb(255 255 255 / 0.55)"
+			>
+				{displayTitle}
+			</h1>
 
-          {/* パーソナリティ */}
-          <div class="p-6 md:p-8 bg-gray-50 dark:bg-gray-900">
-            <h2 class="text-xl font-bold mb-6">パーソナリティ</h2>
-            <div class="grid md:grid-cols-2 gap-8">
-              <div class="flex items-center gap-4">
-                <img
-                  src="https://unavatar.io/twitter/applism118"
-                  alt="michiru_da"
-                  class="w-16 h-16 rounded-full"
-                />
-                <div>
-                  <h3 class="font-bold">@michiru_da</h3>
-                  <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">関西人のプロダクトマネージャー</p>
-                  <a
-                    href="https://x.com/applism118"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    class="text-primary hover:text-secondary transition-colors text-sm"
-                  >
-                    𝕏でフォロー
-                  </a>
-                </div>
-              </div>
-              <div class="flex items-center gap-4">
-                <img
-                  src="https://unavatar.io/twitter/upamune"
-                  alt="upamune"
-                  class="w-16 h-16 rounded-full"
-                />
-                <div>
-                  <h3 class="font-bold">@upamune</h3>
-                  <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">関西人(?)のソフトウェアエンジニア</p>
-                  <a
-                    href="https://x.com/upamune"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    class="text-primary hover:text-secondary transition-colors text-sm"
-                  >
-                    𝕏でフォロー
-                  </a>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </article>
-    </div>
-  </main>
+			<div class="mt-8 flex flex-wrap items-center gap-3">
+				<PlayButton
+					client:load
+					episodeNumber={episode.number}
+					episodeSlug={episodeSlug}
+					episodeTitle={displayTitle}
+					audioUrl={episode.audioUrl}
+				/>
+				<a
+					href={shareUrl}
+					target="_blank"
+					rel="noopener noreferrer"
+					class="btn-pop inline-flex items-center gap-2 rounded-full bg-surface px-6 py-3.5 text-sm font-bold"
+				>
+					<svg viewBox="0 0 24 24" class="h-3.5 w-3.5" fill="currentColor" aria-hidden="true">
+						<path d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z"></path>
+					</svg>
+					ポストする
+				</a>
+			</div>
+		</div>
+	</section>
+
+	<article class="mx-auto max-w-3xl px-5 pt-10 sm:pt-12">
+		<div class="rounded-3xl border-3 border-edge bg-surface p-6 shadow-pop sm:p-8">
+			<div
+				class="prose prose-stone max-w-none dark:prose-invert prose-p:leading-relaxed prose-p:text-ink/90 prose-a:font-bold prose-a:text-tangerine prose-a:decoration-[2px] prose-a:underline-offset-4 prose-strong:text-ink"
+				set:html={episode.description}
+			/>
+		</div>
+
+		{/* 前後のエピソード */}
+		<nav class="mt-10 grid gap-4 sm:grid-cols-2" aria-label="前後のエピソード">
+			{
+				olderEpisode ? (
+					<a
+						href={`/ep/${getEpisodeSlug(olderEpisode)}`}
+						class="btn-pop group rounded-2xl bg-surface p-5"
+					>
+						<p class="font-display text-[11px] tracking-widest text-muted">
+							← 前の回 #{olderEpisode.number}
+						</p>
+						<p class="mt-2 truncate text-sm font-bold underline decoration-transparent decoration-[3px] underline-offset-4 transition-[text-decoration-color] duration-150 group-hover:decoration-tangerine">
+							{getEpisodeDisplayTitle(olderEpisode)}
+						</p>
+					</a>
+				) : (
+					<span />
+				)
+			}
+			{
+				newerEpisode && (
+					<a
+						href={`/ep/${getEpisodeSlug(newerEpisode)}`}
+						class="btn-pop group rounded-2xl bg-surface p-5 text-right"
+					>
+						<p class="font-display text-[11px] tracking-widest text-muted">
+							次の回 #{newerEpisode.number} →
+						</p>
+						<p class="mt-2 truncate text-sm font-bold underline decoration-transparent decoration-[3px] underline-offset-4 transition-[text-decoration-color] duration-150 group-hover:decoration-tangerine">
+							{getEpisodeDisplayTitle(newerEpisode)}
+						</p>
+					</a>
+				)
+			}
+		</nav>
+
+		<section class="mt-12">
+			<h2 class="mb-5 font-display text-lg">パーソナリティ</h2>
+			<Hosts compact />
+		</section>
+	</article>
+
+	<Footer />
 </Layout>
-
-<style>
-  audio::-webkit-media-controls-panel {
-    background-color: theme('colors.gray.100');
-  }
-  .dark audio::-webkit-media-controls-panel {
-    background-color: theme('colors.gray.800');
-  }
-  audio::-webkit-media-controls-current-time-display,
-  audio::-webkit-media-controls-time-remaining-display {
-    color: theme('colors.gray.900');
-  }
-  .dark audio::-webkit-media-controls-current-time-display,
-  .dark audio::-webkit-media-controls-time-remaining-display {
-    color: theme('colors.gray.100');
-  }
-</style>

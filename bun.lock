@@ -1,12 +1,12 @@
 {
   "lockfileVersion": 1,
+  "configVersion": 0,
   "workspaces": {
     "": {
       "name": "magical-fm",
       "dependencies": {
         "@astrojs/react": "^3.0.10",
         "@astrojs/tailwind": "^5.1.0",
-        "@iconify/react": "^4.1.1",
         "@resvg/resvg-js": "^2.6.2",
         "@tailwindcss/typography": "^0.5.10",
         "@types/react": "^18.2.55",
@@ -21,7 +21,6 @@
         "react-dom": "^18.2.0",
         "rss-parser": "^3.13.0",
         "satori": "^0.12.1",
-        "swiper": "^11.0.6",
         "tailwindcss": "^3.4.1",
         "yaml": "^2.3.4",
         "zustand": "^5.0.1",
@@ -157,10 +156,6 @@
     "@esbuild/win32-ia32": ["@esbuild/win32-ia32@0.21.5", "", { "os": "win32", "cpu": "ia32" }, "sha512-SWXFF1CL2RVNMaVs+BBClwtfZSvDgtL//G/smwAc5oVK/UPu2Gu9tIaRgFmYFFKrmg3SyAjSrElf0TiJ1v8fYA=="],
 
     "@esbuild/win32-x64": ["@esbuild/win32-x64@0.21.5", "", { "os": "win32", "cpu": "x64" }, "sha512-tQd/1efJuzPC6rCFwEvLtci/xNFcTZknmXs98FYDfGE4wP9ClFV98nyKrzJKVPMhdDnjzLhdUyMX4PsQAPjwIw=="],
-
-    "@iconify/react": ["@iconify/react@4.1.1", "", { "dependencies": { "@iconify/types": "^2.0.0" }, "peerDependencies": { "react": ">=16" } }, "sha512-jed14EjvKjee8mc0eoscGxlg7mSQRkwQG3iX3cPBCO7UlOjz0DtlvTqxqEcHUJGh+z1VJ31Yhu5B9PxfO0zbdg=="],
-
-    "@iconify/types": ["@iconify/types@2.0.0", "", {}, "sha512-+wluvCrRhXrhyOmRDJ3q8mux9JkKy5SJ/v8ol2tu4FVjyYvtEzkc/3pK15ET6RKg4b4w4BmTk1+gsCUhf21Ykg=="],
 
     "@img/sharp-darwin-arm64": ["@img/sharp-darwin-arm64@0.33.5", "", { "optionalDependencies": { "@img/sharp-libvips-darwin-arm64": "1.0.4" }, "os": "darwin", "cpu": "arm64" }, "sha512-UT4p+iz/2H4twwAoLCqfA9UH5pI6DggwKEGuaPy7nCVQ8ZsiY5PIcrRvD1DzuY3qYL07NtIQcWnBSY/heikIFQ=="],
 
@@ -1005,8 +1000,6 @@
     "sucrase": ["sucrase@3.35.0", "", { "dependencies": { "@jridgewell/gen-mapping": "^0.3.2", "commander": "^4.0.0", "glob": "^10.3.10", "lines-and-columns": "^1.1.6", "mz": "^2.7.0", "pirates": "^4.0.1", "ts-interface-checker": "^0.1.9" }, "bin": { "sucrase": "bin/sucrase", "sucrase-node": "bin/sucrase-node" } }, "sha512-8EbVDiu9iN/nESwxeSxDKe0dunta1GOlHufmSSXxMD2z2/tMZpDMpvXQGsc+ajGo8y2uYUmixaSRUc/QPoQ0GA=="],
 
     "supports-preserve-symlinks-flag": ["supports-preserve-symlinks-flag@1.0.0", "", {}, "sha512-ot0WnXS9fgdkgIcePe6RHNk1WA8+muPa6cSjeR3V8K27q9BB1rTE3R1p7Hv0z1ZyAc8s6Vvv8DIyWf681MAt0w=="],
-
-    "swiper": ["swiper@11.1.15", "", {}, "sha512-IzWeU34WwC7gbhjKsjkImTuCRf+lRbO6cnxMGs88iVNKDwV+xQpBCJxZ4bNH6gSrIbbyVJ1kuGzo3JTtz//CBw=="],
 
     "symbol-tree": ["symbol-tree@3.2.4", "", {}, "sha512-9QNk5KwDF+Bvz+PyObkmSYjI5ksVUYtjW7AU22r2NKcfLJcXp96hkDWU3+XndOsUb+AQ9QhfzfCT2O+CNWT5Tw=="],
 

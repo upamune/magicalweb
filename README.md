@@ -63,12 +63,13 @@ bun scripts/fetch-episodes.js
 
 ### generate-og.jsx
 
-OGP画像を生成するスクリプト
+OGP画像を生成するスクリプト。デザインと日本語組版ルールは [docs/design-system.md](docs/design-system.md) を参照。
 
 | オプション | 説明 |
 | --- | --- |
-| `--latest` | 最新のn件のエピソードを対象にする |
+| `--latest <n>` | 最新のn件のエピソードを対象にする |
 | `--force` | 既存のOGP画像を上書きする |
+| `--site` | サイト全体用の `public/ogp.png` を生成する |
 
 ```bash
 bun scripts/generate-og.jsx

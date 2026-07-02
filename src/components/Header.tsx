@@ -1,109 +1,101 @@
-import React, { useState } from 'react';
-import ThemeToggle from './ThemeToggle';
+import { useState } from "react";
+import ThemeToggle from "./ThemeToggle";
+
+const NAV_ITEMS = [
+	{ href: "/episodes", label: "エピソード" },
+	{ href: "/#hosts", label: "パーソナリティ" },
+	{ href: "/#merch", label: "グッズ" },
+	{ href: "https://go.magical.fm/hello", label: "お便り", external: true },
+];
 
 export default function Header() {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
+	const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  return (
-    <header className="fixed w-full bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm z-50">
-      <nav className="container mx-auto px-4 py-4">
-        <div className="flex items-center justify-between">
-          <a href="/" className="text-2xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-            マヂカル.fm
-          </a>
-          
-          {/* Desktop Menu */}
-          <div className="hidden md:flex items-center gap-6">
-            <a href="/episodes" className="hover:text-primary transition-colors">エピソード</a>
-            <a href="/#hosts" className="hover:text-primary transition-colors">パーソナリティ</a>
-            <a href="/#merch" className="hover:text-primary transition-colors">グッズ</a>
-            <a 
-              href="https://go.magical.fm/hello" 
-              target="_blank" 
-              rel="noopener noreferrer" 
-              className="hover:text-primary transition-colors"
-            >
-              お便り
-            </a>
-            <ThemeToggle />
-          </div>
+	return (
+		<header className="sticky top-0 z-40 border-b-3 border-edge bg-paper">
+			<nav className="mx-auto max-w-5xl px-5">
+				<div className="flex h-16 items-center justify-between">
+					<a
+						href="/"
+						className="flex items-center gap-2.5 font-display text-lg tracking-tight transition-transform duration-150 ease-out-quart active:scale-95"
+					>
+						<span
+							className="grid h-9 w-9 place-items-center rounded-full border-3 border-edge bg-sun text-base shadow-pop-xs"
+							aria-hidden="true"
+						>
+							🎙️
+						</span>
+						マヂカル<span className="text-tangerine">.fm</span>
+					</a>
 
-          {/* Mobile Menu Button */}
-          <div className="flex items-center gap-4 md:hidden">
-            <ThemeToggle />
-            <button
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="p-2 rounded-lg bg-gradient-to-br from-primary/10 to-secondary/10 hover:from-primary/20 hover:to-secondary/20 transition-all duration-300"
-              aria-label="メニュー"
-            >
-              <svg
-                className={`w-6 h-6 transition-transform duration-300 ${isMenuOpen ? 'rotate-90' : ''}`}
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                {isMenuOpen ? (
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M6 18L18 6M6 6l12 12"
-                  />
-                ) : (
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M4 6h16M4 12h16M4 18h16"
-                  />
-                )}
-              </svg>
-            </button>
-          </div>
-        </div>
+					{/* Desktop Menu */}
+					<div className="hidden items-center gap-1.5 md:flex">
+						{NAV_ITEMS.map((item) => (
+							<a
+								key={item.href}
+								href={item.href}
+								target={item.external ? "_blank" : undefined}
+								rel={item.external ? "noopener noreferrer" : undefined}
+								className="rounded-full border-3 border-transparent px-3.5 py-1.5 text-sm font-bold text-ink transition-[border-color,background-color,transform] duration-150 ease-out-quart hover:border-edge hover:bg-sun active:scale-95 dark:hover:text-[rgb(29,26,46)]"
+							>
+								{item.label}
+							</a>
+						))}
+						<div className="ml-2">
+							<ThemeToggle />
+						</div>
+					</div>
 
-        {/* Mobile Menu */}
-        <div
-          className={`md:hidden transition-all duration-300 ease-in-out ${
-            isMenuOpen
-              ? 'max-h-64 opacity-100 mt-4'
-              : 'max-h-0 opacity-0 overflow-hidden'
-          }`}
-        >
-          <div className="flex flex-col gap-4 py-4">
-            <a
-              href="/episodes"
-              className="px-4 py-2 rounded-lg hover:bg-primary/10 transition-colors"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              エピソード
-            </a>
-            <a
-              href="/#hosts"
-              className="px-4 py-2 rounded-lg hover:bg-primary/10 transition-colors"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              パーソナリティ
-            </a>
-            <a
-              href="/#merch"
-              className="px-4 py-2 rounded-lg hover:bg-primary/10 transition-colors"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              グッズ
-            </a>
-            <a
-              href="https://go.magical.fm/hello"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="px-4 py-2 rounded-lg hover:bg-primary/10 transition-colors"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              お便り
-            </a>
-          </div>
-        </div>
-      </nav>
-    </header>
-  );
+					{/* Mobile Menu Button */}
+					<div className="flex items-center gap-3 md:hidden">
+						<ThemeToggle />
+						<button
+							type="button"
+							onClick={() => setIsMenuOpen(!isMenuOpen)}
+							className="btn-pop relative grid h-10 w-10 place-items-center rounded-full bg-surface"
+							aria-label="メニュー"
+							aria-expanded={isMenuOpen}
+						>
+							<span
+								className={`absolute h-[2.5px] w-4 rounded-full bg-ink transition-transform duration-200 ease-out-quart ${
+									isMenuOpen ? "rotate-45" : "-translate-y-[4px]"
+								}`}
+							/>
+							<span
+								className={`absolute h-[2.5px] w-4 rounded-full bg-ink transition-transform duration-200 ease-out-quart ${
+									isMenuOpen ? "-rotate-45" : "translate-y-[4px]"
+								}`}
+							/>
+						</button>
+					</div>
+				</div>
+
+				{/* Mobile Menu */}
+				<div
+					className={`grid transition-[grid-template-rows,opacity] duration-200 ease-out-quart md:hidden ${
+						isMenuOpen
+							? "grid-rows-[1fr] opacity-100"
+							: "grid-rows-[0fr] opacity-0"
+					}`}
+				>
+					<div className="overflow-hidden">
+						<div className="flex flex-col gap-2 pb-4">
+							{NAV_ITEMS.map((item) => (
+								<a
+									key={item.href}
+									href={item.href}
+									target={item.external ? "_blank" : undefined}
+									rel={item.external ? "noopener noreferrer" : undefined}
+									className="rounded-2xl border-3 border-edge bg-surface px-4 py-2.5 text-sm font-bold shadow-pop-xs transition-transform duration-150 ease-out-quart active:scale-[0.98]"
+									onClick={() => setIsMenuOpen(false)}
+								>
+									{item.label}
+								</a>
+							))}
+						</div>
+					</div>
+				</div>
+			</nav>
+		</header>
+	);
 }

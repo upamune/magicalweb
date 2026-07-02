@@ -11,9 +11,4 @@ export default defineConfig({
     tailwind()
   ],
   output: 'static',
-  vite: {
-    ssr: {
-      noExternal: ['swiper', 'swiper/*'],
-    },
-  },
 });

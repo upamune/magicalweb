@@ -1,628 +1,706 @@
 import fs from "node:fs";
 import path from "node:path";
-import React from "react";
-import satori from "satori";
 import { Resvg } from "@resvg/resvg-js";
 import { loadDefaultJapaneseParser } from "budoux";
+import React from "react";
+import satori from "satori";
 import episodesData from "../src/data/episodes.json" with { type: "json" };
 
-// budoux日本語パーサーを初期化
+// ============================================================
+// マヂカル.fm OGP ジェネレーター（関西ポップ）
+//
+// デザイン: docs/design-system.md 参照
+// 組版: BudouX での文節分割に加えて、
+//   - 文字種ごとの幅テーブルによるフォントサイズの段階決定
+//   - 孤立行（行末に1〜2文字だけ残る）の再調整
+//   - 助詞を道連れにする「…」省略
+//   - 約物（括弧・句読点）の全角アキ詰め
+// を自前で行い、行の組み方を完全にコントロールする。
+// ============================================================
+
 const parser = loadDefaultJapaneseParser();
 
-// budouxでテキストを分割し、各セグメントをspanで囲む
-// satoriではdisplay: flex | block | noneのみサポート
-function wrapWithBudoux(text, style = {}) {
-	const segments = parser.parse(text);
-	return segments.map((segment, index) => (
-		<span key={index} style={{ ...style }}>
-			{segment}
-		</span>
-	));
-}
-
-// OGP画像のサイズ
 const WIDTH = 1200;
 const HEIGHT = 630;
-
 const OUT_DIR = path.join(process.cwd(), "public", "og");
+const EMOJI_CACHE_DIR = path.join(
+	process.cwd(),
+	"node_modules",
+	".cache",
+	"twemoji",
+);
 
-// CLI引数をパース
+// デザイントークン（docs/design-system.md と同期）
+const C = {
+	ink: "#1D1A2E",
+	paper: "#FFF8EE",
+	card: "#FFFEFA",
+	muted: "#6E6884",
+	lilac: "#CFB3F5",
+	lime: "#C9E94E",
+	tangerine: "#FF8A3D",
+	sky: "#7FD4F5",
+	candy: "#FF9EC0",
+	sun: "#FFD23F",
+};
+
+// エピソード番号で背景色をローテーション（色面分割の思想）
+const BG_ROTATION = [C.lilac, C.lime, C.sky, C.candy];
+
+// ---------- CLI ----------
 const args = process.argv.slice(2);
-const forceOverwrite = args.includes('--force') || args.includes('-f');
-const generateVariants = args.includes('--variants') || args.includes('-v');
+const forceOverwrite = args.includes("--force") || args.includes("-f");
+const generateSite = args.includes("--site");
 
-// 最新n件の指定を解析
-const latestIndex = args.findIndex(arg => arg === '--latest' || arg === '-l');
-const latestCount = latestIndex !== -1 ? Number.parseInt(args[latestIndex + 1], 10) : null;
+const latestIndex = args.findIndex((arg) => arg === "--latest" || arg === "-l");
+const latestCount =
+	latestIndex !== -1 ? Number.parseInt(args[latestIndex + 1], 10) : null;
 if (latestIndex !== -1 && (!Number.isFinite(latestCount) || latestCount <= 0)) {
-	console.error('Error: --latest (-l) オプションには正の整数を指定してください');
+	console.error(
+		"Error: --latest (-l) オプションには正の整数を指定してください",
+	);
 	process.exit(1);
 }
 
-// M PLUS Roundedフォントを読み込み
-const fontRegular = fs.readFileSync("./fonts/m-plus-rounded/MPLUSRounded1c-Regular.ttf", null);
-const fontBold = fs.readFileSync("./fonts/m-plus-rounded/MPLUSRounded1c-Bold.ttf", null);
+// ---------- フォント ----------
+const fontDisplay = fs.readFileSync(
+	"./fonts/mochiy-pop-one/MochiyPopOne-Regular.ttf",
+	null,
+);
+const fontRegular = fs.readFileSync(
+	"./fonts/m-plus-rounded/MPLUSRounded1c-Regular.ttf",
+	null,
+);
+const fontBold = fs.readFileSync(
+	"./fonts/m-plus-rounded/MPLUSRounded1c-Bold.ttf",
+	null,
+);
 
-// 公式アイコン画像を読み込み（Base64エンコード）
-const artworkImagePath = path.join(process.cwd(), "images", "artwork_for_ogp.png");
-const artworkImageBuffer = fs.readFileSync(artworkImagePath);
-const artworkImageBase64 = artworkImageBuffer.toString('base64');
-const artworkImageDataUri = `data:image/png;base64,${artworkImageBase64}`;
+// ============================================================
+// 絵文字（Twemoji を SVG data URI として埋め込む）
+// ============================================================
 
-// 背景画像を読み込み（Base64エンコード）
-const backgroundImagePath = path.join(process.cwd(), "images", "artwork_for_ogp_3000.png");
-const backgroundImageBuffer = fs.readFileSync(backgroundImagePath);
-const backgroundImageBase64 = backgroundImageBuffer.toString('base64');
-const backgroundImageDataUri = `data:image/png;base64,${backgroundImageBase64}`;
+const EMOJI_RE = /\p{Extended_Pictographic}/u;
+const segmenter = new Intl.Segmenter("ja", { granularity: "grapheme" });
 
-// スタイルバリエーションの定義
-export const STYLE_VARIANTS = {
-	brandBottomRight: {
-		name: 'brand-bottom-right',
-		position: { bottom: '32px', right: '40px' },
-		showIcon: true,
-		fontSize: '24px',
-	},
-	brandTopLeft: {
-		name: 'brand-top-left',
-		position: { top: '32px', left: '40px' },
-		showIcon: true,
-		fontSize: '24px',
-	},
-	brandBottomRightNoIcon: {
-		name: 'brand-bottom-right-no-icon',
-		position: { bottom: '32px', right: '40px' },
-		showIcon: false,
-		fontSize: '24px',
-	},
-	brandTopLeftNoIcon: {
-		name: 'brand-top-left-no-icon',
-		position: { top: '32px', left: '40px' },
-		showIcon: false,
-		fontSize: '24px',
-	},
-	brandCenterBottom: {
-		name: 'brand-center-bottom',
-		position: { bottom: '32px', left: '0', right: '0' },
-		showIcon: true,
-		fontSize: '28px',
-		centerAlign: true,
-	},
-	brandCenterBottomNoIcon: {
-		name: 'brand-center-bottom-no-icon',
-		position: { bottom: '32px', left: '0', right: '0' },
-		showIcon: false,
-		fontSize: '28px',
-		centerAlign: true,
-	},
-	brandTopRight: {
-		name: 'brand-top-right',
-		position: { top: '32px', right: '40px' },
-		showIcon: true,
-		fontSize: '20px',
-	},
-	brandBottomRightSmall: {
-		name: 'brand-bottom-right-small',
-		position: { bottom: '32px', right: '40px' },
-		showIcon: true,
-		fontSize: '24px',
-		backgroundSize: '250px 250px',
-		backgroundRepeat: 'repeat',
-		backgroundPosition: '-60px -60px',
-	},
-	brandTopLeftSmall: {
-		name: 'brand-top-left-small',
-		position: { top: '32px', left: '40px' },
-		showIcon: true,
-		fontSize: '24px',
-		backgroundSize: '250px 250px',
-		backgroundRepeat: 'repeat',
-		backgroundPosition: '-60px -60px',
-	},
-	brandBottomRightSmallNoIcon: {
-		name: 'brand-bottom-right-small-no-icon',
-		position: { bottom: '32px', right: '40px' },
-		showIcon: false,
-		fontSize: '24px',
-		backgroundSize: '250px 250px',
-		backgroundRepeat: 'repeat',
-		backgroundPosition: '-60px -60px',
-	},
-	brandTopLeftSmallNoIcon: {
-		name: 'brand-top-left-small-no-icon',
-		position: { top: '32px', left: '40px' },
-		showIcon: false,
-		fontSize: '24px',
-		backgroundSize: '250px 250px',
-		backgroundRepeat: 'repeat',
-		backgroundPosition: '-60px -60px',
-	},
-	brandBottomRightNoBg: {
-		name: 'brand-bottom-right-no-bg',
-		position: { bottom: '32px', right: '40px' },
-		showIcon: true,
-		fontSize: '24px',
-		useBackgroundImage: false,
-	},
-	brandTopLeftNoBg: {
-		name: 'brand-top-left-no-bg',
-		position: { top: '32px', left: '40px' },
-		showIcon: true,
-		fontSize: '24px',
-		useBackgroundImage: false,
-	},
-	brandBottomRightNoIconNoBg: {
-		name: 'brand-bottom-right-no-icon-no-bg',
-		position: { bottom: '32px', right: '40px' },
-		showIcon: false,
-		fontSize: '24px',
-		useBackgroundImage: false,
-	},
-	brandTopLeftNoIconNoBg: {
-		name: 'brand-top-left-no-icon-no-bg',
-		position: { top: '32px', left: '40px' },
-		showIcon: false,
-		fontSize: '24px',
-		useBackgroundImage: false,
-	},
-	brandBottomRightStrongBlur: {
-		name: 'brand-bottom-right-strong-blur',
-		position: { bottom: '32px', right: '40px' },
-		showIcon: true,
-		fontSize: '24px',
-		backgroundBlur: '8px',
-	},
-	brandTopLeftStrongBlur: {
-		name: 'brand-top-left-strong-blur',
-		position: { top: '32px', left: '40px' },
-		showIcon: true,
-		fontSize: '24px',
-		backgroundBlur: '8px',
-	},
-	brandBottomRightNoIconStrongBlur: {
-		name: 'brand-bottom-right-no-icon-strong-blur',
-		position: { bottom: '32px', right: '40px' },
-		showIcon: false,
-		showText: false,
-		fontSize: '24px',
-		backgroundBlur: '8px',
-		titleStyle: {
-			fontSize: '56px',
-			fontWeight: 700,
-			color: 'rgba(255, 255, 255, 1)',
-			textShadow: '0 3px 12px rgba(0, 0, 0, 0.7), 0 1px 3px rgba(0, 0, 0, 0.5)',
-		},
-	},
-	brandBottomRightNoIconStrongBlurWithBg: {
-		name: 'brand-bottom-right-no-icon-strong-blur-with-bg',
-		position: { bottom: '32px', right: '40px' },
-		showIcon: false,
-		showText: false,
-		fontSize: '24px',
-		backgroundBlur: '8px',
-		titleStyle: {
-			fontSize: '64px',
-			fontWeight: 700,
-			color: 'rgba(255, 255, 255, 1)',
-			textShadow: '0 3px 12px rgba(0, 0, 0, 0.7)',
-			background: 'rgba(0, 0, 0, 0.6)',
-			padding: '16px 32px',
-			borderRadius: '20px',
-			backdropFilter: 'blur(8px)',
-		},
-	},
-	brandBottomRightNoIconStrongBlurLarge: {
-		name: 'brand-bottom-right-no-icon-strong-blur-large',
-		position: { bottom: '32px', right: '40px' },
-		showIcon: false,
-		showText: false,
-		fontSize: '24px',
-		backgroundBlur: '8px',
-		titleStyle: {
-			fontSize: '72px',
-			fontWeight: 700,
-			color: 'rgba(255, 255, 255, 1)',
-			textShadow: '0 3px 12px rgba(0, 0, 0, 0.7), 0 1px 3px rgba(0, 0, 0, 0.5)',
-		},
-	},
-	brandTopLeftNoIconStrongBlur: {
-		name: 'brand-top-left-no-icon-strong-blur',
-		position: { top: '32px', left: '40px' },
-		showIcon: false,
-		fontSize: '24px',
-		backgroundBlur: '8px',
-	},
-	brandCenterBottomStrongBlur: {
-		name: 'brand-center-bottom-strong-blur',
-		position: { bottom: '32px', left: '0', right: '0' },
-		showIcon: true,
-		fontSize: '28px',
-		centerAlign: true,
-		backgroundBlur: '8px',
-	},
-	brandCenterBottomNoIconStrongBlur: {
-		name: 'brand-center-bottom-no-icon-strong-blur',
-		position: { bottom: '32px', left: '0', right: '0' },
-		showIcon: false,
-		fontSize: '28px',
-		centerAlign: true,
-		backgroundBlur: '8px',
-	},
-	brandTopRightStrongBlur: {
-		name: 'brand-top-right-strong-blur',
-		position: { top: '32px', right: '40px' },
-		showIcon: true,
-		fontSize: '20px',
-		backgroundBlur: '8px',
-	},
-	brandBottomRightSmallStrongBlur: {
-		name: 'brand-bottom-right-small-strong-blur',
-		position: { bottom: '32px', right: '40px' },
-		showIcon: true,
-		fontSize: '24px',
-		backgroundSize: '250px 250px',
-		backgroundRepeat: 'repeat',
-		backgroundPosition: '-60px -60px',
-		backgroundBlur: '8px',
-	},
-	brandTopLeftSmallStrongBlur: {
-		name: 'brand-top-left-small-strong-blur',
-		position: { top: '32px', left: '40px' },
-		showIcon: true,
-		fontSize: '24px',
-		backgroundSize: '250px 250px',
-		backgroundRepeat: 'repeat',
-		backgroundPosition: '-60px -60px',
-		backgroundBlur: '8px',
-	},
-	brandBottomRightSmallNoIconStrongBlur: {
-		name: 'brand-bottom-right-small-no-icon-strong-blur',
-		position: { bottom: '32px', right: '40px' },
-		showIcon: false,
-		fontSize: '24px',
-		backgroundSize: '250px 250px',
-		backgroundRepeat: 'repeat',
-		backgroundPosition: '-60px -60px',
-		backgroundBlur: '8px',
-	},
-	brandTopLeftSmallNoIconStrongBlur: {
-		name: 'brand-top-left-small-no-icon-strong-blur',
-		position: { top: '32px', left: '40px' },
-		showIcon: false,
-		fontSize: '24px',
-		backgroundSize: '250px 250px',
-		backgroundRepeat: 'repeat',
-		backgroundPosition: '-60px -60px',
-		backgroundBlur: '8px',
-	},
-	brandBottomRightNoBgStrongBlur: {
-		name: 'brand-bottom-right-no-bg-strong-blur',
-		position: { bottom: '32px', right: '40px' },
-		showIcon: true,
-		fontSize: '24px',
-		useBackgroundImage: false,
-		backgroundBlur: '8px',
-	},
-	brandTopLeftNoBgStrongBlur: {
-		name: 'brand-top-left-no-bg-strong-blur',
-		position: { top: '32px', left: '40px' },
-		showIcon: true,
-		fontSize: '24px',
-		useBackgroundImage: false,
-		backgroundBlur: '8px',
-	},
-	brandBottomRightNoIconNoBgStrongBlur: {
-		name: 'brand-bottom-right-no-icon-no-bg-strong-blur',
-		position: { bottom: '32px', right: '40px' },
-		showIcon: false,
-		fontSize: '24px',
-		useBackgroundImage: false,
-		backgroundBlur: '8px',
-	},
-	brandTopLeftNoIconNoBgStrongBlur: {
-		name: 'brand-top-left-no-icon-no-bg-strong-blur',
-		position: { top: '32px', left: '40px' },
-		showIcon: false,
-		fontSize: '24px',
-		useBackgroundImage: false,
-		backgroundBlur: '8px',
-	},
-	brandCenterBottomNoBg: {
-		name: 'brand-center-bottom-no-bg',
-		position: { bottom: '32px', left: '0', right: '0' },
-		showIcon: true,
-		fontSize: '28px',
-		centerAlign: true,
-		useBackgroundImage: false,
-	},
-	brandCenterBottomNoIconNoBg: {
-		name: 'brand-center-bottom-no-icon-no-bg',
-		position: { bottom: '32px', left: '0', right: '0' },
-		showIcon: false,
-		fontSize: '28px',
-		centerAlign: true,
-		useBackgroundImage: false,
-	},
-	brandCenterBottomNoBgStrongBlur: {
-		name: 'brand-center-bottom-no-bg-strong-blur',
-		position: { bottom: '32px', left: '0', right: '0' },
-		showIcon: true,
-		fontSize: '28px',
-		centerAlign: true,
-		useBackgroundImage: false,
-		backgroundBlur: '8px',
-	},
-	brandCenterBottomNoIconNoBgStrongBlur: {
-		name: 'brand-center-bottom-no-icon-no-bg-strong-blur',
-		position: { bottom: '32px', left: '0', right: '0' },
-		showIcon: false,
-		fontSize: '28px',
-		centerAlign: true,
-		useBackgroundImage: false,
-		backgroundBlur: '8px',
-	},
-};
+function toGraphemes(text) {
+	return [...segmenter.segment(text)].map((s) => s.segment);
+}
 
-export async function generateOGP(options) {
-	const { title, subtitle, outPath, styleVariant = null, episodeNumber = null } = options;
-	
-	// スタイルバリエーションの選択
-	const variant = styleVariant || STYLE_VARIANTS.brandBottomRightNoIconStrongBlur;
-	const brandPosition = variant.position;
-	const showIcon = variant.showIcon;
-	const showText = variant.showText !== false; // デフォルトはtrue
-	const brandFontSize = variant.fontSize;
-	const backgroundSize = variant.backgroundSize || '400px 400px';
-	const backgroundRepeat = variant.backgroundRepeat || 'repeat';
-	const backgroundPosition = variant.backgroundPosition || '-50px -50px';
-	const useBackgroundImage = variant.useBackgroundImage !== false; // デフォルトはtrue
-	const backgroundBlur = variant.backgroundBlur || '3px';
-	const titleStyle = variant.titleStyle || {
-		fontSize: '48px',
-		fontWeight: 700,
-		color: 'rgba(255, 255, 255, 1)',
-		textShadow: '0 3px 12px rgba(0, 0, 0, 0.7), 0 1px 3px rgba(0, 0, 0, 0.5)',
+function twemojiCode(grapheme) {
+	const codes = [...grapheme].map((c) => c.codePointAt(0));
+	// 単独の VS16 付き絵文字は VS16(fe0f) を除いたファイル名になる
+	const filtered = codes.length > 1 ? codes.filter((c) => c !== 0xfe0f) : codes;
+	return filtered.map((c) => c.toString(16)).join("-");
+}
+
+async function loadEmojiDataUri(grapheme) {
+	const code = twemojiCode(grapheme);
+	const cachePath = path.join(EMOJI_CACHE_DIR, `${code}.svg`);
+
+	let svg;
+	if (fs.existsSync(cachePath)) {
+		svg = fs.readFileSync(cachePath, "utf8");
+	} else {
+		const url = `https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/svg/${code}.svg`;
+		const res = await fetch(url);
+		if (!res.ok) return null;
+		svg = await res.text();
+		fs.mkdirSync(EMOJI_CACHE_DIR, { recursive: true });
+		fs.writeFileSync(cachePath, svg);
+	}
+	return `data:image/svg+xml;base64,${Buffer.from(svg).toString("base64")}`;
+}
+
+// テキストに含まれる絵文字の graphemeImages マップを構築する
+async function buildGraphemeImages(texts) {
+	const images = {};
+	for (const text of texts) {
+		for (const g of toGraphemes(text ?? "")) {
+			if (EMOJI_RE.test(g) && !(g in images)) {
+				const uri = await loadEmojiDataUri(g);
+				if (uri) images[g] = uri;
+			}
+		}
+	}
+	return images;
+}
+
+// ============================================================
+// 日本語組版エンジン
+// ============================================================
+
+// 行末に残ると寂しい助詞。「…」で省略するとき、直前が漢字や英数字なら道連れにする
+const PARTICLES = new Set([
+	"は",
+	"が",
+	"を",
+	"に",
+	"で",
+	"と",
+	"の",
+	"も",
+	"へ",
+	"や",
+	"か",
+	"な",
+	"ね",
+	"よ",
+]);
+
+// 前アキを持つ約物（開き括弧類）: 左側を詰める
+const OPEN_PUNCT = new Set(["「", "『", "（", "【", "〈", "《", "“"]);
+// 後アキを持つ約物（閉じ括弧・句読点類）: 右側を詰める
+const CLOSE_PUNCT = new Set([
+	"」",
+	"』",
+	"）",
+	"】",
+	"〉",
+	"》",
+	"、",
+	"。",
+	"”",
+]);
+
+// 約物の詰め量（em）。全角アキのうちこれだけ詰める
+const PUNCT_TIGHTEN = 0.42;
+
+// 文字種ごとの概算幅（em）。「何文字か」ではなく「幅の合計」で判定する
+function charWidth(grapheme) {
+	if (EMOJI_RE.test(grapheme)) return 1.15; // 絵文字（余白込み）
+	const code = grapheme.codePointAt(0);
+	if (OPEN_PUNCT.has(grapheme) || CLOSE_PUNCT.has(grapheme)) {
+		return 1.0 - PUNCT_TIGHTEN;
+	}
+	if (code <= 0x7f) {
+		if (grapheme === " ") return 0.32;
+		if (/[iIl1jft!.,:;'"|()[\]]/.test(grapheme)) return 0.36;
+		return 0.6; // 半角英数
+	}
+	if (code >= 0xff61 && code <= 0xff9f) return 0.5; // 半角カナ
+	return 1.0; // 全角（漢字・かな・記号）
+}
+
+function textWidth(text) {
+	return toGraphemes(text).reduce((sum, g) => sum + charWidth(g), 0);
+}
+
+// BudouX の文節を greedy に行へ詰める。長すぎる文節は文字単位で折る
+function composeLines(segments, maxWidthEm) {
+	const lines = [];
+	let current = "";
+	let currentWidth = 0;
+
+	const push = () => {
+		if (current) lines.push(current);
+		current = "";
+		currentWidth = 0;
 	};
 
-	// エピソード番号がない場合の背景色
-	const backgroundColor = episodeNumber === 0 ? "#4EACAB" : "#B753E7";
+	for (const segment of segments) {
+		const w = textWidth(segment);
+		if (currentWidth + w <= maxWidthEm) {
+			current += segment;
+			currentWidth += w;
+			continue;
+		}
+		// 文節単体で1行を超える場合は文字単位で折る
+		if (w > maxWidthEm) {
+			for (const g of toGraphemes(segment)) {
+				const gw = charWidth(g);
+				if (currentWidth + gw > maxWidthEm) push();
+				current += g;
+				currentWidth += gw;
+			}
+			continue;
+		}
+		push();
+		current = segment;
+		currentWidth = w;
+	}
+	push();
+	return lines;
+}
 
-	// satori用のReact仮想DOMを定義
-	const element = (
+// 最終行が孤立（1〜2文字 or 先頭行に比べて極端に短い）していないか
+function hasOrphan(lines) {
+	if (lines.length < 2) return false;
+	const last = lines[lines.length - 1];
+	const first = lines[0];
+	return (
+		toGraphemes(last).length <= 2 ||
+		textWidth(last) < 2.6 ||
+		textWidth(last) < textWidth(first) * 0.4
+	);
+}
+
+// 助詞を道連れにしながら「…」で省略する
+function truncateWithEllipsis(segments, maxWidthEm, maxLines) {
+	const graphemes = toGraphemes(segments.join(""));
+	const budget = maxWidthEm * maxLines - 1.2; // 「…」と余白のぶんを確保
+
+	while (graphemes.length > 0 && textWidth(graphemes.join("")) > budget) {
+		graphemes.pop();
+	}
+	// 末尾が助詞で、その前が漢字・英数字なら助詞ごと削る
+	while (graphemes.length >= 2) {
+		const last = graphemes[graphemes.length - 1];
+		const prev = graphemes[graphemes.length - 2];
+		const prevIsDense = /[一-鿿㐀-䶿A-Za-z0-9]/.test(prev);
+		if (PARTICLES.has(last) && prevIsDense) {
+			graphemes.pop();
+		} else {
+			break;
+		}
+	}
+	// 末尾の約物・中黒は削ってから省略する
+	while (
+		graphemes.length > 0 &&
+		/[、。・「『（【〈《]/.test(graphemes[graphemes.length - 1])
+	) {
+		graphemes.pop();
+	}
+	return composeLines(parser.parse(`${graphemes.join("")}…`), maxWidthEm);
+}
+
+// フォントサイズを大きい方から試し、行数と孤立行が許容できた瞬間に確定する。
+// どのサイズでも収まらなければ最小サイズで「…」省略する
+function layoutText(text, { sizes, containerWidthPx, maxLines }) {
+	const segments = parser.parse(text);
+
+	for (const size of sizes) {
+		const maxWidthEm = (containerWidthPx / size) * 0.98;
+		let lines = composeLines(segments, maxWidthEm);
+		if (lines.length > maxLines) continue;
+
+		// 孤立行があれば行幅を少しずつ狭めて再配分を試みる
+		if (hasOrphan(lines)) {
+			for (const ratio of [0.94, 0.88, 0.82, 0.74, 0.64, 0.56]) {
+				const retry = composeLines(segments, maxWidthEm * ratio);
+				if (retry.length > maxLines) break;
+				if (retry.length >= lines.length && !hasOrphan(retry)) {
+					lines = retry;
+					break;
+				}
+			}
+		}
+		if (lines.length <= maxLines) {
+			return { size, lines };
+		}
+	}
+
+	const size = sizes[sizes.length - 1];
+	const maxWidthEm = (containerWidthPx / size) * 0.98;
+	return { size, lines: truncateWithEllipsis(segments, maxWidthEm, maxLines) };
+}
+
+// 1行ぶんのテキストを、約物詰めの span 列に変換する
+function renderLine(line, fontSize, key) {
+	const tokens = [];
+	let buffer = "";
+
+	const flush = () => {
+		if (buffer) {
+			tokens.push({ type: "text", text: buffer });
+			buffer = "";
+		}
+	};
+
+	for (const g of toGraphemes(line)) {
+		if (OPEN_PUNCT.has(g) || CLOSE_PUNCT.has(g)) {
+			flush();
+			tokens.push({ type: OPEN_PUNCT.has(g) ? "open" : "close", text: g });
+		} else {
+			buffer += g;
+		}
+	}
+	flush();
+
+	const tighten = -PUNCT_TIGHTEN * fontSize;
+	return (
 		<div
-			style={{
-				width: WIDTH,
-				height: HEIGHT,
-				display: "flex",
-				justifyContent: "center",
-				alignItems: "center",
-				fontSize: "48px",
-				fontFamily: "MPLUSRounded1c",
-				position: "relative",
-				backgroundColor: backgroundColor,
-			}}
+			key={key}
+			style={{ display: "flex", flexWrap: "nowrap", whiteSpace: "pre" }}
 		>
-			{/* 背景画像（ブラー効果付き） - 現在は使用していません */}
-			{/* 番組名とアイコン */}
-			{(showIcon || showText) && (
-				<div
-					style={{
-						position: "absolute",
-						...brandPosition,
-						display: "flex",
-						alignItems: "center",
-						justifyContent: variant.centerAlign ? "center" : "flex-start",
-						gap: "12px",
-						fontSize: brandFontSize,
-						fontFamily: "MPLUSRounded1c",
-						fontWeight: 400,
-						padding: "8px 16px",
-						background: "rgba(0, 0, 0, 0.3)",
-						backdropFilter: "blur(4px)",
-						borderRadius: "16px",
-						border: "1px solid rgba(255, 255, 255, 0.2)",
-					}}
-				>
-					{/* 公式アイコン */}
-					{showIcon && (
-						<img
-							src={artworkImageDataUri}
-							alt="マヂカル.fm"
-							width="120"
-							height="120"
-							style={{
-								width: "120px",
-								height: "120px",
-								objectFit: "contain",
-								filter: "drop-shadow(0 2px 8px rgba(0, 0, 0, 0.3))",
-								flexShrink: 0,
-							}}
-						/>
-					)}
-					{showText && (
-						<span
-							style={{
-								color: "rgba(255, 255, 255, 1)",
-								textShadow: "0 2px 8px rgba(0, 0, 0, 0.5), 0 1px 2px rgba(0, 0, 0, 0.3)",
-								fontWeight: 500,
-								whiteSpace: "nowrap",
-							}}
-						>
-							🎧マヂカル.fm🎧
-						</span>
-					)}
-				</div>
-			)}
-			{/* マヂカル.fm タイトル */}
-			<div
-				style={{
-					position: "absolute",
-					top: "50px",
-					left: "0",
-					right: "0",
-					display: "flex",
-					justifyContent: "center",
-					alignItems: "center",
-					fontFamily: "MPLUSRounded1c",
-					marginBottom: "40px",
-					...(titleStyle.containerStyle || {}),
-				}}
-			>
+			{tokens.map((token, i) => (
 				<span
+					key={String(i)}
 					style={{
-						...titleStyle,
-						...(titleStyle.background && {
-							background: titleStyle.background,
-							padding: titleStyle.padding || '12px 24px',
-							borderRadius: titleStyle.borderRadius || '16px',
-						}),
+						whiteSpace: "pre",
+						...(token.type === "open" && { marginLeft: tighten }),
+						...(token.type === "close" && { marginRight: tighten }),
 					}}
 				>
-					🎧マヂカル.fm🎧
+					{token.text}
 				</span>
-			</div>
-			<div
-				style={{
-					width: "90%",
-					maxWidth: "1100px",
-					background: "rgba(255, 255, 255, 0.97)",
-					backdropFilter: "blur(8px)",
-					borderRadius: "24px",
-					boxShadow: "0 8px 32px rgba(0, 0, 0, 0.1)",
-					padding: "64px 48px",
-					marginBottom: brandPosition.bottom ? "100px" : "0",
-					marginTop: brandPosition.top ? "220px" : "180px",
-					lineHeight: 1.4,
-					color: "#111",
-					textAlign: "center",
-					display: "flex",
-					flexDirection: "column",
-					gap: "24px",
-					alignItems: "center",
-				}}
-			>
-				<div 
-					style={{ 
-						wordBreak: "break-word",
-						display: "flex",
-						flexDirection: "column",
-						gap: "16px",
-						maxWidth: "90%",
-					}}
-				>
-					<div
-						style={{
-							display: "flex",
-							flexWrap: "wrap",
-							justifyContent: "center",
-							fontSize: "56px",
-							fontWeight: 700,
-							fontFamily: "MPLUSRounded1c",
-							color: "#7E22CE",
-							letterSpacing: "-0.5px",
-							textShadow: "0 2px 4px rgba(0, 0, 0, 0.08)",
-						}}
-					>
-						{wrapWithBudoux(title)}
-					</div>
-					{subtitle && (
-						<div
-							style={{
-								display: "flex",
-								flexWrap: "wrap",
-								justifyContent: "center",
-								fontSize: "36px",
-								fontFamily: "MPLUSRounded1c",
-								fontWeight: 400,
-								color: "#9333EA",
-								letterSpacing: "-0.3px",
-							}}
-						>
-							〜{wrapWithBudoux(subtitle)}〜
-						</div>
-					)}
-				</div>
-			</div>
+			))}
 		</div>
 	);
+}
 
-	// satoriでSVGを生成
+// ============================================================
+// レンダリング
+// ============================================================
+
+async function renderToPng(element, graphemeImages, outPath) {
 	const svg = await satori(element, {
 		width: WIDTH,
 		height: HEIGHT,
 		fonts: [
+			{ name: "MochiyPopOne", data: fontDisplay, weight: 400, style: "normal" },
 			{
 				name: "MPLUSRounded1c",
 				data: fontRegular,
 				weight: 400,
 				style: "normal",
 			},
-			{
-				name: "MPLUSRounded1c",
-				data: fontBold,
-				weight: 700,
-				style: "normal",
-			},
+			{ name: "MPLUSRounded1c", data: fontBold, weight: 700, style: "normal" },
 		],
+		graphemeImages,
 	});
 
-	// SVG → PNG変換
 	const resvg = new Resvg(svg, {
-		fitTo: {
-			mode: "width",
-			value: WIDTH,
-		},
+		fitTo: { mode: "width", value: WIDTH },
 		background: "white",
 	});
-	const pngData = resvg.render();
-	const pngBuffer = pngData.asPng();
-
-	// 保存
-	fs.writeFileSync(outPath, pngBuffer);
+	fs.writeFileSync(outPath, resvg.render().asPng());
 	console.log(`Generated -> ${outPath}`);
 }
 
+// ステッカー風バッジ
+function Sticker({ children, bg = C.sun, rotate = -3, fontSize = 30 }) {
+	return (
+		<div
+			style={{
+				display: "flex",
+				alignItems: "center",
+				backgroundColor: bg,
+				color: C.ink,
+				border: `4px solid ${C.ink}`,
+				borderRadius: "9999px",
+				padding: "8px 26px",
+				fontFamily: "MochiyPopOne",
+				fontSize,
+				transform: `rotate(${rotate}deg)`,
+				boxShadow: `5px 5px 0 ${C.ink}`,
+			}}
+		>
+			{children}
+		</div>
+	);
+}
+
+// マイクのロゴマーク（絵文字に頼らない）
+function MicBadge({ size = 56 }) {
+	return (
+		<div
+			style={{
+				display: "flex",
+				alignItems: "center",
+				justifyContent: "center",
+				width: size,
+				height: size,
+				backgroundColor: C.sun,
+				border: `4px solid ${C.ink}`,
+				borderRadius: "9999px",
+				boxShadow: `4px 4px 0 ${C.ink}`,
+			}}
+		>
+			<svg
+				width={size * 0.5}
+				height={size * 0.5}
+				viewBox="0 0 24 24"
+				fill={C.ink}
+				aria-hidden="true"
+			>
+				<path d="M12 14a3 3 0 0 0 3-3V6a3 3 0 0 0-6 0v5a3 3 0 0 0 3 3zm5.3-3a5.3 5.3 0 0 1-10.6 0H4.5a7.5 7.5 0 0 0 6.4 7.4V21h2.2v-2.6a7.5 7.5 0 0 0 6.4-7.4h-2.2z" />
+			</svg>
+		</div>
+	);
+}
+
+function EpisodeOgp({
+	episodeNumber,
+	pubDate,
+	titleLayout,
+	subtitleLayout,
+	bg,
+}) {
+	return (
+		<div
+			style={{
+				width: WIDTH,
+				height: HEIGHT,
+				display: "flex",
+				backgroundColor: bg,
+				backgroundImage: `radial-gradient(circle, ${C.ink}24 3.5px, transparent 3.5px)`,
+				backgroundSize: "30px 30px",
+				padding: "38px 52px 50px 40px",
+				fontFamily: "MochiyPopOne",
+			}}
+		>
+			<div
+				style={{
+					flex: 1,
+					display: "flex",
+					flexDirection: "column",
+					backgroundColor: C.card,
+					border: `6px solid ${C.ink}`,
+					borderRadius: "36px",
+					boxShadow: `14px 14px 0 ${C.ink}`,
+					padding: "40px 52px 36px",
+				}}
+			>
+				{/* ヘッダー行: 話数ステッカー + 配信日 */}
+				<div style={{ display: "flex", alignItems: "center", gap: "24px" }}>
+					<Sticker>{`#${episodeNumber}`}</Sticker>
+					<div
+						style={{
+							display: "flex",
+							fontFamily: "MPLUSRounded1c",
+							fontWeight: 700,
+							fontSize: "24px",
+							color: C.muted,
+						}}
+					>
+						{pubDate}
+					</div>
+				</div>
+
+				{/* タイトル */}
+				<div
+					style={{
+						flex: 1,
+						display: "flex",
+						flexDirection: "column",
+						justifyContent: "center",
+						gap: "18px",
+						paddingTop: "16px",
+						paddingBottom: "8px",
+					}}
+				>
+					<div
+						style={{
+							display: "flex",
+							flexDirection: "column",
+							fontSize: titleLayout.size,
+							lineHeight: 1.32,
+							color: C.ink,
+							fontFamily: "MochiyPopOne",
+						}}
+					>
+						{titleLayout.lines.map((line, i) =>
+							renderLine(line, titleLayout.size, `t-${i}`),
+						)}
+					</div>
+					{subtitleLayout && (
+						<div
+							style={{
+								display: "flex",
+								flexDirection: "column",
+								fontSize: subtitleLayout.size,
+								lineHeight: 1.4,
+								color: C.muted,
+								fontFamily: "MPLUSRounded1c",
+								fontWeight: 700,
+							}}
+						>
+							{subtitleLayout.lines.map((line, i) => {
+								const prefix = i === 0 ? "〜" : "";
+								const suffix =
+									i === subtitleLayout.lines.length - 1 ? "〜" : "";
+								return renderLine(
+									`${prefix}${line}${suffix}`,
+									subtitleLayout.size,
+									`s-${i}`,
+								);
+							})}
+						</div>
+					)}
+				</div>
+
+				{/* フッター行: ブランド + キャッチコピー */}
+				<div
+					style={{
+						display: "flex",
+						alignItems: "center",
+						justifyContent: "space-between",
+					}}
+				>
+					<div style={{ display: "flex", alignItems: "center", gap: "18px" }}>
+						<MicBadge />
+						<div style={{ display: "flex", fontSize: "34px", color: C.ink }}>
+							マヂカル
+							<span style={{ color: C.tangerine }}>.fm</span>
+						</div>
+					</div>
+					<div
+						style={{
+							display: "flex",
+							fontFamily: "MPLUSRounded1c",
+							fontWeight: 700,
+							fontSize: "21px",
+							color: C.muted,
+						}}
+					>
+						ほぼ週2の雑談ポッドキャスト
+					</div>
+				</div>
+			</div>
+		</div>
+	);
+}
+
+function SiteOgp() {
+	const badges = [
+		{ text: "ほぼ週2!", bg: C.sun, rotate: -4 },
+		{ text: "雑談100%", bg: C.lime, rotate: 2 },
+		{ text: "たまに関西弁", bg: C.sky, rotate: -2 },
+	];
+	return (
+		<div
+			style={{
+				width: WIDTH,
+				height: HEIGHT,
+				display: "flex",
+				backgroundColor: C.lilac,
+				backgroundImage: `radial-gradient(circle, ${C.ink}24 3.5px, transparent 3.5px)`,
+				backgroundSize: "30px 30px",
+				padding: "38px 52px 50px 40px",
+				fontFamily: "MochiyPopOne",
+			}}
+		>
+			<div
+				style={{
+					flex: 1,
+					display: "flex",
+					flexDirection: "column",
+					alignItems: "center",
+					justifyContent: "center",
+					gap: "30px",
+					backgroundColor: C.card,
+					border: `6px solid ${C.ink}`,
+					borderRadius: "36px",
+					boxShadow: `14px 14px 0 ${C.ink}`,
+					padding: "40px 52px",
+				}}
+			>
+				<div style={{ display: "flex", gap: "20px" }}>
+					{badges.map((badge) => (
+						<Sticker
+							key={badge.text}
+							bg={badge.bg}
+							rotate={badge.rotate}
+							fontSize={24}
+						>
+							{badge.text}
+						</Sticker>
+					))}
+				</div>
+				<div
+					style={{
+						display: "flex",
+						alignItems: "center",
+						gap: "28px",
+					}}
+				>
+					<MicBadge size={92} />
+					<div style={{ display: "flex", fontSize: "104px", color: C.ink }}>
+						マヂカル
+						<span style={{ color: C.tangerine }}>.fm</span>
+					</div>
+				</div>
+				<div
+					style={{
+						display: "flex",
+						fontFamily: "MPLUSRounded1c",
+						fontWeight: 700,
+						fontSize: "30px",
+						color: C.muted,
+					}}
+				>
+					関西人のPMとエンジニアがお届けする雑談ポッドキャスト
+				</div>
+			</div>
+		</div>
+	);
+}
+
+// ============================================================
+// エントリーポイント
+// ============================================================
+
+export async function generateEpisodeOgp(episode, outPath) {
+	const fullTitle = episode.title.replace(/~/g, "〜");
+
+	// 「タイトル 〜サブタイトル〜」を分離し、話数プレフィックスはステッカーと重複するので外す
+	const match = fullTitle.match(/^(.*?)〜(.+?)〜(.*)$/);
+	const [rawTitle, subtitle] = match
+		? [match[1] + match[3], match[2]]
+		: [fullTitle, null];
+	const title = rawTitle.replace(/^#\d+[:：]\s*/, "").trim();
+
+	const contentWidth = 1000;
+	const titleLayout = layoutText(title, {
+		sizes: [76, 68, 60, 54, 48],
+		containerWidthPx: contentWidth,
+		maxLines: 3,
+	});
+	const subtitleLayout = subtitle
+		? layoutText(subtitle, {
+				sizes: [34, 30, 26],
+				containerWidthPx: contentWidth - 68, // 前後の「〜」のぶん
+				maxLines: 2,
+			})
+		: null;
+
+	const graphemeImages = await buildGraphemeImages([title, subtitle]);
+	const bg = BG_ROTATION[episode.number % BG_ROTATION.length];
+
+	await renderToPng(
+		<EpisodeOgp
+			episodeNumber={episode.number}
+			pubDate={episode.pubDate}
+			titleLayout={titleLayout}
+			subtitleLayout={subtitleLayout}
+			bg={bg}
+		/>,
+		graphemeImages,
+		outPath,
+	);
+}
+
 async function main() {
-	// 生成先ディレクトリがなければ作成
 	if (!fs.existsSync(OUT_DIR)) {
 		fs.mkdirSync(OUT_DIR, { recursive: true });
 	}
 
-	// エピソードを番号で降順ソート
+	// サイト全体のOGP
+	if (generateSite) {
+		await renderToPng(
+			<SiteOgp />,
+			{},
+			path.join(process.cwd(), "public", "ogp.png"),
+		);
+		if (!latestCount) return;
+	}
+
 	const sortedEpisodes = [...episodesData].sort((a, b) => b.number - a.number);
-	
-	// 最新n件に制限
-	const targetEpisodes = latestCount ? sortedEpisodes.slice(0, latestCount) : sortedEpisodes;
+	const targetEpisodes = latestCount
+		? sortedEpisodes.slice(0, latestCount)
+		: sortedEpisodes;
 
-	// episodes.json からエピソード一覧を取得
 	for (const episode of targetEpisodes) {
-		const epNumber = episode.number;
-		const epSlug = episode.customPath || epNumber.toString();
-		const fullTitle = episode.title.replace(/~/g, '〜');
+		const epSlug = episode.customPath || episode.number.toString();
+		const outPath = path.join(OUT_DIR, `ep-${epSlug}.png`);
 
-		// サブタイトルを抽出
-		const match = fullTitle.match(/^(.*?)〜(.+?)〜(.*)$/);
-		const [title, subtitle] = match
-			? [match[1] + match[3], match[2]]
-			: [fullTitle, null];
-
-		// バリエーション生成モードの場合
-		if (generateVariants) {
-			for (const [key, variant] of Object.entries(STYLE_VARIANTS)) {
-				const outPath = path.join(OUT_DIR, `ep-${epSlug}-${variant.name}.png`);
-				await generateOGP({ title, subtitle, outPath, styleVariant: variant, episodeNumber: epNumber });
-			}
-		} else {
-			const outPath = path.join(OUT_DIR, `ep-${epSlug}.png`);
-
-			// 既に生成済みで上書きしたくない場合はスキップ
-			if (fs.existsSync(outPath) && !forceOverwrite) {
-				console.log(`ep-${epSlug}.png が既に存在します。スキップします。`);
-				continue;
-			}
-
-			await generateOGP({ title, subtitle, outPath, episodeNumber: epNumber });
+		if (fs.existsSync(outPath) && !forceOverwrite) {
+			console.log(`ep-${epSlug}.png が既に存在します。スキップします。`);
+			continue;
 		}
+
+		await generateEpisodeOgp(episode, outPath);
 	}
 }
 

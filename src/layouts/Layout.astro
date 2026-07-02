@@ -1,29 +1,29 @@
 ---
-import { ViewTransitions } from 'astro:transitions';
-import AudioPlayer from '../components/AudioPlayer';
+import { ViewTransitions } from "astro:transitions";
+import AudioPlayer from "../components/AudioPlayer";
 
 interface Props {
-  title: string;
-  description?: string;
-  image?: string;
-  type?: 'website' | 'article';
-  publishedTime?: string;
+	title: string;
+	description?: string;
+	image?: string;
+	type?: "website" | "article";
+	publishedTime?: string;
 }
 
 const {
-  title,
-  description = "マヂカル.fmは、関西人のプロダクトマネージャー@michiru_daと関西人(?)のソフトウェアエンジニアの@upamuneがほぼ週2で配信する雑談Podcast",
-  image = "https://www.magical.fm/ogp.jpg",
-  type = "website",
-  publishedTime,
+	title,
+	description = "マヂカル.fmは、関西人のプロダクトマネージャー@michiru_daと関西人(?)のソフトウェアエンジニアの@upamuneがほぼ週2で配信する雑談Podcast",
+	image = "https://www.magical.fm/ogp.png",
+	type = "website",
+	publishedTime,
 } = Astro.props;
 
 const canonicalURL = new URL(Astro.url.pathname, "https://www.magical.fm");
 
 // 画像URLが相対パスの場合は絶対URLに変換
-const ogImageUrl = image.startsWith('http') 
-  ? image 
-  : new URL(image, "https://www.magical.fm").toString();
+const ogImageUrl = image.startsWith("http")
+	? image
+	: new URL(image, "https://www.magical.fm").toString();
 ---
 
 <!doctype html>
@@ -67,58 +67,272 @@ const ogImageUrl = image.startsWith('http')
     <!-- Podcast -->
     <link type="application/rss+xml" rel="alternate" title="マヂカル.fm RSS Feed" href="https://listen.style/p/magicalfm/rss" />
 
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=M+PLUS+Rounded+1c:wght@500;700;800&family=Mochiy+Pop+One&display=swap"
+      rel="stylesheet"
+    />
+
     <ViewTransitions />
     <script is:inline>
-      const theme = (() => {
-        if (typeof localStorage !== 'undefined' && localStorage.getItem('theme')) {
-          return localStorage.getItem('theme');
-        }
-        if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-          return 'dark';
-        }
-        return 'light';
-      })();
-      
-      if (theme === 'dark') {
-        document.documentElement.classList.add('dark');
-      }
+      const applyTheme = () => {
+        const theme = (() => {
+          if (typeof localStorage !== "undefined" && localStorage.getItem("theme")) {
+            return localStorage.getItem("theme");
+          }
+          if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+            return "dark";
+          }
+          return "light";
+        })();
+
+        document.documentElement.classList.toggle("dark", theme === "dark");
+      };
+
+      applyTheme();
+      document.addEventListener("astro:after-swap", applyTheme);
     </script>
   </head>
-  <body class="bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100">
+  <body class="bg-paper font-sans font-medium text-ink antialiased">
     <div class="min-h-screen flex flex-col">
       <main class="flex-grow">
         <slot />
       </main>
     </div>
-    <AudioPlayer client:load />
+    <div transition:persist="audio-player">
+      <AudioPlayer client:load />
+    </div>
   </body>
 </html>
 
 <style is:global>
   :root {
-    --accent: 136, 58, 234;
-    --accent-light: 224, 204, 250;
-    --accent-dark: 49, 10, 101;
+    /* 関西ポップ（ライト） */
+    --paper: 255 248 238;
+    --surface: 255 255 255;
+    --ink: 29 26 46;
+    --muted: 110 104 132;
+    --edge: 29 26 46;
+    --lilac: 207 179 245;
+    --lime: 201 233 78;
+    --tangerine: 255 138 61;
+    --sky: 127 212 245;
+    --candy: 255 111 165;
+    --sun: 255 210 63;
+
+    --ease-out-quart: cubic-bezier(0.23, 1, 0.32, 1);
   }
-  
+
+  .dark {
+    /* 関西ポップ（夜のゲームセンター） */
+    --paper: 22 19 42;
+    --surface: 35 31 62;
+    --ink: 244 239 228;
+    --muted: 169 163 192;
+    --edge: 11 9 32;
+    --lilac: 176 140 232;
+    --lime: 190 224 70;
+    --tangerine: 255 138 61;
+    --sky: 110 197 236;
+    --candy: 255 111 165;
+    --sun: 255 210 63;
+  }
+
   html {
-    font-family: system-ui, sans-serif;
+    font-family: "M PLUS Rounded 1c", "Hiragino Maru Gothic ProN", system-ui, sans-serif;
     scroll-behavior: smooth;
+    background-color: rgb(var(--paper));
   }
-  
+
+  ::selection {
+    background-color: rgb(var(--sun));
+    color: rgb(29 26 46);
+  }
+
+  :focus-visible {
+    outline: 3px solid rgb(var(--tangerine));
+    outline-offset: 2px;
+    border-radius: 6px;
+  }
+
+  /* ポップな押しボタン: ホバーで浮き、押すと沈む */
+  .btn-pop {
+    border: 3px solid rgb(var(--edge));
+    box-shadow: 4px 4px 0 rgb(var(--edge));
+    transition:
+      transform 150ms var(--ease-out-quart),
+      box-shadow 150ms var(--ease-out-quart);
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .btn-pop:hover {
+      transform: translate(-1px, -1px);
+      box-shadow: 6px 6px 0 rgb(var(--edge));
+    }
+  }
+
+  .btn-pop:active {
+    transform: translate(2px, 2px) scale(0.98);
+    box-shadow: 1px 1px 0 rgb(var(--edge));
+  }
+
+  /* ドット柄の紙面（色面セクションの下地） */
+  .dotted {
+    background-image: radial-gradient(rgb(var(--edge) / 0.12) 1.5px, transparent 1.5px);
+    background-size: 22px 22px;
+  }
+
+  /* 流れるティッカー帯 */
+  .ticker {
+    display: flex;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+
+  .ticker > div {
+    display: flex;
+    flex-shrink: 0;
+    animation: ticker-scroll 26s linear infinite;
+  }
+
+  @keyframes ticker-scroll {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-100%);
+    }
+  }
+
+  /* ステッカーバッジのふわふわ */
+  @keyframes float-a {
+    0%,
+    100% {
+      transform: rotate(-6deg) translateY(0);
+    }
+    50% {
+      transform: rotate(-4deg) translateY(-6px);
+    }
+  }
+
+  @keyframes float-b {
+    0%,
+    100% {
+      transform: rotate(4deg) translateY(0);
+    }
+    50% {
+      transform: rotate(6deg) translateY(-8px);
+    }
+  }
+
+  .float-a {
+    animation: float-a 4.5s ease-in-out infinite;
+  }
+
+  .float-b {
+    animation: float-b 5.2s ease-in-out infinite;
+  }
+
+  /* 再生中インジケーター（イコライザー） */
+  .eq {
+    display: inline-flex;
+    align-items: flex-end;
+    gap: 2px;
+    height: 12px;
+  }
+
+  .eq > span {
+    width: 3px;
+    height: 100%;
+    border-radius: 9999px;
+    background-color: currentColor;
+    transform-origin: bottom;
+    animation: eq-bounce 0.9s ease-in-out infinite;
+  }
+
+  .eq > span:nth-child(1) {
+    animation-duration: 0.8s;
+  }
+
+  .eq > span:nth-child(2) {
+    animation-duration: 1s;
+    animation-delay: 0.15s;
+  }
+
+  .eq > span:nth-child(3) {
+    animation-duration: 0.7s;
+    animation-delay: 0.05s;
+  }
+
+  .eq.eq-paused > span {
+    animation-play-state: paused;
+    transform: scaleY(0.4);
+  }
+
+  @keyframes eq-bounce {
+    0%,
+    100% {
+      transform: scaleY(0.35);
+    }
+    50% {
+      transform: scaleY(1);
+    }
+  }
+
+  /* ヒーローの入場（初回のみの演出なので許容） */
+  @keyframes rise {
+    from {
+      opacity: 0;
+      transform: translateY(14px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .rise {
+    animation: rise 480ms var(--ease-out-quart) both;
+  }
+
+  .rise-1 {
+    animation-delay: 0ms;
+  }
+  .rise-2 {
+    animation-delay: 60ms;
+  }
+  .rise-3 {
+    animation-delay: 120ms;
+  }
+  .rise-4 {
+    animation-delay: 180ms;
+  }
+
   @media (prefers-reduced-motion: reduce) {
     html {
       scroll-behavior: auto;
     }
+
+    .rise {
+      animation: rise 200ms ease both;
+      transform: none;
+    }
+
+    .eq > span,
+    .float-a,
+    .float-b,
+    .ticker > div {
+      animation: none;
+    }
+
+    .eq > span {
+      transform: scaleY(0.6);
+    }
   }
 
   body.has-player {
-    padding-bottom: 8rem;
-  }
-
-  @media (max-width: 640px) {
-    body.has-player {
-      padding-bottom: 10rem;
-    }
+    padding-bottom: 8.5rem;
   }
 </style>

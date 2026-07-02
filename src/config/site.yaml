@@ -3,7 +3,7 @@ site:
   name: "マヂカル.fm"
   description: "マヂカル.fmは、関西人のプロダクトマネージャー@michiru_daと関西人(?)のソフトウェアエンジニアの@upamuneがほぼ週2で配信する雑談Podcast。"
   url: "https://www.magical.fm"
-  ogImage: "https://www.magical.fm/ogp.jpg"
+  ogImage: "https://www.magical.fm/ogp.png"
   rss: "https://listen.style/p/magicalfm/rss"
 
 # Social Media

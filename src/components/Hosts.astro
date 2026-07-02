@@ -1,0 +1,71 @@
+---
+import { getHosts } from "../utils/config";
+
+interface Props {
+	compact?: boolean;
+}
+
+const { compact = false } = Astro.props;
+const hosts = Object.values(getHosts()) as {
+	name: string;
+	role: string;
+	twitter: string;
+	avatar: string;
+}[];
+---
+
+{
+	compact ? (
+		<div class="grid gap-4 sm:grid-cols-2">
+			{hosts.map((host) => (
+				<a
+					href={`https://x.com/${host.twitter}`}
+					target="_blank"
+					rel="noopener noreferrer"
+					class="btn-pop group flex items-center gap-4 rounded-2xl bg-surface p-4"
+				>
+					<img
+						src={host.avatar}
+						alt={host.name}
+						loading="lazy"
+						width="48"
+						height="48"
+						class="h-12 w-12 rounded-full border-3 border-edge transition-transform duration-200 ease-out-quart group-hover:-rotate-6"
+					/>
+					<span class="min-w-0">
+						<span class="block truncate font-bold">{host.name}</span>
+						<span class="block truncate text-xs text-muted">{host.role}</span>
+					</span>
+				</a>
+			))}
+		</div>
+	) : (
+		<div class="grid gap-6 sm:grid-cols-2">
+			{hosts.map((host) => (
+				<div class="group rounded-3xl border-3 border-edge bg-surface p-7 text-center shadow-pop">
+					<img
+						src={host.avatar}
+						alt={host.name}
+						loading="lazy"
+						width="96"
+						height="96"
+						class="mx-auto h-24 w-24 rounded-full border-3 border-edge transition-transform duration-200 ease-out-quart group-hover:-rotate-6"
+					/>
+					<h3 class="mt-5 font-display text-lg">{host.name}</h3>
+					<p class="mt-1 text-sm text-muted">{host.role}</p>
+					<a
+						href={`https://x.com/${host.twitter}`}
+						target="_blank"
+						rel="noopener noreferrer"
+						class="btn-pop mt-5 inline-flex items-center gap-2 rounded-full bg-sun px-4 py-1.5 text-sm font-bold text-[rgb(29,26,46)]"
+					>
+						<svg viewBox="0 0 24 24" class="h-3.5 w-3.5" fill="currentColor" aria-hidden="true">
+							<path d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z" />
+						</svg>
+						フォローする
+					</a>
+				</div>
+			))}
+		</div>
+	)
+}

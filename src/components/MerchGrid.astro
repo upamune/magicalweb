@@ -1,0 +1,41 @@
+---
+import { getMerchandise } from "../utils/config";
+
+const merchandise = getMerchandise() as {
+	id: string;
+	name: string;
+	price: number;
+	image: string;
+	url: string;
+}[];
+
+const tagColors = ["bg-candy", "bg-sky", "bg-lime"];
+---
+
+<div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+	{
+		merchandise.map((item, i) => (
+			<a
+				href={item.url}
+				target="_blank"
+				rel="noopener noreferrer"
+				class="btn-pop group relative rounded-3xl bg-surface p-3"
+			>
+				<span
+					class={`absolute -right-2 -top-3 z-10 rotate-6 rounded-full border-3 border-edge px-3 py-1 font-display text-xs text-[rgb(29,26,46)] shadow-pop-xs ${tagColors[i % tagColors.length]}`}
+				>
+					¥{item.price.toLocaleString()}
+				</span>
+				<div class="overflow-hidden rounded-2xl border-3 border-edge bg-white">
+					<img
+						src={item.image}
+						alt={item.name}
+						loading="lazy"
+						class="aspect-square w-full object-contain p-4 transition-transform duration-300 ease-out-quart group-hover:scale-[1.05] group-hover:-rotate-2"
+					/>
+				</div>
+				<h3 class="truncate px-2 py-3.5 text-center font-bold">{item.name}</h3>
+			</a>
+		))
+	}
+</div>
