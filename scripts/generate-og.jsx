@@ -76,6 +76,11 @@ const fontBold = fs.readFileSync(
 	null,
 );
 
+// ---------- 番組アートワーク ----------
+const artworkUri = `data:image/png;base64,${fs
+	.readFileSync("./images/artwork-256.png")
+	.toString("base64")}`;
+
 // ============================================================
 // 絵文字（Twemoji を SVG data URI として埋め込む）
 // ============================================================
@@ -391,32 +396,22 @@ function Sticker({ children, bg = C.sun, rotate = -3, fontSize = 30 }) {
 	);
 }
 
-// マイクのロゴマーク（絵文字に頼らない）
+// 番組アートワークのロゴバッジ
 function MicBadge({ size = 56 }) {
 	return (
-		<div
+		<img
+			src={artworkUri}
+			alt=""
+			width={size}
+			height={size}
 			style={{
-				display: "flex",
-				alignItems: "center",
-				justifyContent: "center",
 				width: size,
 				height: size,
-				backgroundColor: C.sun,
 				border: `4px solid ${C.ink}`,
 				borderRadius: "9999px",
 				boxShadow: `4px 4px 0 ${C.ink}`,
 			}}
-		>
-			<svg
-				width={size * 0.5}
-				height={size * 0.5}
-				viewBox="0 0 24 24"
-				fill={C.ink}
-				aria-hidden="true"
-			>
-				<path d="M12 14a3 3 0 0 0 3-3V6a3 3 0 0 0-6 0v5a3 3 0 0 0 3 3zm5.3-3a5.3 5.3 0 0 1-10.6 0H4.5a7.5 7.5 0 0 0 6.4 7.4V21h2.2v-2.6a7.5 7.5 0 0 0 6.4-7.4h-2.2z" />
-			</svg>
-		</div>
+		/>
 	);
 }
 

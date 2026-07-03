@@ -19,12 +19,13 @@ export default function Header() {
 						href="/"
 						className="flex items-center gap-2.5 font-display text-lg tracking-tight transition-transform duration-150 ease-out-quart active:scale-95"
 					>
-						<span
-							className="grid h-9 w-9 place-items-center rounded-full border-3 border-edge bg-sun text-base shadow-pop-xs"
-							aria-hidden="true"
-						>
-							🎙️
-						</span>
+						<img
+							src="/artwork.png"
+							alt=""
+							width="36"
+							height="36"
+							className="h-9 w-9 rounded-full border-3 border-edge object-cover shadow-pop-xs"
+						/>
 						マヂカル<span className="text-tangerine">.fm</span>
 					</a>
 
