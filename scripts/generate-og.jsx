@@ -556,7 +556,6 @@ function SiteOgp() {
 	const badges = [
 		{ text: "ほぼ週2!", bg: C.sun, rotate: -4 },
 		{ text: "雑談100%", bg: C.lime, rotate: 2 },
-		{ text: "たまに関西弁", bg: C.sky, rotate: -2 },
 	];
 	return (
 		<div
