@@ -15,7 +15,7 @@ import { C } from "./tokens";
 import type { CaptionPage, ClipData, Speaker, Word } from "./types";
 
 const HOSTS: Record<Speaker, { name: string; avatar: string }> = {
-	michiru: { name: "michiru", avatar: "host-michiru.png" },
+	michiru: { name: "michiru_da", avatar: "host-michiru.png" },
 	upamune: { name: "upamune", avatar: "host-upamune.png" },
 };
 
