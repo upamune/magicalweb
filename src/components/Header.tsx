@@ -1,5 +1,4 @@
 import { useState } from "react";
-import ThemeToggle from "./ThemeToggle";
 
 const NAV_ITEMS = [
 	{ href: "/episodes", label: "エピソード" },
@@ -37,19 +36,15 @@ export default function Header() {
 								href={item.href}
 								target={item.external ? "_blank" : undefined}
 								rel={item.external ? "noopener noreferrer" : undefined}
-								className="rounded-full border-3 border-transparent px-3.5 py-1.5 text-sm font-bold text-ink transition-[border-color,background-color,transform] duration-150 ease-out-quart hover:border-edge hover:bg-sun active:scale-95 dark:hover:text-[rgb(29,26,46)]"
+								className="rounded-full border-3 border-transparent px-3.5 py-1.5 text-sm font-bold text-ink transition-[border-color,background-color,transform] duration-150 ease-out-quart hover:border-edge hover:bg-sun active:scale-95"
 							>
 								{item.label}
 							</a>
 						))}
-						<div className="ml-2">
-							<ThemeToggle />
-						</div>
 					</div>
 
 					{/* Mobile Menu Button */}
 					<div className="flex items-center gap-3 md:hidden">
-						<ThemeToggle />
 						<button
 							type="button"
 							onClick={() => setIsMenuOpen(!isMenuOpen)}

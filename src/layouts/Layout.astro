@@ -78,24 +78,6 @@ const ogImageUrl = image.startsWith("http")
     />
 
     <ViewTransitions />
-    <script is:inline>
-      const applyTheme = () => {
-        const theme = (() => {
-          if (typeof localStorage !== "undefined" && localStorage.getItem("theme")) {
-            return localStorage.getItem("theme");
-          }
-          if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
-            return "dark";
-          }
-          return "light";
-        })();
-
-        document.documentElement.classList.toggle("dark", theme === "dark");
-      };
-
-      applyTheme();
-      document.addEventListener("astro:after-swap", applyTheme);
-    </script>
   </head>
   <body class="bg-paper font-sans font-medium text-ink antialiased">
     <div class="min-h-screen flex flex-col">
@@ -127,20 +109,6 @@ const ogImageUrl = image.startsWith("http")
     --ease-out-quart: cubic-bezier(0.23, 1, 0.32, 1);
   }
 
-  .dark {
-    /* 関西ポップ（夜のゲームセンター） */
-    --paper: 22 19 42;
-    --surface: 35 31 62;
-    --ink: 244 239 228;
-    --muted: 169 163 192;
-    --edge: 11 9 32;
-    --lilac: 176 140 232;
-    --lime: 190 224 70;
-    --tangerine: 255 138 61;
-    --sky: 110 197 236;
-    --candy: 255 111 165;
-    --sun: 255 210 63;
-  }
 
   html {
     font-family: "M PLUS Rounded 1c", "Hiragino Maru Gothic ProN", system-ui, sans-serif;
