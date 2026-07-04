@@ -1,6 +1,6 @@
 ---
 name: make-clip
-description: エピソード番号から「盛り上がり切り抜きショート動画」を生成するフルパイプライン。ユーザーが「#N のクリップ作って」「切り抜き動画を作って」「Magic Clips」などと言ったときに使う。音声DL→文字起こし→ハイライト検出→字幕校正→Remotionレンダリングまでを一気通貫で行う。
+description: エピソード番号またはLISTENのプレビューURLから「盛り上がり切り抜きショート動画」を生成するフルパイプライン。ユーザーが「#N のクリップ作って」「切り抜き動画を作って」「Magic Clips」「このプレビューリンクから作って」などと言ったときに使う。音声DL→文字起こし→ハイライト検出→字幕校正→Remotionレンダリングまでを一気通貫で行う。
 ---
 
 # make-clip: マヂカル.fm Magic Clips パイプライン
@@ -26,13 +26,27 @@ mp3 をスクラッチパッドにダウンロードする。
 
 **予約投稿（未公開エピソード）の場合**: RSSにまだ載っていないので episodes.json は使えない。
 
-- 音源はユーザーからローカルのファイルパス（またはURL）で受け取る
-- `number` / `title` / 配信予定日はユーザーに確認してプランに手で書く
-- LISTENの話者分離は公開ページがまだ無いため、
-  (a) ユーザーがログイン済みブラウザで LISTEN ダッシュボードの該当エピソードを開き
-  HTML保存したファイルを `fetch-listen-transcript.mjs` に渡す（URLの代わりにファイルパスを受け取れる）、
+**LISTENのプレビュー共有URL**（`https://listen.style/p/magicalfm/<slug>/<共有トークン>` の
+4セグメント形式）をユーザーからもらえれば、**ログイン不要の curl 1発で全情報が取れる**:
+
+```bash
+curl -sL "<プレビューURL>" -o $SCRATCHPAD/preview.html
+grep -o '<title>[^<]*</title>' preview.html                 # 「N: タイトル - マヂカル.fm - LISTEN」→ number/title
+grep -oE 'https://[^"]*\.mp3' preview.html | head -1         # 音声のCDN URL（これをDLする）
+grep -oE '202[0-9]-[0-9]{2}-[0-9]{2}' preview.html | sort -u # 配信予定日
+bun scripts/fetch-listen-transcript.mjs $SCRATCHPAD/preview.html listen.json  # 話者分離もこのHTMLから取れる
+```
+
+プレビューURLが無い場合のフォールバック:
+
+- 音源はユーザーからローカルのファイルパス（またはURL）で受け取り、
+  `number` / `title` / 配信予定日はユーザーに確認してプランに手で書く
+- 話者分離は (a) ユーザーがログイン済みブラウザで LISTEN ダッシュボードの該当エピソードを開き
+  HTML保存したファイルを `fetch-listen-transcript.mjs` に渡す、
   (b) それが無理なら F0 ピッチのフォールバックで割り当てて文脈検証を厚めにする
-- 公開前なので**動画の内容がネタバレにならないか**ユーザーに一言確認する
+
+いずれの場合も、公開前なので**動画の内容がネタバレにならないか**ユーザーに一言確認する
+（ハイライト候補の提示と兼ねると1回で済む）。
 
 ### 2. 文字起こし（単語タイムスタンプ付き）
 
