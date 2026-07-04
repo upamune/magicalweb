@@ -14,8 +14,14 @@ mlx_whisper episode.mp3 --model mlx-community/whisper-large-v3-turbo \
 
 ### 2. ハイライト検出
 
-- 音声の RMS エネルギーで盛り上がり（笑い声）の候補窓をランキング
-- 文字起こしを読んで、オチが決まる 20〜40秒 を選ぶ
+```bash
+bun scripts/find-highlights.mjs episode.mp3 whisper.json --top 5
+```
+
+- 音声の RMS エネルギーで盛り上がり（笑い声）の候補窓をランキングし、文字起こし付きで表示
+- 候補の前後を読んで、オチが決まる 20〜40秒 を選ぶ
+
+エピソード番号を渡すだけで全工程を回す場合は Claude Code で `/make-clip` スキルを使う。
 
 ### 3. クリッププランの作成（plans/ep-N.json）
 
