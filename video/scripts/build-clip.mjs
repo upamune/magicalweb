@@ -51,8 +51,13 @@ fs.writeFileSync(dataPath, `${JSON.stringify(data, null, "\t")}\n`);
 console.log(`Wrote ${dataPath}`);
 
 // 音声の切り出し（フェードイン0.15s / フェードアウト0.8s）
+// audioMuteAt を指定すると、その時刻(絶対時刻)から短いフェードで無音にする
+// （オチの直後に次の話題の声が被って残ってしまう場合の対策）
 const outAudio = path.join(videoDir, "public", "clip.mp3");
-const fadeOutStart = Math.max(0, durationSec - 0.8);
+const fadeOutStart = plan.audioMuteAt
+	? shift(plan.audioMuteAt)
+	: Math.max(0, durationSec - 0.8);
+const fadeOutDur = plan.audioMuteAt ? 0.3 : 0.8;
 execFileSync("ffmpeg", [
 	"-v",
 	"error",
@@ -64,7 +69,7 @@ execFileSync("ffmpeg", [
 	"-i",
 	audioPath,
 	"-af",
-	`afade=t=in:d=0.15,afade=t=out:st=${fadeOutStart.toFixed(2)}:d=0.8`,
+	`afade=t=in:d=0.15,afade=t=out:st=${fadeOutStart.toFixed(2)}:d=${fadeOutDur}`,
 	"-b:a",
 	"192k",
 	outAudio,
