@@ -1,0 +1,52 @@
+---
+import Footer from "../components/Footer.astro";
+import Header from "../components/Header";
+import Layout from "../layouts/Layout.astro";
+import { getLatestEpisodes, toEpisodeListItem } from "../utils/rss";
+import EpisodeList from "../components/EpisodeList";
+
+const episodes = await getLatestEpisodes(3);
+const listItems = episodes.map(toEpisodeListItem);
+---
+
+<Layout title="ページが見つかりません - マヂカル.fm" description="お探しのページは見つかりませんでした。">
+	<Header client:load />
+
+	<section class="dotted border-b-3 border-edge bg-lilac">
+		<div class="mx-auto max-w-5xl px-5 py-20 text-center sm:py-28">
+			<span class="inline-block -rotate-3 rounded-full border-3 border-edge bg-sun px-5 py-2 font-display text-sm text-[rgb(29,26,46)] shadow-pop-sm">
+				404 NOT FOUND
+			</span>
+			<h1
+				class="mt-8 font-display text-5xl leading-tight tracking-tight text-[rgb(29,26,46)] sm:text-6xl"
+				style="text-shadow: 4px 4px 0 rgb(255 255 255 / 0.55)"
+			>
+				おらんなあ…
+			</h1>
+			<p class="mx-auto mt-6 max-w-md font-bold leading-relaxed text-[rgb(29,26,46)]/80">
+				お探しのページは見つかりませんでした。URLが変わったか、そもそも存在しない回かもしれません。
+			</p>
+			<div class="mt-10 flex flex-wrap items-center justify-center gap-4">
+				<a
+					href="/"
+					class="btn-pop inline-flex items-center gap-2 rounded-full bg-tangerine px-7 py-3.5 font-bold text-[rgb(29,26,46)]"
+				>
+					トップへ戻る
+				</a>
+				<a
+					href="/episodes"
+					class="btn-pop inline-flex items-center gap-2 rounded-full bg-surface px-7 py-3.5 font-bold"
+				>
+					エピソード一覧 →
+				</a>
+			</div>
+		</div>
+	</section>
+
+	<section class="mx-auto max-w-5xl px-5 py-14">
+		<h2 class="mb-6 font-display text-2xl">かわりに最新回どうですか</h2>
+		<EpisodeList client:load episodes={listItems} />
+	</section>
+
+	<Footer />
+</Layout>

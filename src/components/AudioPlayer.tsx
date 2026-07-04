@@ -20,6 +20,7 @@ export default function AudioPlayer() {
 	const [hoverTime, setHoverTime] = useState<number | null>(null);
 	const [hoverPosition, setHoverPosition] = useState<number | null>(null);
 	const [entered, setEntered] = useState(false);
+	const [copied, setCopied] = useState(false);
 	const {
 		isPlaying,
 		currentTime,
@@ -230,6 +231,18 @@ export default function AudioPlayer() {
 		}
 	};
 
+	// 現在の再生位置つきリンクをコピーする
+	const handleCopyLink = async () => {
+		const url = `${window.location.origin}/ep/${episodeSlug || episodeNumber}?t=${Math.floor(currentTime)}`;
+		try {
+			await navigator.clipboard.writeText(url);
+			setCopied(true);
+			window.setTimeout(() => setCopied(false), 1500);
+		} catch {
+			// クリップボードが使えない環境では何もしない
+		}
+	};
+
 	if (!episodeNumber) return null;
 
 	const progressPercent = duration ? (currentTime / duration) * 100 : 0;
@@ -434,6 +447,47 @@ export default function AudioPlayer() {
 							aria-label="音量スライダー"
 						/>
 					</div>
+
+					<button
+						type="button"
+						onClick={handleCopyLink}
+						className={`grid h-9 w-9 shrink-0 place-items-center rounded-full transition-[transform,color,background-color] duration-150 ease-out-quart active:scale-90 ${
+							copied
+								? "bg-lime text-[rgb(29,26,46)]"
+								: "text-muted hover:bg-sun hover:text-[rgb(29,26,46)]"
+						}`}
+						aria-label="この位置のリンクをコピー"
+						title="現在の再生位置つきリンクをコピー"
+					>
+						{copied ? (
+							<svg
+								viewBox="0 0 24 24"
+								className="h-4 w-4"
+								fill="none"
+								stroke="currentColor"
+								strokeWidth="2.5"
+								strokeLinecap="round"
+								strokeLinejoin="round"
+								aria-hidden="true"
+							>
+								<path d="M20 6L9 17l-5-5" />
+							</svg>
+						) : (
+							<svg
+								viewBox="0 0 24 24"
+								className="h-4 w-4"
+								fill="none"
+								stroke="currentColor"
+								strokeWidth="2"
+								strokeLinecap="round"
+								strokeLinejoin="round"
+								aria-hidden="true"
+							>
+								<path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
+								<path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
+							</svg>
+						)}
+					</button>
 
 					<button
 						type="button"

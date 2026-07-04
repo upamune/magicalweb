@@ -18,12 +18,12 @@ hosts:
     name: "@michiru_da"
     role: "関西人のプロダクトマネージャー"
     twitter: "applism118"
-    avatar: "https://unavatar.io/twitter/applism118"
+    avatar: "/hosts/michiru.png"
   upamune:
     name: "@upamune"
     role: "関西人(?)のソフトウェアエンジニア"
     twitter: "upamune"
-    avatar: "https://unavatar.io/twitter/upamune"
+    avatar: "/hosts/upamune.png"
 
 # Platform Links
 platforms:

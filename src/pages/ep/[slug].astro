@@ -3,6 +3,7 @@ import Footer from "../../components/Footer.astro";
 import Header from "../../components/Header";
 import Hosts from "../../components/Hosts.astro";
 import PlayButton from "../../components/PlayButton";
+import SeekFromQuery from "../../components/SeekFromQuery";
 import Layout from "../../layouts/Layout.astro";
 import {
 	getAllEpisodeSlugs,
@@ -41,6 +42,30 @@ const displayTitle = getEpisodeDisplayTitle(episode);
 const shareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(
 	`${episode.title} を聴いています | マヂカル.fm`,
 )}&url=${encodeURIComponent(`https://www.magical.fm/ep/${episodeSlug}`)}&hashtags=magicalfm`;
+
+const publishedIso = new Date(
+	episode.pubDate.replace(/年|月/g, "-").replace("日", ""),
+).toISOString();
+
+// 構造化データ（Google ポッドキャスト/リッチリザルト向け）
+const jsonLd = JSON.stringify({
+	"@context": "https://schema.org",
+	"@type": "PodcastEpisode",
+	url: `https://www.magical.fm/ep/${episodeSlug}`,
+	name: episode.title,
+	episodeNumber: episode.number,
+	datePublished: publishedIso,
+	description: episode.description.replace(/<[^>]*>/g, "").slice(0, 300),
+	associatedMedia: {
+		"@type": "MediaObject",
+		contentUrl: episode.audioUrl,
+	},
+	partOfSeries: {
+		"@type": "PodcastSeries",
+		name: "マヂカル.fm",
+		url: "https://www.magical.fm",
+	},
+});
 ---
 
 <Layout
@@ -48,9 +73,17 @@ const shareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(
 	description={episode.description.replace(/<[^>]*>/g, "").slice(0, 200) + "..."}
 	image={ogImage}
 	type="article"
-	publishedTime={new Date(episode.pubDate.replace(/年|月/g, "-").replace("日", "")).toISOString()}
+	publishedTime={publishedIso}
 >
+	<script type="application/ld+json" set:html={jsonLd} is:inline />
 	<Header client:load />
+	<SeekFromQuery
+		client:load
+		episodeNumber={episode.number}
+		episodeSlug={episodeSlug}
+		episodeTitle={displayTitle}
+		audioUrl={episode.audioUrl}
+	/>
 
 	<!-- ヘッダー（スカイ） -->
 	<section class="dotted border-b-3 border-edge bg-sky">
