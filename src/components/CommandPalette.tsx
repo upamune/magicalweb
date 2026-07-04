@@ -14,24 +14,37 @@ interface NavEntry {
 	href: string;
 	external?: boolean;
 	icon: string;
+	keywords: string[];
 }
 
 const NAV_ENTRIES: NavEntry[] = [
-	{ label: "トップ", href: "/", icon: "🏠" },
-	{ label: "エピソード一覧", href: "/episodes", icon: "🎧" },
+	{ label: "トップ", href: "/", icon: "🏠", keywords: ["top", "home"] },
+	{
+		label: "エピソード一覧",
+		href: "/episodes",
+		icon: "🎧",
+		keywords: ["episodes", "list"],
+	},
 	{
 		label: "お便りを送る",
 		href: "https://go.magical.fm/hello",
 		external: true,
 		icon: "📮",
+		keywords: ["hello", "otayori", "contact", "letter"],
 	},
 	{
 		label: "グッズストア",
 		href: "https://suzuri.jp/magicalfm",
 		external: true,
 		icon: "🛍️",
+		keywords: ["goods", "merch", "store", "suzuri"],
 	},
-	{ label: "サポート", href: "/support", icon: "💜" },
+	{
+		label: "サポート",
+		href: "/support",
+		icon: "💜",
+		keywords: ["support", "donate"],
+	},
 ];
 
 const MAX_EPISODE_RESULTS = 8;
@@ -109,7 +122,11 @@ export default function CommandPalette() {
 		() =>
 			q === ""
 				? NAV_ENTRIES
-				: NAV_ENTRIES.filter((entry) => entry.label.toLowerCase().includes(q)),
+				: NAV_ENTRIES.filter(
+						(entry) =>
+							entry.label.toLowerCase().includes(q) ||
+							entry.keywords.some((keyword) => keyword.startsWith(q)),
+					),
 		[q],
 	);
 
