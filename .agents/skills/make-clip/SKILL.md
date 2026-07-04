@@ -24,6 +24,16 @@ python3 -m venv $SCRATCHPAD/venv && $SCRATCHPAD/venv/bin/pip install -q mlx-whis
 `src/data/episodes.json` から対象話数の `number` / `title` / `pubDate` / `audioUrl` を取得し、
 mp3 をスクラッチパッドにダウンロードする。
 
+**予約投稿（未公開エピソード）の場合**: RSSにまだ載っていないので episodes.json は使えない。
+
+- 音源はユーザーからローカルのファイルパス（またはURL）で受け取る
+- `number` / `title` / 配信予定日はユーザーに確認してプランに手で書く
+- LISTENの話者分離は公開ページがまだ無いため、
+  (a) ユーザーがログイン済みブラウザで LISTEN ダッシュボードの該当エピソードを開き
+  HTML保存したファイルを `fetch-listen-transcript.mjs` に渡す（URLの代わりにファイルパスを受け取れる）、
+  (b) それが無理なら F0 ピッチのフォールバックで割り当てて文脈検証を厚めにする
+- 公開前なので**動画の内容がネタバレにならないか**ユーザーに一言確認する
+
 ### 2. 文字起こし（単語タイムスタンプ付き）
 
 ```bash

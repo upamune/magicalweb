@@ -9,22 +9,30 @@ import fs from "node:fs";
 // 注意: 話者ラベルの 0/1 が誰かはエピソードごとに任意なので、
 //       呼び出し側で F0 や文脈からマッピングする必要がある。
 
-const [url, outPath] = process.argv.slice(2);
-if (!url || !outPath) {
+// URL または保存済みHTMLファイルのどちらでも受け取れる。
+// 予約投稿（未公開）はログインが必要なので、ブラウザでダッシュボードの
+// エピソードページを開いてHTML保存し、そのファイルパスを渡す。
+const [source, outPath] = process.argv.slice(2);
+if (!source || !outPath) {
 	console.error(
-		"Usage: bun scripts/fetch-listen-transcript.mjs <listen-episode-url> <out.json>",
+		"Usage: bun scripts/fetch-listen-transcript.mjs <listen-episode-url | saved.html> <out.json>",
 	);
 	process.exit(1);
 }
 
-const res = await fetch(url, {
-	headers: { "user-agent": "magicalfm-clips/1.0" },
-});
-if (!res.ok) {
-	console.error(`Fetch failed: ${res.status} ${res.statusText}`);
-	process.exit(1);
+let html;
+if (source.startsWith("http")) {
+	const res = await fetch(source, {
+		headers: { "user-agent": "magicalfm-clips/1.0" },
+	});
+	if (!res.ok) {
+		console.error(`Fetch failed: ${res.status} ${res.statusText}`);
+		process.exit(1);
+	}
+	html = await res.text();
+} else {
+	html = fs.readFileSync(source, "utf8");
 }
-const html = await res.text();
 
 const segmentRe =
 	/x-data="\{ start: ([\d.]+), end: ([\d.]+) \}"\s*data-speaker="(-?\d+)"[^>]*data-segment-index="(\d+)"[\s\S]*?>([\s\S]*?)<\/div>/g;
