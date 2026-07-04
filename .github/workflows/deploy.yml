@@ -9,6 +9,10 @@ on:
   repository_dispatch:
     types: [update_content]
 
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
 jobs:
   build:
     runs-on: ubuntu-latest
