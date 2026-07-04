@@ -1,0 +1,21 @@
+{
+	"name": "magicalfm-clips",
+	"private": true,
+	"scripts": {
+		"studio": "remotion studio",
+		"render": "remotion render Clip ../out/clip.mp4"
+	},
+	"dependencies": {
+		"@remotion/cli": "4.0.243",
+		"@remotion/fonts": "4.0.243",
+		"@remotion/google-fonts": "4.0.243",
+		"@remotion/media-utils": "4.0.243",
+		"react": "^18.2.0",
+		"react-dom": "^18.2.0",
+		"remotion": "4.0.243"
+	},
+	"devDependencies": {
+		"@types/react": "^18.2.55",
+		"typescript": "^5.5.0"
+	}
+}

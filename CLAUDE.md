@@ -11,6 +11,7 @@ bun run build               # 本番ビルド（PR前に必ず通すこと）
 bun x biome check --write . # Lint & Format（tabインデント・ダブルクォート）
 
 bun scripts/fetch-episodes.js              # RSSから episodes.json を更新
+# ショート動画クリップ生成は video/README.md 参照（Remotion）
 bun scripts/generate-og.jsx --latest 5     # 新着エピソードのOGP生成
 bun scripts/generate-og.jsx --site         # サイト全体用 public/ogp.png を生成
 bun scripts/generate-og.jsx --force        # 全話再生成（OGPデザイン変更時のみ）
