@@ -117,6 +117,11 @@ export default function AudioPlayer() {
 				return;
 			}
 
+			// モーダル（クリップ再生など）が開いている間はモーダル側に譲る
+			if (document.querySelector("dialog[open]")) {
+				return;
+			}
+
 			switch (e.code) {
 				case "Space":
 					e.preventDefault();

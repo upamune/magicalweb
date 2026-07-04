@@ -1,0 +1,73 @@
+---
+import ClipPlayer from "../components/ClipPlayer.astro";
+import Footer from "../components/Footer.astro";
+import Header from "../components/Header";
+import Layout from "../layouts/Layout.astro";
+import { getPublishedClips } from "../utils/clips";
+
+const clips = await getPublishedClips();
+---
+
+<Layout
+	title="切り抜きクリップ - マヂカル.fm"
+	description="マヂカル.fmの切り抜きクリップ一覧です。エピソードの盛り上がりポイントを字幕付きのショート動画でお楽しみください。"
+	type="website"
+>
+	<Header client:load />
+
+	<section class="dotted border-b-3 border-edge bg-sun">
+		<div class="mx-auto max-w-5xl px-5 py-12 sm:py-16">
+			<span class="inline-block -rotate-2 rounded-full border-3 border-edge bg-surface px-4 py-1.5 font-display text-xs text-ink shadow-pop-sm">
+				全{clips.length}本
+			</span>
+			<h1
+				class="mt-5 font-display text-4xl tracking-tight text-[rgb(29,26,46)] sm:text-5xl"
+				style="text-shadow: 4px 4px 0 rgb(255 255 255 / 0.55)"
+			>
+				🎬 切り抜きクリップ
+			</h1>
+			<p class="mt-4 max-w-xl text-sm font-bold leading-relaxed text-[rgb(29,26,46)]/80">
+				エピソードの盛り上がりポイントを字幕付きのショート動画で。話数チップを押すとエピソード詳細ページへ。
+			</p>
+		</div>
+	</section>
+
+	<div class="mx-auto max-w-5xl px-5 py-10 sm:py-12">
+		{
+			clips.length > 0 ? (
+				<div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+					{clips.map((clip) => (
+						<div class="rounded-3xl border-3 border-edge bg-surface p-4 shadow-pop">
+							<ClipPlayer url={clip.url} label={clip.label} />
+							<div class="mt-4 flex items-center gap-3">
+								<a
+									href={`/ep/${clip.episode.slug}`}
+									class="btn-pop inline-block shrink-0 rounded-full bg-sun px-3 py-1 font-display text-xs text-[rgb(29,26,46)]"
+								>
+									#{clip.episodeNumber}
+								</a>
+								<p class="truncate text-sm font-bold">
+									{clip.label ?? clip.episode.title}
+								</p>
+							</div>
+							<a
+								href={`/ep/${clip.episode.slug}`}
+								class="group mt-2 block truncate text-xs font-bold text-muted"
+							>
+								<span class="underline decoration-transparent decoration-[2px] underline-offset-4 transition-[text-decoration-color] duration-150 group-hover:decoration-tangerine">
+									{clip.episode.title}
+								</span>
+							</a>
+						</div>
+					))}
+				</div>
+			) : (
+				<p class="text-center text-sm font-bold text-muted">
+					クリップはまだありません。おたのしみに!
+				</p>
+			)
+		}
+	</div>
+
+	<Footer />
+</Layout>

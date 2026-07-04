@@ -26,6 +26,12 @@ const NAV_ENTRIES: NavEntry[] = [
 		keywords: ["episodes", "list"],
 	},
 	{
+		label: "切り抜きクリップ",
+		href: "/clips",
+		icon: "🎬",
+		keywords: ["clips", "video", "short", "kirinuki"],
+	},
+	{
 		label: "お便りを送る",
 		href: "https://go.magical.fm/hello",
 		external: true,

@@ -1,4 +1,5 @@
 ---
+import ClipPlayer from "../components/ClipPlayer.astro";
 import EpisodeList from "../components/EpisodeList";
 import Footer from "../components/Footer.astro";
 import Header from "../components/Header";
@@ -7,11 +8,15 @@ import MerchGrid from "../components/MerchGrid.astro";
 import PlatformLinks from "../components/PlatformLinks.astro";
 import PlayButton from "../components/PlayButton";
 import Layout from "../layouts/Layout.astro";
+import { getPublishedClips } from "../utils/clips";
 import { getLatestEpisodes, toEpisodeListItem } from "../utils/rss";
 
 const episodes = await getLatestEpisodes(5);
 const listItems = episodes.map(toEpisodeListItem);
 const latest = listItems[0];
+
+// 最新クリップ3本（公開済みエピソードのものだけ表示する）
+const latestClips = (await getPublishedClips()).slice(0, 3);
 
 const tickerItems = [
 	"マヂカル.fm",
@@ -103,6 +108,49 @@ const tickerItems = [
 			))
 		}
 	</div>
+
+	<!-- 切り抜きクリップ（サン） -->
+	{
+		latestClips.length > 0 && (
+			<section
+				id="clips"
+				class="dotted border-b-3 border-edge bg-sun"
+				aria-label="切り抜きクリップ"
+			>
+				<div class="mx-auto max-w-5xl px-5 py-16 sm:py-20">
+					<div class="mb-8 flex flex-wrap items-end justify-between gap-4">
+						<h2 class="font-display text-3xl text-[rgb(29,26,46)]">
+							🎬 最新切り抜きクリップ
+						</h2>
+						<a
+							href="/clips"
+							class="btn-pop rounded-full bg-surface px-5 py-2 text-sm font-bold"
+						>
+							ぜんぶ見る →
+						</a>
+					</div>
+					<div class="grid gap-6 sm:grid-cols-3">
+						{latestClips.map((clip) => (
+							<div class="rounded-3xl border-3 border-edge bg-surface p-4 shadow-pop">
+								<ClipPlayer url={clip.url} label={clip.label} />
+								<div class="mt-4 flex items-center gap-3">
+									<a
+										href={`/ep/${clip.episode?.slug}`}
+										class="btn-pop inline-block shrink-0 rounded-full bg-sun px-3 py-1 font-display text-xs text-[rgb(29,26,46)]"
+									>
+										#{clip.episodeNumber}
+									</a>
+									<p class="truncate text-sm font-bold">
+										{clip.label ?? clip.episode?.title}
+									</p>
+								</div>
+							</div>
+						))}
+					</div>
+				</div>
+			</section>
+		)
+	}
 
 	<!-- 最新エピソード（ライム） -->
 	<section id="episodes" class="border-b-3 border-edge bg-lime">
