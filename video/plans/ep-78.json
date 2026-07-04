@@ -11,7 +11,8 @@
 	},
 	"bg": "sky",
 	"guest": {
-		"name": "概念会"
+		"name": "概念会",
+		"avatar": "guest-gainenkai.png"
 	},
 	"clipStart": 2596.5,
 	"clipEnd": 2631.34,

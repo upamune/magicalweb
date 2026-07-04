@@ -1,533 +1,333 @@
 {
 	"episode": {
-		"number": 60,
-		"title": "おしえて、乙女ゲーム ~命がけの恋愛が見たい~",
+		"number": 79,
+		"title": "ベストパートナーになるために ~結局どっちもどっち~",
 		"titleLines": [
-			"おしえて、乙女ゲーム",
-			"~命がけの恋愛が見たい~"
+			"ベストパートナーになるために",
+			"~結局どっちもどっち~"
 		],
-		"date": "2024年7月21日"
+		"date": "2024年9月25日"
 	},
 	"audioFile": "clip.mp3",
-	"durationSec": 39.86,
-	"bg": "lilac",
+	"durationSec": 37.1,
+	"bg": "candy",
 	"guest": {
-		"name": "黄身子"
+		"name": "概念会",
+		"avatar": "guest-gainenkai.png"
 	},
 	"pages": [
 		{
-			"start": 0,
-			"end": 2.12,
+			"start": 0.4,
+			"end": 2.96,
 			"speaker": "guest",
 			"lines": [
 				[
 					{
-						"text": "ジャンキー",
-						"start": 0,
-						"end": 0.64
+						"text": "うぱさんは",
+						"start": 0.4,
+						"end": 1.34
 					}
 				],
 				[
 					{
-						"text": "なんか",
-						"start": 0.64,
-						"end": 0.8
-					},
-					{
-						"text": "少女漫画",
-						"start": 0.8,
-						"end": 1.42
+						"text": "どうなんですか？",
+						"start": 1.34,
+						"end": 2.06
 					}
 				],
 				[
 					{
-						"text": "読みまくって",
-						"start": 1.42,
-						"end": 2.12
+						"text": "ちなみに。",
+						"start": 2.28,
+						"end": 2.96
 					}
 				]
 			]
 		},
 		{
-			"start": 2.12,
-			"end": 3.52,
-			"speaker": "guest",
-			"lines": [
-				[
-					{
-						"text": "乙女",
-						"start": 2.12,
-						"end": 2.48
-					},
-					{
-						"text": "ゲーム",
-						"start": 2.48,
-						"end": 2.72
-					}
-				],
-				[
-					{
-						"text": "やりまくって",
-						"start": 2.72,
-						"end": 3.52
-					}
-				]
-			]
-		},
-		{
-			"start": 4.78,
-			"end": 6.36,
-			"speaker": "guest",
-			"lines": [
-				[
-					{
-						"text": "それで",
-						"start": 4.78,
-						"end": 5.1
-					},
-					{
-						"text": "ようやく",
-						"start": 5.1,
-						"end": 5.62
-					}
-				],
-				[
-					{
-						"text": "生きて",
-						"start": 5.62,
-						"end": 5.92
-					},
-					{
-						"text": "いるので",
-						"start": 5.92,
-						"end": 6.36
-					}
-				]
-			]
-		},
-		{
-			"start": 6.86,
-			"end": 8.62,
-			"speaker": "guest",
-			"lines": [
-				[
-					{
-						"text": "なんか",
-						"start": 6.86,
-						"end": 7.18
-					},
-					{
-						"text": "もう",
-						"start": 7.18,
-						"end": 7.44
-					}
-				],
-				[
-					{
-						"text": "バンパイア",
-						"start": 7.44,
-						"end": 8.06
-					}
-				],
-				[
-					{
-						"text": "みたいな",
-						"start": 8.06,
-						"end": 8.4
-					},
-					{
-						"text": "感じ",
-						"start": 8.4,
-						"end": 8.62
-					}
-				]
-			]
-		},
-		{
-			"start": 8.62,
-			"end": 9.92,
+			"start": 2.96,
+			"end": 4.22,
 			"speaker": "upamune",
 			"lines": [
 				[
 					{
-						"text": "バンパイア?",
-						"start": 8.62,
-						"end": 9.92
+						"text": "ちなみに。",
+						"start": 2.96,
+						"end": 4.22
 					}
 				]
 			]
 		},
 		{
-			"start": 10.22,
-			"end": 11.98,
+			"start": 5.22,
+			"end": 8.44,
 			"speaker": "upamune",
 			"lines": [
 				[
 					{
-						"text": "人の",
-						"start": 10.22,
-						"end": 10.78
+						"text": "私",
+						"start": 5.22,
+						"end": 5.66
 					},
 					{
-						"text": "恋愛",
-						"start": 10.78,
-						"end": 11.12
+						"text": "そんな",
+						"start": 5.66,
+						"end": 6.1
 					}
 				],
 				[
 					{
-						"text": "吸って",
-						"start": 11.12,
-						"end": 11.44
+						"text": "イライラ",
+						"start": 6.1,
+						"end": 6.78
 					},
 					{
-						"text": "生きてるって",
-						"start": 11.44,
-						"end": 11.98
+						"text": "する",
+						"start": 6.78,
+						"end": 6.98
+					},
+					{
+						"text": "ことが",
+						"start": 6.98,
+						"end": 7.38
+					}
+				],
+				[
+					{
+						"text": "マジで",
+						"start": 7.38,
+						"end": 7.78
+					},
+					{
+						"text": "ない",
+						"start": 7.78,
+						"end": 7.9
+					},
+					{
+						"text": "んですけど",
+						"start": 7.9,
+						"end": 8.44
 					}
 				]
 			]
 		},
 		{
-			"start": 11.98,
-			"end": 13.52,
-			"speaker": "guest",
+			"start": 9.58,
+			"end": 13,
+			"speaker": "upamune",
 			"lines": [
 				[
 					{
-						"text": "そうそう",
-						"start": 11.98,
-						"end": 12.42
+						"text": "家庭で",
+						"start": 9.58,
+						"end": 10.54
 					}
 				],
 				[
 					{
-						"text": "なんか",
-						"start": 12.42,
-						"end": 12.78
+						"text": "イライラ",
+						"start": 10.54,
+						"end": 10.98
 					},
 					{
-						"text": "でも",
-						"start": 12.78,
-						"end": 13.08
+						"text": "する",
+						"start": 10.98,
+						"end": 11.26
+					},
+					{
+						"text": "ことが",
+						"start": 11.26,
+						"end": 11.8
 					}
 				],
 				[
 					{
-						"text": "自分で",
-						"start": 13.08,
-						"end": 13.52
+						"text": "唯一ぐらい",
+						"start": 11.8,
+						"end": 12.58
+					},
+					{
+						"text": "あって",
+						"start": 12.58,
+						"end": 13
 					}
 				]
 			]
 		},
 		{
 			"start": 13.52,
-			"end": 15.56,
-			"speaker": "guest",
-			"lines": [
-				[
-					{
-						"text": "恋愛",
-						"start": 13.52,
-						"end": 13.78
-					},
-					{
-						"text": "を",
-						"start": 13.78,
-						"end": 13.92
-					},
-					{
-						"text": "錬成",
-						"start": 13.92,
-						"end": 14.22
-					}
-				],
-				[
-					{
-						"text": "する",
-						"start": 14.22,
-						"end": 14.4
-					},
-					{
-						"text": "こと",
-						"start": 14.4,
-						"end": 14.56
-					},
-					{
-						"text": "が",
-						"start": 14.56,
-						"end": 14.82
-					}
-				],
-				[
-					{
-						"text": "でき",
-						"start": 14.82,
-						"end": 15.02
-					},
-					{
-						"text": "ない",
-						"start": 15.02,
-						"end": 15.18
-					},
-					{
-						"text": "から",
-						"start": 15.18,
-						"end": 15.56
-					}
-				]
-			]
-		},
-		{
-			"start": 16.5,
-			"end": 19.6,
-			"speaker": "guest",
-			"lines": [
-				[
-					{
-						"text": "たまに",
-						"start": 16.5,
-						"end": 17.16
-					}
-				],
-				[
-					{
-						"text": "結婚式",
-						"start": 17.16,
-						"end": 17.78
-					},
-					{
-						"text": "とか",
-						"start": 17.78,
-						"end": 17.98
-					},
-					{
-						"text": "行くと",
-						"start": 17.98,
-						"end": 18.4
-					}
-				],
-				[
-					{
-						"text": "天然物",
-						"start": 18.4,
-						"end": 19.14
-					},
-					{
-						"text": "は違う",
-						"start": 19.14,
-						"end": 19.6
-					}
-				]
-			]
-		},
-		{
-			"start": 19.6,
-			"end": 21,
+			"end": 19.44,
 			"speaker": "upamune",
 			"lines": [
 				[
 					{
-						"text": "天然物",
-						"start": 19.6,
-						"end": 21
+						"text": "私が",
+						"start": 13.52,
+						"end": 14.24
+					},
+					{
+						"text": "探し物を",
+						"start": 14.24,
+						"end": 16.32
+					}
+				],
+				[
+					{
+						"text": "例えば",
+						"start": 16.32,
+						"end": 17.1
+					},
+					{
+						"text": "家の中で",
+						"start": 17.1,
+						"end": 17.72
+					}
+				],
+				[
+					{
+						"text": "ハサミ",
+						"start": 17.72,
+						"end": 18.06
+					},
+					{
+						"text": "探してる",
+						"start": 18.06,
+						"end": 18.56
+					},
+					{
+						"text": "ときに",
+						"start": 18.56,
+						"end": 19.44
 					}
 				]
 			]
 		},
 		{
-			"start": 22.06,
-			"end": 26.04,
-			"speaker": "guest",
+			"start": 20.44,
+			"end": 23.1,
+			"speaker": "upamune",
 			"lines": [
 				[
 					{
-						"text": "普段",
-						"start": 22.06,
-						"end": 22.78
+						"text": "何",
+						"start": 20.44,
+						"end": 20.84
 					},
 					{
-						"text": "も",
-						"start": 22.78,
-						"end": 22.96
+						"text": "探して",
+						"start": 20.84,
+						"end": 21.28
 					},
 					{
-						"text": "ありながら",
-						"start": 22.96,
-						"end": 23.58
+						"text": "るのって",
+						"start": 21.28,
+						"end": 21.82
 					}
 				],
 				[
 					{
-						"text": "動物",
-						"start": 23.58,
-						"end": 24.34
+						"text": "聞かれるの",
+						"start": 21.82,
+						"end": 22.22
 					},
 					{
-						"text": "とか",
-						"start": 24.34,
-						"end": 24.58
+						"text": "が",
+						"start": 22.22,
+						"end": 22.28
 					}
 				],
 				[
 					{
-						"text": "冷凍",
-						"start": 24.58,
-						"end": 25.18
+						"text": "一番",
+						"start": 22.28,
+						"end": 22.52
 					},
 					{
-						"text": "保存",
-						"start": 25.18,
-						"end": 25.68
-					},
-					{
-						"text": "された",
-						"start": 25.68,
-						"end": 26.02
-					},
-					{
-						"text": "血液を",
-						"start": 26.02,
-						"end": 26.04
+						"text": "嫌なんですけど",
+						"start": 22.52,
+						"end": 23.1
 					}
 				]
 			]
 		},
 		{
-			"start": 26.04,
-			"end": 28.2,
-			"speaker": "guest",
+			"start": 26.18,
+			"end": 31.56,
+			"speaker": "upamune",
 			"lines": [
 				[
 					{
-						"text": "そうそう",
-						"start": 26.04,
-						"end": 26.04
+						"text": "自分で",
+						"start": 26.18,
+						"end": 26.98
 					},
 					{
-						"text": "なんか",
-						"start": 26.04,
-						"end": 26.16
+						"text": "完結",
+						"start": 26.98,
+						"end": 27.46
+					},
+					{
+						"text": "するし、",
+						"start": 27.46,
+						"end": 28.86
 					}
 				],
 				[
 					{
-						"text": "トマト",
-						"start": 26.16,
-						"end": 26.76
+						"text": "困った",
+						"start": 28.86,
+						"end": 29.6
 					},
 					{
-						"text": "ジュースで",
-						"start": 26.76,
-						"end": 27.48
+						"text": "ときは",
+						"start": 29.6,
+						"end": 30.02
 					}
 				],
 				[
 					{
-						"text": "生きてる",
-						"start": 27.48,
-						"end": 27.9
+						"text": "自分",
+						"start": 30.02,
+						"end": 30.42
 					},
 					{
-						"text": "けど",
-						"start": 27.9,
-						"end": 28.2
+						"text": "から",
+						"start": 30.42,
+						"end": 30.66
+					},
+					{
+						"text": "声かける",
+						"start": 30.66,
+						"end": 31.2
+					},
+					{
+						"text": "から、",
+						"start": 31.2,
+						"end": 31.56
 					}
 				]
 			]
 		},
 		{
-			"start": 28.2,
-			"end": 30.3,
-			"speaker": "guest",
+			"start": 32.82,
+			"end": 37.1,
+			"speaker": "upamune",
 			"lines": [
 				[
 					{
-						"text": "たまに",
-						"start": 28.2,
-						"end": 29.14
-					}
-				],
-				[
-					{
-						"text": "生き血",
-						"start": 29.14,
-						"end": 29.5
+						"text": "何も",
+						"start": 32.82,
+						"end": 33.48
 					},
 					{
-						"text": "を",
-						"start": 29.5,
-						"end": 29.68
+						"text": "ほっといて",
+						"start": 33.48,
+						"end": 34.62
 					},
 					{
-						"text": "飲むと",
-						"start": 29.68,
-						"end": 30.3
-					}
-				]
-			]
-		},
-		{
-			"start": 30.3,
-			"end": 32.6,
-			"speaker": "guest",
-			"lines": [
-				[
-					{
-						"text": "全然",
-						"start": 30.3,
-						"end": 31
-					},
-					{
-						"text": "違う",
-						"start": 31,
-						"end": 31.3
-					},
-					{
-						"text": "じゃんって",
-						"start": 31.3,
-						"end": 31.72
-					}
-				],
-				[
-					{
-						"text": "思ったり",
-						"start": 31.72,
-						"end": 32.1
-					},
-					{
-						"text": "するけど",
-						"start": 32.1,
-						"end": 32.6
-					}
-				]
-			]
-		},
-		{
-			"start": 33.88,
-			"end": 34.9,
-			"speaker": "michiru",
-			"lines": [
-				[
-					{
-						"text": "何の話か",
-						"start": 33.88,
+						"text": "ほしい",
+						"start": 34.62,
 						"end": 34.9
-					}
-				]
-			]
-		},
-		{
-			"start": 36.72,
-			"end": 39.86,
-			"speaker": "guest",
-			"lines": [
-				[
-					{
-						"text": "恋愛バンパイア",
-						"start": 36.72,
-						"end": 37.96
 					}
 				]
 			]

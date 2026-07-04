@@ -11,7 +11,8 @@
 	},
 	"bg": "lime",
 	"guest": {
-		"name": "kita"
+		"name": "kita",
+		"avatar": "guest-kita.png"
 	},
 	"clipStart": 1631.8,
 	"clipEnd": 1656.7,

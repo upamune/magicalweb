@@ -10,7 +10,8 @@
 	},
 	"bg": "lilac",
 	"guest": {
-		"name": "黄身子"
+		"name": "黄身子",
+		"avatar": "guest-kimiko.png"
 	},
 	"clipStart": 2526.98,
 	"clipEnd": 2566.84,

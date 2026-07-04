@@ -10,7 +10,8 @@
 	},
 	"bg": "sky",
 	"guest": {
-		"name": "kita"
+		"name": "kita",
+		"avatar": "guest-kita.png"
 	},
 	"clipStart": 2627.6,
 	"clipEnd": 2649.69,

@@ -10,7 +10,8 @@
 	},
 	"bg": "candy",
 	"guest": {
-		"name": "概念会"
+		"name": "概念会",
+		"avatar": "guest-gainenkai.png"
 	},
 	"clipStart": 1261.7,
 	"clipEnd": 1298.8,
