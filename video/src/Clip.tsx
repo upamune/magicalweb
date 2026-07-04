@@ -347,7 +347,7 @@ export const Clip: React.FC<{ data: ClipData }> = ({ data }) => {
 			<div
 				style={{
 					position: "absolute",
-					top: 96,
+					top: 140,
 					left: 72,
 					right: 72,
 					display: "flex",
@@ -373,7 +373,7 @@ export const Clip: React.FC<{ data: ClipData }> = ({ data }) => {
 			<div
 				style={{
 					position: "absolute",
-					top: 232,
+					top: 350,
 					left: 72,
 					right: 72,
 					transform: `scale(${0.9 + titleIn * 0.1})`,
@@ -406,7 +406,7 @@ export const Clip: React.FC<{ data: ClipData }> = ({ data }) => {
 				<div
 					style={{
 						position: "absolute",
-						top: 566,
+						top: 700,
 						left: 72,
 						right: 72,
 						display: "flex",
@@ -433,7 +433,7 @@ export const Clip: React.FC<{ data: ClipData }> = ({ data }) => {
 					/>
 				</div>
 			) : (
-				<div style={{ position: "absolute", top: 640, left: 72, right: 72 }}>
+				<div style={{ position: "absolute", top: 760, left: 72, right: 72 }}>
 					<Waveform frame={frame} audioFile={data.audioFile} />
 				</div>
 			)}
@@ -442,7 +442,7 @@ export const Clip: React.FC<{ data: ClipData }> = ({ data }) => {
 			<div
 				style={{
 					position: "absolute",
-					top: 820,
+					top: 960,
 					left: 64,
 					right: 64,
 					minHeight: 560,
@@ -458,7 +458,7 @@ export const Clip: React.FC<{ data: ClipData }> = ({ data }) => {
 				<div
 					style={{
 						position: "absolute",
-						bottom: 320,
+						bottom: 330,
 						left: 0,
 						right: 0,
 						display: "flex",
@@ -489,7 +489,7 @@ export const Clip: React.FC<{ data: ClipData }> = ({ data }) => {
 				<div
 					style={{
 						position: "absolute",
-						bottom: 300,
+						bottom: 330,
 						left: 0,
 						right: 0,
 						display: "flex",
