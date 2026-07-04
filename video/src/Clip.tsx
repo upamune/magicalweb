@@ -476,7 +476,7 @@ export const Clip: React.FC<{ data: ClipData }> = ({ data }) => {
 							padding: "16px 52px",
 							fontFamily: DISPLAY,
 							fontSize: 40,
-							transform: `rotate(${-3 + Math.sin((frame / fps) * 1.8) * 1.4}deg) translateY(${Math.sin((frame / fps) * 2.2) * 7}px)`,
+							transform: "rotate(-3deg)",
 						}}
 					>
 						週2で配信中!
