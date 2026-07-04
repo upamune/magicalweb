@@ -34,7 +34,12 @@ const listItems = episodes.map(toEpisodeListItem);
 	</section>
 
 	<div class="mx-auto max-w-5xl px-5 py-10 sm:py-12">
-		<EpisodeList client:load episodes={listItems} searchable />
+		<EpisodeList
+			client:load
+			episodes={listItems.slice(0, 24)}
+			total={listItems.length}
+			searchable
+		/>
 	</div>
 
 	<Footer />

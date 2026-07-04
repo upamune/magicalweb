@@ -18,13 +18,7 @@ export default {
 				"system-ui",
 				"sans-serif",
 			],
-			mono: [
-				'"IBM Plex Mono"',
-				"ui-monospace",
-				"SFMono-Regular",
-				"Menlo",
-				"monospace",
-			],
+			mono: ["ui-monospace", "SFMono-Regular", "Menlo", "monospace"],
 		},
 		extend: {
 			colors: {

@@ -70,13 +70,26 @@ const ogImageUrl = image.startsWith("http")
     <!-- Podcast -->
     <link type="application/rss+xml" rel="alternate" title="マヂカル.fm RSS Feed" href="https://listen.style/p/magicalfm/rss" />
 
-    <!-- Fonts -->
+    <!-- Fonts（非ブロッキング読み込み: FCP/LCP対策） -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=M+PLUS+Rounded+1c:wght@500;700;800&family=Mochiy+Pop+One&display=swap"
-      rel="stylesheet"
+      rel="preload"
+      as="style"
+      href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@500;700&family=Mochiy+Pop+One&display=swap"
     />
+    <link
+      href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@500;700&family=Mochiy+Pop+One&display=swap"
+      rel="stylesheet"
+      media="print"
+      onload="this.media='all'"
+    />
+    <noscript>
+      <link
+        href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@500;700&family=Mochiy+Pop+One&display=swap"
+        rel="stylesheet"
+      />
+    </noscript>
 
     <ViewTransitions />
   </head>

@@ -13,6 +13,7 @@ export interface EpisodeItem {
 interface EpisodeListProps {
 	episodes: EpisodeItem[];
 	searchable?: boolean;
+	total?: number;
 }
 
 function PlayIcon() {
@@ -55,21 +56,40 @@ export function Equalizer({ paused = false }: { paused?: boolean }) {
 export default function EpisodeList({
 	episodes,
 	searchable = false,
+	total = episodes.length,
 }: EpisodeListProps) {
 	const [query, setQuery] = useState("");
+	const [allEpisodes, setAllEpisodes] = useState<EpisodeItem[] | null>(null);
+	const [loadingAll, setLoadingAll] = useState(false);
 	const { episodeNumber, isPlaying, setEpisode, setPlaying } = useAudioStore();
+
+	// 初期表示は先頭のみ渡し、全件は必要になったとき（検索・すべて表示）に取得する。
+	// 266話ぶんを最初からハイドレートするとTBTが悪化するため
+	const hasMore = total > episodes.length && allEpisodes === null;
+
+	const loadAll = () => {
+		if (allEpisodes !== null || loadingAll) return;
+		setLoadingAll(true);
+		fetch("/api/episodes.json")
+			.then((res) => res.json())
+			.then((data: EpisodeItem[]) => setAllEpisodes(data))
+			.catch(() => setAllEpisodes(episodes))
+			.finally(() => setLoadingAll(false));
+	};
+
+	const source = allEpisodes ?? episodes;
 
 	const filtered = useMemo(() => {
 		const q = query.trim().toLowerCase();
-		if (!q) return episodes;
-		return episodes.filter(
+		if (!q) return source;
+		return source.filter(
 			(ep) =>
 				ep.title.toLowerCase().includes(q) ||
 				`#${ep.number}`.includes(q) ||
 				String(ep.number).includes(q) ||
 				(ep.snippet?.toLowerCase().includes(q) ?? false),
 		);
-	}, [episodes, query]);
+	}, [source, query]);
 
 	const handlePlay = (ep: EpisodeItem) => {
 		if (episodeNumber === ep.number) {
@@ -87,13 +107,14 @@ export default function EpisodeList({
 						type="search"
 						value={query}
 						onChange={(e) => setQuery(e.target.value)}
+						onFocus={loadAll}
 						placeholder="タイトル・話数で検索"
 						className="w-full max-w-sm rounded-full border-3 border-edge bg-surface px-5 py-2.5 text-sm font-bold shadow-pop-xs outline-none transition-shadow duration-150 placeholder:font-medium placeholder:text-muted/70 focus:shadow-pop-sm"
 						aria-label="エピソードを検索"
 					/>
 					<p className="shrink-0 font-display text-sm text-muted">
-						{filtered.length}
-						<span className="text-muted/60"> / {episodes.length}</span>
+						{query ? filtered.length : total}
+						<span className="text-muted/60"> / {total}</span>
 					</p>
 				</div>
 			)}
@@ -177,6 +198,21 @@ export default function EpisodeList({
 						);
 					})}
 				</ol>
+			)}
+
+			{hasMore && query === "" && (
+				<div className="mt-8 text-center">
+					<button
+						type="button"
+						onClick={loadAll}
+						disabled={loadingAll}
+						className="btn-pop rounded-full bg-sun px-8 py-3 font-bold text-[rgb(29,26,46)] disabled:opacity-60"
+					>
+						{loadingAll
+							? "読み込み中…"
+							: `残り${total - episodes.length}話をすべて表示`}
+					</button>
+				</div>
 			)}
 		</div>
 	);
