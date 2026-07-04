@@ -5,9 +5,12 @@ export interface Word {
 	end: number;
 }
 
+export type Speaker = "michiru" | "upamune";
+
 export interface CaptionPage {
 	start: number;
 	end: number;
+	speaker?: Speaker;
 	lines: Word[][];
 }
 

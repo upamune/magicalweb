@@ -34,6 +34,7 @@ const data = {
 	pages: plan.pages.map((page) => ({
 		start: shift(page.start),
 		end: shift(page.end),
+		...(page.speaker && { speaker: page.speaker }),
 		lines: page.lines.map((line) =>
 			line.map((word) => ({
 				text: word.text,

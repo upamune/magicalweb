@@ -12,7 +12,12 @@ import {
 	useVideoConfig,
 } from "remotion";
 import { C } from "./tokens";
-import type { CaptionPage, ClipData, Word } from "./types";
+import type { CaptionPage, ClipData, Speaker, Word } from "./types";
+
+const HOSTS: Record<Speaker, { name: string; avatar: string }> = {
+	michiru: { name: "michiru", avatar: "host-michiru.png" },
+	upamune: { name: "upamune", avatar: "host-upamune.png" },
+};
 
 export const FPS = 30;
 
@@ -136,7 +141,85 @@ function Captions({
 	);
 }
 
-function Waveform({ frame, audioFile }: { frame: number; audioFile: string }) {
+// 話者アバター: 喋っている方がポップして目立つ
+function HostAvatar({
+	speaker,
+	active,
+	activeSinceFrame,
+	frame,
+	fps,
+}: {
+	speaker: Speaker;
+	active: boolean;
+	activeSinceFrame: number;
+	frame: number;
+	fps: number;
+}) {
+	const host = HOSTS[speaker];
+	const pop = spring({
+		frame: frame - activeSinceFrame,
+		fps,
+		config: { damping: 12, stiffness: 190 },
+		durationInFrames: 12,
+	});
+	const scale = active ? 0.94 + pop * 0.14 : 0.9;
+
+	return (
+		<div
+			style={{
+				display: "flex",
+				flexDirection: "column",
+				alignItems: "center",
+				gap: 14,
+				width: 190,
+			}}
+		>
+			<div style={{ position: "relative", transform: `scale(${scale})` }}>
+				<Img
+					src={staticFile(host.avatar)}
+					style={{
+						width: 150,
+						height: 150,
+						borderRadius: 9999,
+						border: `7px solid ${C.ink}`,
+						boxShadow: active
+							? `0 0 0 10px ${C.sun}, 8px 8px 0 ${C.ink}`
+							: `6px 6px 0 ${C.ink}`,
+						filter: active ? "none" : "grayscale(1)",
+						opacity: active ? 1 : 0.45,
+						objectFit: "cover",
+					}}
+				/>
+			</div>
+			<div
+				style={{
+					fontFamily: DISPLAY,
+					fontSize: 26,
+					color: C.ink,
+					backgroundColor: active ? C.sun : C.card,
+					border: `4px solid ${C.ink}`,
+					borderRadius: 9999,
+					padding: "2px 20px",
+					opacity: active ? 1 : 0.5,
+					boxShadow: active ? `4px 4px 0 ${C.ink}` : "none",
+					transform: `scale(${active ? 0.96 + pop * 0.04 : 0.92})`,
+				}}
+			>
+				{host.name}
+			</div>
+		</div>
+	);
+}
+
+function Waveform({
+	frame,
+	audioFile,
+	barCount = 24,
+}: {
+	frame: number;
+	audioFile: string;
+	barCount?: number;
+}) {
 	const { fps } = useVideoConfig();
 	const audioData = useAudioData(staticFile(audioFile));
 	if (!audioData) return <div style={{ height: 100 }} />;
@@ -149,7 +232,7 @@ function Waveform({ frame, audioFile }: { frame: number; audioFile: string }) {
 	});
 
 	// 低〜中域のビンだけ使い、sqrtで持ち上げて動きを出す
-	const bars = freq.slice(1, 25);
+	const bars = freq.slice(1, 1 + barCount);
 
 	return (
 		<div
@@ -184,7 +267,19 @@ export const Clip: React.FC<{ data: ClipData }> = ({ data }) => {
 	const { fps, durationInFrames } = useVideoConfig();
 	const t = frame / fps;
 
-	const page = data.pages.find((p) => t >= p.start && t < p.end) ?? null;
+	const pageIndex = data.pages.findIndex((p) => t >= p.start && t < p.end);
+	const page = pageIndex >= 0 ? data.pages[pageIndex] : null;
+
+	// 話者表示: 現在の話者と、その話者に切り替わったフレーム（連続同一話者は遡る）
+	const hasSpeakers = data.pages.some((p) => p.speaker);
+	const activeSpeaker = page?.speaker ?? null;
+	let speakerSince = page ? Math.round(page.start * fps) : 0;
+	if (activeSpeaker && pageIndex > 0) {
+		for (let i = pageIndex - 1; i >= 0; i--) {
+			if (data.pages[i].speaker !== activeSpeaker) break;
+			speakerSince = Math.round(data.pages[i].start * fps);
+		}
+	}
 
 	const stickerIn = spring({
 		frame,
@@ -226,6 +321,27 @@ export const Clip: React.FC<{ data: ClipData }> = ({ data }) => {
 			}}
 		>
 			<Audio src={staticFile(data.audioFile)} />
+
+			{/* プログレスバー（ストーリーズ式・画面最上部フルブリード） */}
+			<div
+				style={{
+					position: "absolute",
+					top: 0,
+					left: 0,
+					right: 0,
+					height: 22,
+					backgroundColor: C.card,
+					borderBottom: `5px solid ${C.ink}`,
+				}}
+			>
+				<div
+					style={{
+						width: `${progress * 100}%`,
+						height: "100%",
+						backgroundColor: C.tangerine,
+					}}
+				/>
+			</div>
 
 			{/* ヘッダー: 話数ステッカー + 日付 */}
 			<div
@@ -285,10 +401,42 @@ export const Clip: React.FC<{ data: ClipData }> = ({ data }) => {
 				</div>
 			</div>
 
-			{/* 波形 */}
-			<div style={{ position: "absolute", top: 640, left: 72, right: 72 }}>
-				<Waveform frame={frame} audioFile={data.audioFile} />
-			</div>
+			{/* 話者 + 波形 */}
+			{hasSpeakers ? (
+				<div
+					style={{
+						position: "absolute",
+						top: 566,
+						left: 72,
+						right: 72,
+						display: "flex",
+						alignItems: "center",
+						gap: 8,
+					}}
+				>
+					<HostAvatar
+						speaker="michiru"
+						active={activeSpeaker === "michiru"}
+						activeSinceFrame={speakerSince}
+						frame={frame}
+						fps={fps}
+					/>
+					<div style={{ flex: 1 }}>
+						<Waveform frame={frame} audioFile={data.audioFile} barCount={14} />
+					</div>
+					<HostAvatar
+						speaker="upamune"
+						active={activeSpeaker === "upamune"}
+						activeSinceFrame={speakerSince}
+						frame={frame}
+						fps={fps}
+					/>
+				</div>
+			) : (
+				<div style={{ position: "absolute", top: 640, left: 72, right: 72 }}>
+					<Waveform frame={frame} audioFile={data.audioFile} />
+				</div>
+			)}
 
 			{/* 字幕 */}
 			<div
@@ -335,7 +483,7 @@ export const Clip: React.FC<{ data: ClipData }> = ({ data }) => {
 				</div>
 			)}
 
-			{/* ブランド行 + プログレスバー */}
+			{/* ブランド行 */}
 			<div
 				style={{
 					position: "absolute",
@@ -344,7 +492,6 @@ export const Clip: React.FC<{ data: ClipData }> = ({ data }) => {
 					right: 72,
 					display: "flex",
 					flexDirection: "column",
-					gap: 28,
 					opacity: brandIn,
 				}}
 			>
@@ -381,23 +528,6 @@ export const Clip: React.FC<{ data: ClipData }> = ({ data }) => {
 					>
 						#magicalfm
 					</div>
-				</div>
-				<div
-					style={{
-						height: 18,
-						borderRadius: 9999,
-						border: `5px solid ${C.ink}`,
-						backgroundColor: C.card,
-						overflow: "hidden",
-					}}
-				>
-					<div
-						style={{
-							width: `${progress * 100}%`,
-							height: "100%",
-							backgroundColor: C.tangerine,
-						}}
-					/>
 				</div>
 			</div>
 		</AbsoluteFill>
