@@ -1,292 +1,408 @@
 {
 	"episode": {
-		"number": 263,
-		"title": "👀のemoji、結局どういう意味？",
+		"number": 262,
+		"title": "ジョジョ5部完走 〜雑魚が存在しない漫画〜",
 		"titleLines": [
-			"👀のemoji、",
-			"結局どういう意味？"
+			"ジョジョ5部完走",
+			"〜雑魚が存在しない漫画〜"
 		],
-		"date": "2026年7月1日"
+		"date": "2026年6月28日"
 	},
 	"audioFile": "clip.mp3",
-	"durationSec": 30.5,
-	"bg": "candy",
+	"durationSec": 33.7,
+	"bg": "sky",
 	"pages": [
 		{
-			"start": 0.4,
-			"end": 4.08,
-			"speaker": "upamune",
+			"start": 0.1,
+			"end": 3.06,
+			"speaker": "michiru",
 			"lines": [
 				[
 					{
-						"text": "「目で見る」",
-						"start": 0.48,
-						"end": 1.48
+						"text": "やっぱ",
+						"start": 0.16,
+						"end": 0.8
 					},
 					{
-						"text": "とかは、",
-						"start": 1.48,
-						"end": 1.94
+						"text": "ジョジョが",
+						"start": 0.8,
+						"end": 1.26
 					},
 					{
-						"text": "あれ、",
-						"start": 1.94,
-						"end": 2.48
+						"text": "いいのは",
+						"start": 1.26,
+						"end": 1.76
 					}
 				],
 				[
 					{
-						"text": "見ました",
-						"start": 2.48,
-						"end": 3.38
-					},
-					{
-						"text": "みたいなのって",
-						"start": 3.38,
-						"end": 4.08
+						"text": "出てくる人が",
+						"start": 1.76,
+						"end": 3.06
 					}
 				]
 			]
 		},
 		{
-			"start": 4.08,
-			"end": 6.2,
-			"speaker": "upamune",
+			"start": 3.06,
+			"end": 5.1,
+			"speaker": "michiru",
 			"lines": [
 				[
 					{
-						"text": "了解ってこと?",
-						"start": 4.08,
+						"text": "だいたいみんな",
+						"start": 3.06,
+						"end": 3.68
+					}
+				],
+				[
+					{
+						"text": "強いことですね",
+						"start": 3.68,
+						"end": 4.58
+					}
+				]
+			]
+		},
+		{
+			"start": 5.1,
+			"end": 7.06,
+			"speaker": "michiru",
+			"lines": [
+				[
+					{
+						"text": "なんか",
+						"start": 5.14,
 						"end": 5.5
-					}
-				]
-			]
-		},
-		{
-			"start": 6.2,
-			"end": 12.66,
-			"speaker": "michiru",
-			"lines": [
-				[
-					{
-						"text": "+1と、",
-						"start": 6.26,
-						"end": 7.34
 					},
 					{
-						"text": "+1は",
-						"start": 7.92,
-						"end": 8.72
-					},
-					{
-						"text": "もう完全に",
-						"start": 8.72,
-						"end": 9.5
+						"text": "弱い人",
+						"start": 5.5,
+						"end": 6.08
 					}
 				],
 				[
 					{
-						"text": "この投稿に",
-						"start": 9.5,
-						"end": 10.24
+						"text": "出てこないじゃないですか",
+						"start": 6.08,
+						"end": 7.06
+					}
+				]
+			]
+		},
+		{
+			"start": 7.06,
+			"end": 10.26,
+			"speaker": "michiru",
+			"lines": [
+				[
+					{
+						"text": "あんま、",
+						"start": 7.06,
+						"end": 7.62
 					},
 					{
-						"text": "対して",
-						"start": 10.24,
-						"end": 10.88
+						"text": "時々",
+						"start": 7.62,
+						"end": 8.02
 					}
 				],
 				[
 					{
-						"text": "肯定",
-						"start": 10.88,
-						"end": 11.6
-					},
-					{
-						"text": "じゃないですか",
-						"start": 11.6,
-						"end": 12.66
-					}
-				]
-			]
-		},
-		{
-			"start": 12.66,
-			"end": 16.82,
-			"speaker": "michiru",
-			"lines": [
-				[
-					{
-						"text": "それと",
-						"start": 12.66,
-						"end": 13.74
-					},
-					{
-						"text": "「見ました」は",
-						"start": 13.74,
-						"end": 15.08
+						"text": "チンピラみたいな、",
+						"start": 8.02,
+						"end": 8.88
 					}
 				],
 				[
 					{
-						"text": "何の差分が",
-						"start": 15.08,
-						"end": 16.48
+						"text": "まあまあ",
+						"start": 8.88,
+						"end": 9.64
 					},
 					{
-						"text": "あるんですか",
-						"start": 16.48,
-						"end": 16.82
+						"text": "負けだろうな",
+						"start": 9.64,
+						"end": 10.26
 					}
 				]
 			]
 		},
 		{
-			"start": 16.82,
-			"end": 18.36,
+			"start": 10.26,
+			"end": 11.82,
 			"speaker": "michiru",
 			"lines": [
 				[
 					{
-						"text": "何の感情もない",
-						"start": 16.82,
-						"end": 18.36
+						"text": "みたいな人と、",
+						"start": 10.26,
+						"end": 10.74
+					}
+				],
+				[
+					{
+						"text": "時々出てくるけど",
+						"start": 10.74,
+						"end": 11.82
 					}
 				]
 			]
 		},
 		{
-			"start": 18.36,
-			"end": 22.32,
+			"start": 11.82,
+			"end": 14.88,
 			"speaker": "michiru",
 			"lines": [
 				[
 					{
-						"text": "だから、",
-						"start": 18.36,
-						"end": 18.66
+						"text": "敵が",
+						"start": 11.82,
+						"end": 12.54
 					},
 					{
-						"text": "いいとも",
-						"start": 18.66,
-						"end": 19.26
+						"text": "なんか、",
+						"start": 12.54,
+						"end": 12.94
+					}
+				],
+				[
+					{
+						"text": "ちゃんとみんな",
+						"start": 12.94,
+						"end": 13.5
 					},
 					{
-						"text": "悪いとも",
-						"start": 19.26,
+						"text": "強い",
+						"start": 13.5,
+						"end": 14.34
+					}
+				]
+			]
+		},
+		{
+			"start": 14.88,
+			"end": 18.56,
+			"speaker": "michiru",
+			"lines": [
+				[
+					{
+						"text": "なんか",
+						"start": 14.88,
+						"end": 15.34
+					},
+					{
+						"text": "味方もさ、",
+						"start": 15.34,
+						"end": 16.36
+					}
+				],
+				[
+					{
+						"text": "そんな",
+						"start": 16.36,
+						"end": 16.74
+					},
+					{
+						"text": "雑魚みたいな",
+						"start": 16.74,
+						"end": 17.38
+					},
+					{
+						"text": "人",
+						"start": 17.38,
+						"end": 17.54
+					}
+				],
+				[
+					{
+						"text": "いないじゃん",
+						"start": 17.92,
+						"end": 18.56
+					}
+				]
+			]
+		},
+		{
+			"start": 18.56,
+			"end": 19.82,
+			"speaker": "michiru",
+			"lines": [
+				[
+					{
+						"text": "みんな",
+						"start": 18.56,
+						"end": 18.82
+					},
+					{
+						"text": "頑張って",
+						"start": 18.82,
+						"end": 19.22
+					},
+					{
+						"text": "戦ってる",
+						"start": 19.22,
 						"end": 19.82
 					}
-				],
+				]
+			]
+		},
+		{
+			"start": 19.82,
+			"end": 21.52,
+			"speaker": "upamune",
+			"lines": [
 				[
 					{
-						"text": "言ってないけど",
+						"text": "そういう強いね",
 						"start": 19.82,
-						"end": 20.56
-					}
-				],
-				[
-					{
-						"text": "一応",
-						"start": 20.56,
 						"end": 21.2
-					},
-					{
-						"text": "見はしたよ",
-						"start": 21.2,
-						"end": 21.98
-					},
-					{
-						"text": "っていう",
-						"start": 21.98,
-						"end": 22.32
 					}
 				]
 			]
 		},
 		{
-			"start": 22.32,
-			"end": 25.58,
-			"speaker": "michiru",
+			"start": 21.52,
+			"end": 23.74,
+			"speaker": "upamune",
 			"lines": [
 				[
 					{
-						"text": "じゃあ、",
-						"start": 22.32,
-						"end": 22.76
+						"text": "なんか、",
+						"start": 21.52,
+						"end": 21.76
 					},
 					{
-						"text": "ラジャーとも",
-						"start": 22.76,
-						"end": 23.44
+						"text": "人としての",
+						"start": 21.76,
+						"end": 22.58
 					}
 				],
 				[
 					{
-						"text": "違うんだ",
-						"start": 23.44,
-						"end": 23.86
-					}
-				],
-				[
-					{
-						"text": "ラジャーとも",
-						"start": 23.86,
-						"end": 24.36
+						"text": "芯が",
+						"start": 22.58,
+						"end": 22.9
 					},
 					{
-						"text": "違うんだ",
-						"start": 24.36,
+						"text": "強いとか",
+						"start": 22.9,
+						"end": 23.26
+					},
+					{
+						"text": "じゃなくて",
+						"start": 23.26,
+						"end": 23.74
+					}
+				]
+			]
+		},
+		{
+			"start": 23.74,
+			"end": 24.9,
+			"speaker": "upamune",
+			"lines": [
+				[
+					{
+						"text": "能力的な",
+						"start": 23.74,
+						"end": 24.5
+					},
+					{
+						"text": "強さ",
+						"start": 24.5,
 						"end": 24.88
-					},
-					{
-						"text": "え?",
-						"start": 24.88,
-						"end": 25.58
 					}
 				]
 			]
 		},
 		{
-			"start": 25.58,
-			"end": 27.6,
+			"start": 24.9,
+			"end": 27.62,
 			"speaker": "michiru",
 			"lines": [
 				[
 					{
-						"text": "だから、",
-						"start": 25.58,
-						"end": 25.86
+						"text": "そもそも",
+						"start": 24.9,
+						"end": 25.76
 					},
 					{
-						"text": "ほんまに",
-						"start": 25.86,
-						"end": 26.16
+						"text": "能力が",
+						"start": 25.76,
+						"end": 26.28
+					},
+					{
+						"text": "強い",
+						"start": 26.28,
+						"end": 27
+					}
+				]
+			]
+		},
+		{
+			"start": 27.62,
+			"end": 30.4,
+			"speaker": "upamune",
+			"lines": [
+				[
+					{
+						"text": "確かに",
+						"start": 27.62,
+						"end": 28.26
 					}
 				],
 				[
 					{
-						"text": "何の意味も",
-						"start": 26.16,
-						"end": 27.12
+						"text": "ホワイト",
+						"start": 28.26,
+						"end": 28.84
 					},
 					{
-						"text": "ないです",
-						"start": 27.12,
-						"end": 27.6
+						"text": "アルバムの",
+						"start": 28.84,
+						"end": 29.48
+					},
+					{
+						"text": "やつとかも",
+						"start": 29.48,
+						"end": 30.4
 					}
 				]
 			]
 		},
 		{
-			"start": 27.6,
-			"end": 30.5,
-			"speaker": "michiru",
+			"start": 30.4,
+			"end": 33.7,
+			"speaker": "upamune",
 			"lines": [
 				[
 					{
-						"text": "つけるな",
-						"start": 27.6,
-						"end": 28.28
+						"text": "めっちゃ",
+						"start": 30.4,
+						"end": 30.7
+					},
+					{
+						"text": "顔雑魚そう",
+						"start": 30.7,
+						"end": 31.36
+					},
+					{
+						"text": "なのに",
+						"start": 31.36,
+						"end": 31.7
+					}
+				],
+				[
+					{
+						"text": "めちゃくちゃ",
+						"start": 31.7,
+						"end": 32.16
+					},
+					{
+						"text": "強かったから",
+						"start": 32.16,
+						"end": 32.7
 					}
 				]
 			]

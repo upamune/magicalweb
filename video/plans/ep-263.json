@@ -11,7 +11,7 @@
 	"bg": "candy",
 	"clipStart": 305.9,
 	"clipEnd": 336.4,
-	"note": "👀(見ました)リアクションの意味論争〜「つけるな」のオチまで。文字起こしは校正済み(プラ1→+1 / 本の→ほんまに / 句読点・疑問符を補完)。話者はF0ピッチで割り当て(質問側=upamune/解説とオチ=michiru)",
+	"note": "👀(見ました)リアクションの意味論争〜「つけるな」のオチまで。文字起こしは校正済み(プラ1→+1 / 本の→ほんまに / 句読点・疑問符を補完)。話者はLISTENの話者分離を採用(質問とツッコミ「つけるな」=upamune / 解説=michiru)",
 	"pages": [
 		{
 			"start": 306.3,
@@ -109,7 +109,7 @@
 					}
 				]
 			],
-			"speaker": "michiru"
+			"speaker": "upamune"
 		},
 		{
 			"start": 318.56,
@@ -140,7 +140,7 @@
 					}
 				]
 			],
-			"speaker": "michiru"
+			"speaker": "upamune"
 		},
 		{
 			"start": 322.72,
@@ -245,7 +245,7 @@
 					}
 				]
 			],
-			"speaker": "michiru"
+			"speaker": "upamune"
 		},
 		{
 			"start": 331.48,
@@ -290,7 +290,7 @@
 					}
 				]
 			],
-			"speaker": "michiru"
+			"speaker": "upamune"
 		}
 	]
 }
