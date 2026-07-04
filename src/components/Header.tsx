@@ -1,5 +1,22 @@
 import { useState } from "react";
 
+function SearchIcon() {
+	return (
+		<svg
+			viewBox="0 0 24 24"
+			className="h-4 w-4"
+			fill="none"
+			stroke="currentColor"
+			strokeWidth="2.5"
+			strokeLinecap="round"
+			aria-hidden="true"
+		>
+			<circle cx="11" cy="11" r="7" />
+			<path d="m20 20-3.5-3.5" />
+		</svg>
+	);
+}
+
 const NAV_ITEMS = [
 	{ href: "/episodes", label: "エピソード" },
 	{ href: "/#hosts", label: "パーソナリティ" },
@@ -41,10 +58,31 @@ export default function Header() {
 								{item.label}
 							</a>
 						))}
+						<button
+							type="button"
+							onClick={() =>
+								window.dispatchEvent(new CustomEvent("open-command-palette"))
+							}
+							className="btn-pop ml-2 flex items-center gap-2 rounded-full bg-surface px-3.5 py-1.5 text-sm font-bold text-muted"
+							aria-label="検索（⌘K）"
+						>
+							<SearchIcon />
+							<kbd className="font-mono text-[10px] font-medium">⌘K</kbd>
+						</button>
 					</div>
 
 					{/* Mobile Menu Button */}
 					<div className="flex items-center gap-3 md:hidden">
+						<button
+							type="button"
+							onClick={() =>
+								window.dispatchEvent(new CustomEvent("open-command-palette"))
+							}
+							className="btn-pop grid h-10 w-10 place-items-center rounded-full bg-surface text-muted"
+							aria-label="検索"
+						>
+							<SearchIcon />
+						</button>
 						<button
 							type="button"
 							onClick={() => setIsMenuOpen(!isMenuOpen)}

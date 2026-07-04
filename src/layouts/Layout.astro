@@ -1,6 +1,7 @@
 ---
 import { ViewTransitions } from "astro:transitions";
 import AudioPlayer from "../components/AudioPlayer";
+import CommandPalette from "../components/CommandPalette";
 
 interface Props {
 	title: string;
@@ -88,6 +89,9 @@ const ogImageUrl = image.startsWith("http")
     <div transition:persist="audio-player">
       <AudioPlayer client:load />
     </div>
+    <div transition:persist="command-palette">
+      <CommandPalette client:load />
+    </div>
   </body>
 </html>
 
@@ -152,6 +156,22 @@ const ogImageUrl = image.startsWith("http")
   .btn-pop:active {
     transform: translate(2px, 2px) scale(0.98);
     box-shadow: 1px 1px 0 rgb(var(--edge));
+  }
+
+  /* コマンドパレットの入場 */
+  @keyframes palette-in {
+    from {
+      opacity: 0;
+      transform: scale(0.97) translateY(-6px);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1) translateY(0);
+    }
+  }
+
+  .palette-in {
+    animation: palette-in 150ms var(--ease-out-quart) both;
   }
 
   /* ドット柄の紙面（色面セクションの下地） */
