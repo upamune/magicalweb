@@ -32,10 +32,14 @@ bun scripts/find-highlights.mjs episode.mp3 whisper.json --top 5
 - 1ページ 1〜3行・1行 約12文字以内、行頭に助詞・閉じ約物が来ない改行位置
 - 短いオチは1語だけの単独ページにする（自動で特大・中央表示になる）
 - チャンク単位（1〜7文字）の start/end でカラオケハイライトが流れる
-- ページに `speaker`（michiru / upamune）を付けると2人のアバターが表示され、
+- ページに `speaker`（michiru / upamune / guest）を付けるとアバターが表示され、
   喋っている側がハイライトされる。話者は LISTEN (listen.style) の話者分離を
   `scripts/fetch-listen-transcript.mjs` で取得して使う（ラベル0/1と名前の対応は
   文脈かF0ピッチで決める）。相槌が混ざるページは話者の切れ目で分割する
+- ゲスト回はプランのトップレベルに `"guest": { "name": "kita" }` を書くと
+  ホスト2人の間にゲストのアバターが並び、`"speaker": "guest"` のページで
+  ハイライトされる。画像は `avatar`（public/ 配下のファイル名）で指定でき、
+  省略時は 🎤 のプレースホルダになる
 
 ### 4. データ生成 & レンダリング
 
@@ -48,6 +52,17 @@ bunx remotion render src/index.ts Clip out/clip.mp4
 # プレビューしながら調整する場合
 bunx remotion studio
 ```
+
+### 5. アップロードと配信
+
+レンダリングした動画は Cloudflare R2（`clips.magical.fm`）にアップロードし、
+`src/data/clips.json` に自動追記する:
+
+```bash
+bun scripts/upload-clip.mjs out/clip.mp4 263 "オチの一言"
+```
+
+初回のみ `bunx wrangler login` でCloudflareにログインしておく。
 
 ## デザイン
 

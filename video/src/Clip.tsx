@@ -12,12 +12,12 @@ import {
 	useVideoConfig,
 } from "remotion";
 import { C } from "./tokens";
-import type { CaptionPage, ClipData, Speaker, Word } from "./types";
+import type { CaptionPage, ClipData, Word } from "./types";
 
-const HOSTS: Record<Speaker, { name: string; avatar: string }> = {
+const HOSTS = {
 	michiru: { name: "michiru_da", avatar: "host-michiru.png" },
 	upamune: { name: "upamune", avatar: "host-upamune.png" },
-};
+} as const;
 
 export const FPS = 30;
 
@@ -142,20 +142,22 @@ function Captions({
 }
 
 // 話者アバター: 喋っている方がポップして目立つ
-function HostAvatar({
-	speaker,
+// avatar が無い話者（画像未登録のゲスト）は絵文字プレースホルダで表示する
+function SpeakerAvatar({
+	name,
+	avatar,
 	active,
 	activeSinceFrame,
 	frame,
 	fps,
 }: {
-	speaker: Speaker;
+	name: string;
+	avatar?: string;
 	active: boolean;
 	activeSinceFrame: number;
 	frame: number;
 	fps: number;
 }) {
-	const host = HOSTS[speaker];
 	const pop = spring({
 		frame: frame - activeSinceFrame,
 		fps,
@@ -163,6 +165,18 @@ function HostAvatar({
 		durationInFrames: 12,
 	});
 	const scale = active ? 0.94 + pop * 0.14 : 0.9;
+
+	const faceStyle = {
+		width: 150,
+		height: 150,
+		borderRadius: 9999,
+		border: `7px solid ${C.ink}`,
+		boxShadow: active
+			? `0 0 0 10px ${C.sun}, 8px 8px 0 ${C.ink}`
+			: `6px 6px 0 ${C.ink}`,
+		filter: active ? "none" : "grayscale(1)",
+		opacity: active ? 1 : 0.45,
+	} as const;
 
 	return (
 		<div
@@ -175,37 +189,42 @@ function HostAvatar({
 			}}
 		>
 			<div style={{ position: "relative", transform: `scale(${scale})` }}>
-				<Img
-					src={staticFile(host.avatar)}
-					style={{
-						width: 150,
-						height: 150,
-						borderRadius: 9999,
-						border: `7px solid ${C.ink}`,
-						boxShadow: active
-							? `0 0 0 10px ${C.sun}, 8px 8px 0 ${C.ink}`
-							: `6px 6px 0 ${C.ink}`,
-						filter: active ? "none" : "grayscale(1)",
-						opacity: active ? 1 : 0.45,
-						objectFit: "cover",
-					}}
-				/>
+				{avatar ? (
+					<Img
+						src={staticFile(avatar)}
+						style={{ ...faceStyle, objectFit: "cover" }}
+					/>
+				) : (
+					<div
+						style={{
+							...faceStyle,
+							backgroundColor: C.card,
+							display: "flex",
+							alignItems: "center",
+							justifyContent: "center",
+							fontSize: 78,
+						}}
+					>
+						🎤
+					</div>
+				)}
 			</div>
 			<div
 				style={{
 					fontFamily: DISPLAY,
-					fontSize: 26,
+					fontSize: name.length > 7 ? 21 : 26,
 					color: C.ink,
 					backgroundColor: active ? C.sun : C.card,
 					border: `4px solid ${C.ink}`,
 					borderRadius: 9999,
 					padding: "2px 20px",
+					whiteSpace: "nowrap",
 					opacity: active ? 1 : 0.5,
 					boxShadow: active ? `4px 4px 0 ${C.ink}` : "none",
 					transform: `scale(${active ? 0.96 + pop * 0.04 : 0.92})`,
 				}}
 			>
-				{host.name}
+				{name}
 			</div>
 		</div>
 	);
@@ -414,18 +433,41 @@ export const Clip: React.FC<{ data: ClipData }> = ({ data }) => {
 						gap: 8,
 					}}
 				>
-					<HostAvatar
-						speaker="michiru"
+					<SpeakerAvatar
+						{...HOSTS.michiru}
 						active={activeSpeaker === "michiru"}
 						activeSinceFrame={speakerSince}
 						frame={frame}
 						fps={fps}
 					/>
 					<div style={{ flex: 1 }}>
-						<Waveform frame={frame} audioFile={data.audioFile} barCount={14} />
+						<Waveform
+							frame={frame}
+							audioFile={data.audioFile}
+							barCount={data.guest ? 5 : 14}
+						/>
 					</div>
-					<HostAvatar
-						speaker="upamune"
+					{data.guest && (
+						<>
+							<SpeakerAvatar
+								name={data.guest.name}
+								avatar={data.guest.avatar}
+								active={activeSpeaker === "guest"}
+								activeSinceFrame={speakerSince}
+								frame={frame}
+								fps={fps}
+							/>
+							<div style={{ flex: 1 }}>
+								<Waveform
+									frame={frame}
+									audioFile={data.audioFile}
+									barCount={5}
+								/>
+							</div>
+						</>
+					)}
+					<SpeakerAvatar
+						{...HOSTS.upamune}
 						active={activeSpeaker === "upamune"}
 						activeSinceFrame={speakerSince}
 						frame={frame}

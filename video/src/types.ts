@@ -5,7 +5,7 @@ export interface Word {
 	end: number;
 }
 
-export type Speaker = "michiru" | "upamune";
+export type Speaker = "michiru" | "upamune" | "guest";
 
 export interface CaptionPage {
 	start: number;
@@ -24,5 +24,8 @@ export interface ClipData {
 	audioFile: string;
 	durationSec: number;
 	bg: "lilac" | "lime" | "sky" | "candy";
+	// ゲスト回: 指定するとホスト2人の間にゲストのアバターが並ぶ
+	// avatar は public/ 配下のファイル名。無ければ絵文字プレースホルダで表示
+	guest?: { name: string; avatar?: string };
 	pages: CaptionPage[];
 }

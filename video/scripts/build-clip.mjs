@@ -31,6 +31,7 @@ const data = {
 	audioFile: "clip.mp3",
 	durationSec: Number(durationSec.toFixed(3)),
 	bg: plan.bg,
+	...(plan.guest && { guest: plan.guest }),
 	pages: plan.pages.map((page) => ({
 		start: shift(page.start),
 		end: shift(page.end),
