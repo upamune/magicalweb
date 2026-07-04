@@ -5,6 +5,7 @@ import Hosts from "../../components/Hosts.astro";
 import PlayButton from "../../components/PlayButton";
 import SeekFromQuery from "../../components/SeekFromQuery";
 import Layout from "../../layouts/Layout.astro";
+import { getEpisodeClips } from "../../utils/clips";
 import {
 	getAllEpisodeSlugs,
 	getEpisodeBySlug,
@@ -38,6 +39,7 @@ const olderEpisode =
 	index < allEpisodes.length - 1 ? allEpisodes[index + 1] : null;
 
 const displayTitle = getEpisodeDisplayTitle(episode);
+const clips = getEpisodeClips(episode.number);
 
 const shareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(
 	`${episode.title} を聴いています | マヂカル.fm`,
@@ -139,6 +141,34 @@ const jsonLd = JSON.stringify({
 				set:html={episode.description}
 			/>
 		</div>
+
+		{
+			clips.length > 0 && (
+				<section class="mt-10" aria-label="切り抜きクリップ">
+					<h2 class="mb-5 font-display text-lg">切り抜きクリップ</h2>
+					<div class="flex flex-wrap gap-4">
+						{clips.map((clip, i) => (
+							<a
+								href={clip.url}
+								target="_blank"
+								rel="noopener noreferrer"
+								class="btn-pop inline-flex items-center gap-2 rounded-full bg-surface px-6 py-3.5 text-sm font-bold"
+							>
+								<svg
+									viewBox="0 0 24 24"
+									class="h-3.5 w-3.5 text-tangerine"
+									fill="currentColor"
+									aria-hidden="true"
+								>
+									<path d="M8 5v14l11-7z" />
+								</svg>
+								{clip.label ?? `クリップ ${i + 1}`}
+							</a>
+						))}
+					</div>
+				</section>
+			)
+		}
 
 		{/* 前後のエピソード */}
 		<nav class="mt-10 grid gap-4 sm:grid-cols-2" aria-label="前後のエピソード">
