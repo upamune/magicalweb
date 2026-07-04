@@ -453,6 +453,37 @@ export const Clip: React.FC<{ data: ClipData }> = ({ data }) => {
 				{page && <Captions page={page} t={t} fps={fps} frame={frame} />}
 			</div>
 
+			{/* 帯ステッカー（終盤はCTAと入れ替わる） */}
+			{frame < ctaStartFrame + 6 && (
+				<div
+					style={{
+						position: "absolute",
+						bottom: 320,
+						left: 0,
+						right: 0,
+						display: "flex",
+						justifyContent: "center",
+						transform: `scale(${Math.max(0, Math.min(brandIn, 1 - ctaIn))})`,
+					}}
+				>
+					<div
+						style={{
+							backgroundColor: C.lime,
+							color: C.ink,
+							border: `7px solid ${C.ink}`,
+							borderRadius: 9999,
+							boxShadow: `8px 8px 0 ${C.ink}`,
+							padding: "16px 52px",
+							fontFamily: DISPLAY,
+							fontSize: 40,
+							transform: `rotate(${-3 + Math.sin((frame / fps) * 1.8) * 1.4}deg) translateY(${Math.sin((frame / fps) * 2.2) * 7}px)`,
+						}}
+					>
+						週2で配信中!
+					</div>
+				</div>
+			)}
+
 			{/* CTA */}
 			{frame >= ctaStartFrame && (
 				<div
