@@ -59,7 +59,7 @@ const { url, label } = Astro.props;
 				preload="none"
 				playsinline
 				controls
-				class="mx-auto aspect-[9/16] max-h-[82vh] w-auto rounded-2xl border-3 border-edge bg-ink shadow-pop"
+				class="mx-auto aspect-[9/16] max-h-[82vh] w-auto max-w-[calc(100vw-4rem)] rounded-2xl border-3 border-edge bg-ink shadow-pop"
 			/>
 			<button
 				type="button"
@@ -128,10 +128,27 @@ const { url, label } = Astro.props;
 			if (thumb.readyState >= 1) showDuration();
 			thumb.addEventListener("loadedmetadata", showDuration);
 
+			// 配信側の一時的なエラーで黒画面のまま止まることがあるので、
+			// 再生失敗・メディアエラー時は一度だけ読み直して再試行する
+			let errorRetried = false;
+			const playFromStart = () => {
+				if (modalVideo.readyState >= 1) modalVideo.currentTime = 0;
+				modalVideo.play().catch(() => {
+					modalVideo.load();
+					modalVideo.play().catch(() => {});
+				});
+			};
+			modalVideo.addEventListener("error", () => {
+				if (!modal.open || errorRetried) return;
+				errorRetried = true;
+				modalVideo.load();
+				modalVideo.play().catch(() => {});
+			});
+
 			overlay.addEventListener("click", () => {
+				errorRetried = false;
 				modal.showModal();
-				modalVideo.currentTime = 0;
-				modalVideo.play();
+				playFromStart();
 			});
 
 			// Esc・✕・背景クリックのどれで閉じても close イベントに集約される

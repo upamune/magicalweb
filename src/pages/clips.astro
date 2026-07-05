@@ -35,7 +35,7 @@ const clips = await getPublishedClips();
 	<div class="mx-auto max-w-5xl px-5 py-10 sm:py-12">
 		{
 			clips.length > 0 ? (
-				<div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+				<div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
 					{clips.map((clip) => (
 						<div class="rounded-3xl border-3 border-edge bg-surface p-4 shadow-pop">
 							<ClipPlayer url={clip.url} label={clip.label} />

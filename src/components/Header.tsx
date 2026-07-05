@@ -19,6 +19,7 @@ function SearchIcon() {
 
 const NAV_ITEMS = [
 	{ href: "/episodes", label: "エピソード" },
+	{ href: "/clips", label: "クリップ" },
 	{ href: "/#hosts", label: "パーソナリティ" },
 	{ href: "/#merch", label: "グッズ" },
 	{ href: "https://go.magical.fm/hello", label: "お便り", external: true },
