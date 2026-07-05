@@ -69,13 +69,34 @@ const { url, label } = Astro.props;
 			>
 				✕
 			</button>
-			{
-				label && (
-					<p class="mx-auto mt-4 w-fit rounded-full border-3 border-edge bg-surface px-4 py-1.5 text-sm font-bold shadow-pop-xs">
-						{label}
-					</p>
-				)
-			}
+			<div class="mx-auto mt-4 flex w-fit max-w-[calc(100vw-2rem)] items-center gap-3">
+				{
+					label && (
+						<p class="min-w-0 truncate rounded-full border-3 border-edge bg-surface px-4 py-1.5 text-sm font-bold shadow-pop-xs">
+							{label}
+						</p>
+					)
+				}
+				<button
+					type="button"
+					data-clip-download
+					class="btn-pop flex shrink-0 items-center gap-1.5 rounded-full bg-tangerine px-4 py-1.5 text-sm font-bold text-[rgb(29,26,46)]"
+				>
+					<svg
+						viewBox="0 0 24 24"
+						class="h-4 w-4"
+						fill="none"
+						stroke="currentColor"
+						stroke-width="2.5"
+						stroke-linecap="round"
+						stroke-linejoin="round"
+						aria-hidden="true"
+					>
+						<path d="M12 4v11m0 0 -4.5-4.5M12 15l4.5-4.5M4 20h16"></path>
+					</svg>
+					保存
+				</button>
+			</div>
 		</div>
 	</dialog>
 </div>
@@ -149,6 +170,35 @@ const { url, label } = Astro.props;
 				errorRetried = false;
 				modal.showModal();
 				playFromStart();
+			});
+
+			// ダウンロード: cross-origin なので blob 経由で保存する（R2側でCORS許可済み）。
+			// fetch できない場合は新規タブで開くフォールバック
+			const downloadButton = modal.querySelector<HTMLButtonElement>(
+				"[data-clip-download]",
+			);
+			downloadButton?.addEventListener("click", async () => {
+				const url = modalVideo.getAttribute("src");
+				if (!url || downloadButton.disabled) return;
+				const filename =
+					new URL(url, location.href).pathname.split("/").pop() || "clip.mp4";
+				downloadButton.disabled = true;
+				try {
+					// CORS対応前にキャッシュされたレスポンス（ACAOヘッダ無し）に
+					// ヒットすると失敗するため、キャッシュは常に迂回する
+					const res = await fetch(url, { cache: "no-store" });
+					if (!res.ok) throw new Error(String(res.status));
+					const blobUrl = URL.createObjectURL(await res.blob());
+					const a = document.createElement("a");
+					a.href = blobUrl;
+					a.download = filename;
+					a.click();
+					setTimeout(() => URL.revokeObjectURL(blobUrl), 10_000);
+				} catch {
+					window.open(url, "_blank", "noopener");
+				} finally {
+					downloadButton.disabled = false;
+				}
 			});
 
 			// Esc・✕・背景クリックのどれで閉じても close イベントに集約される
