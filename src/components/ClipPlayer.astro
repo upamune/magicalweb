@@ -184,9 +184,7 @@ const { url, label } = Astro.props;
 					new URL(url, location.href).pathname.split("/").pop() || "clip.mp4";
 				downloadButton.disabled = true;
 				try {
-					// CORS対応前にキャッシュされたレスポンス（ACAOヘッダ無し）に
-					// ヒットすると失敗するため、キャッシュは常に迂回する
-					const res = await fetch(url, { cache: "no-store" });
+					const res = await fetch(url);
 					if (!res.ok) throw new Error(String(res.status));
 					const blobUrl = URL.createObjectURL(await res.blob());
 					const a = document.createElement("a");
