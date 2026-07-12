@@ -23,6 +23,8 @@ export interface ClipData {
 	};
 	audioFile: string;
 	durationSec: number;
+	// ショート動画としての見出し。指定するとタイトルカードにエピソード名の代わりに表示する
+	clipTitleLines?: string[];
 	bg: "lilac" | "lime" | "sky" | "candy";
 	// ゲスト回: 指定するとホスト2人の間にゲストのアバターが並ぶ
 	// avatar は public/ 配下のファイル名。無ければ絵文字プレースホルダで表示

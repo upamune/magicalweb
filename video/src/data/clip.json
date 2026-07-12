@@ -1,394 +1,241 @@
 {
 	"episode": {
-		"number": 268,
-		"title": "本は書かない",
+		"number": 267,
+		"title": "ジェダイとシス",
 		"titleLines": [
-			"本は書かない"
+			"ジェダイとシス"
 		],
-		"date": "2026年7月20日"
+		"date": "2026年7月16日"
 	},
 	"audioFile": "clip.mp3",
-	"durationSec": 33.72,
-	"bg": "lilac",
+	"durationSec": 22.42,
+	"bg": "candy",
+	"clipTitleLines": [
+		"日常でフォースを",
+		"使うなら"
+	],
 	"pages": [
 		{
 			"start": 0,
-			"end": 5.58,
+			"end": 2.06,
 			"speaker": "michiru",
 			"lines": [
 				[
+					{
+						"text": "で、",
+						"start": 0.24,
+						"end": 0.58
+					},
 					{
 						"text": "なんか",
-						"start": 0,
-						"end": 0.6
+						"start": 0.58,
+						"end": 0.78
 					},
 					{
-						"text": "自分が",
-						"start": 0.6,
-						"end": 2.08
-					},
-					{
-						"text": "出す、",
-						"start": 2.08,
-						"end": 2.84
+						"text": "最後、",
+						"start": 0.78,
+						"end": 0.98
 					}
 				],
 				[
 					{
-						"text": "特に",
-						"start": 2.84,
-						"end": 3.16
+						"text": "ライト",
+						"start": 0.98,
+						"end": 1.48
 					},
 					{
-						"text": "その",
-						"start": 3.16,
-						"end": 3.28
-					},
-					{
-						"text": "仕事",
-						"start": 3.28,
-						"end": 3.7
-					},
-					{
-						"text": "関連の",
-						"start": 3.7,
-						"end": 4.66
-					}
-				],
-				[
-					{
-						"text": "本",
-						"start": 4.66,
-						"end": 4.88
-					},
-					{
-						"text": "だとしたら、",
-						"start": 4.88,
-						"end": 5.58
+						"text": "セーバーを",
+						"start": 1.48,
+						"end": 2.06
 					}
 				]
 			]
 		},
 		{
-			"start": 5.58,
-			"end": 10.38,
+			"start": 2.06,
+			"end": 4.9,
 			"speaker": "michiru",
 			"lines": [
 				[
 					{
-						"text": "多分",
-						"start": 5.58,
-						"end": 5.86
-					},
-					{
-						"text": "テーマが、",
-						"start": 5.86,
-						"end": 6.48
+						"text": "こうシュパって",
+						"start": 2.06,
+						"end": 2.7
 					}
 				],
 				[
 					{
-						"text": "まあ",
-						"start": 6.48,
-						"end": 6.96
-					},
-					{
-						"text": "いわゆる",
-						"start": 6.96,
-						"end": 7.56
-					},
-					{
-						"text": "事業",
-						"start": 7.56,
-						"end": 7.94
-					},
-					{
-						"text": "開発とか、",
-						"start": 7.94,
-						"end": 8.98
+						"text": "フォースで",
+						"start": 2.7,
+						"end": 3.68
 					}
 				],
 				[
 					{
-						"text": "プロダクト",
-						"start": 8.98,
-						"end": 9.44
-					},
-					{
-						"text": "マネジメント",
-						"start": 9.44,
-						"end": 10.08
-					},
-					{
-						"text": "とか",
-						"start": 10.08,
-						"end": 10.38
+						"text": "手繰り寄せて",
+						"start": 3.68,
+						"end": 4.9
 					}
 				]
 			]
 		},
 		{
-			"start": 10.84,
-			"end": 14.6,
+			"start": 4.9,
+			"end": 8.02,
 			"speaker": "michiru",
 			"lines": [
 				[
 					{
-						"text": "になる",
-						"start": 10.84,
-						"end": 11.62
+						"text": "バトルする",
+						"start": 4.9,
+						"end": 5.74
 					},
 					{
-						"text": "んですけど、",
-						"start": 11.62,
-						"end": 12.14
+						"text": "みたいな",
+						"start": 5.74,
+						"end": 6.18
 					}
 				],
 				[
 					{
-						"text": "なんだろう、",
-						"start": 12.14,
-						"end": 13.12
-					},
-					{
-						"text": "え",
-						"start": 13.12,
-						"end": 13.86
+						"text": "シーンが",
+						"start": 6.18,
+						"end": 6.64
 					}
 				],
 				[
 					{
-						"text": "じゃあ",
-						"start": 13.86,
-						"end": 14.16
-					},
-					{
-						"text": "お前",
-						"start": 14.16,
-						"end": 14.6
+						"text": "多かったですね",
+						"start": 6.64,
+						"end": 8.02
 					}
 				]
 			]
 		},
 		{
-			"start": 15.44,
-			"end": 17.38,
-			"speaker": "michiru",
+			"start": 8.02,
+			"end": 11.14,
+			"speaker": "upamune",
 			"lines": [
 				[
 					{
-						"text": "何億の",
-						"start": 15.44,
-						"end": 16.28
+						"text": "はい、",
+						"start": 8.02,
+						"end": 8.54
 					},
 					{
-						"text": "事業",
-						"start": 16.28,
-						"end": 16.54
+						"text": "確かに。",
+						"start": 8.54,
+						"end": 9.38
 					}
 				],
 				[
 					{
-						"text": "作ったん",
-						"start": 16.54,
-						"end": 17.1
+						"text": "日常に",
+						"start": 9.38,
+						"end": 10
 					},
 					{
-						"text": "とか、",
-						"start": 17.1,
-						"end": 17.38
+						"text": "あると",
+						"start": 10,
+						"end": 10.18
+					}
+				],
+				[
+					{
+						"text": "便利な、",
+						"start": 10.18,
+						"end": 10.56
+					},
+					{
+						"text": "うん",
+						"start": 10.56,
+						"end": 11.14
 					}
 				]
 			]
 		},
 		{
-			"start": 17.38,
-			"end": 21.3,
-			"speaker": "michiru",
+			"start": 11.14,
+			"end": 13.26,
+			"speaker": "upamune",
 			"lines": [
 				[
 					{
-						"text": "なんか",
-						"start": 17.38,
-						"end": 17.64
-					},
-					{
-						"text": "どんな",
-						"start": 17.64,
-						"end": 18.14
-					}
-				],
-				[
-					{
-						"text": "素晴らしい",
-						"start": 18.14,
-						"end": 18.8
-					},
-					{
-						"text": "プロダクト",
-						"start": 18.8,
-						"end": 19.64
-					}
-				],
-				[
-					{
-						"text": "作ったん",
-						"start": 19.64,
-						"end": 20.18
-					},
-					{
-						"text": "みたいなのが",
-						"start": 20.18,
-						"end": 21.3
+						"text": "リモコン",
+						"start": 11.14,
+						"end": 12.06
 					}
 				]
 			]
 		},
 		{
-			"start": 21.94,
-			"end": 23.82,
+			"start": 13.26,
+			"end": 14.64,
 			"speaker": "michiru",
 			"lines": [
 				[
 					{
-						"text": "セルフ",
-						"start": 21.94,
-						"end": 22.56
-					},
-					{
-						"text": "ツッコミ",
-						"start": 22.56,
-						"end": 22.92
-					}
-				],
-				[
-					{
-						"text": "しちゃう",
-						"start": 22.92,
-						"end": 23.36
-					},
-					{
-						"text": "なって",
-						"start": 23.36,
-						"end": 23.82
+						"text": "無駄遣いすぎ",
+						"start": 13.26,
+						"end": 14.32
 					}
 				]
 			]
 		},
 		{
-			"start": 23.82,
-			"end": 26.04,
+			"start": 14.64,
+			"end": 17.36,
 			"speaker": "michiru",
 			"lines": [
 				[
 					{
-						"text": "いや",
-						"start": 23.82,
-						"end": 24.42
+						"text": "トークンの",
+						"start": 14.64,
+						"end": 15.34
 					},
 					{
-						"text": "ちょっと",
-						"start": 24.42,
-						"end": 24.72
-					}
-				],
-				[
-					{
-						"text": "そんな",
-						"start": 24.72,
-						"end": 25.08
-					},
-					{
-						"text": "本",
-						"start": 25.08,
-						"end": 25.38
-					},
-					{
-						"text": "書いてる",
-						"start": 25.38,
-						"end": 26.04
+						"text": "無駄遣い",
+						"start": 15.34,
+						"end": 16.18
 					}
 				]
 			]
 		},
 		{
-			"start": 26.04,
-			"end": 28.98,
-			"speaker": "michiru",
+			"start": 17.36,
+			"end": 19.15,
+			"speaker": "upamune",
 			"lines": [
 				[
 					{
-						"text": "余裕",
-						"start": 26.04,
-						"end": 27
+						"text": "フォース",
+						"start": 17.36,
+						"end": 17.98
 					},
 					{
-						"text": "ある",
-						"start": 27,
-						"end": 27.48
-					},
-					{
-						"text": "ほど",
-						"start": 27.48,
-						"end": 27.7
-					}
-				],
-				[
-					{
-						"text": "実績",
-						"start": 27.7,
-						"end": 28.06
-					},
-					{
-						"text": "出して",
-						"start": 28.06,
-						"end": 28.36
-					},
-					{
-						"text": "ないわって",
-						"start": 28.36,
-						"end": 28.98
+						"text": "マキシング",
+						"start": 17.98,
+						"end": 19.04
 					}
 				]
 			]
 		},
 		{
-			"start": 29.48,
-			"end": 31.52,
+			"start": 19.15,
+			"end": 22.42,
 			"speaker": "michiru",
 			"lines": [
 				[
 					{
-						"text": "もう",
-						"start": 29.48,
-						"end": 29.88
+						"text": "フォース",
+						"start": 19.15,
+						"end": 19.6
 					},
 					{
-						"text": "結構",
-						"start": 29.88,
-						"end": 30.22
-					},
-					{
-						"text": "即",
-						"start": 30.22,
-						"end": 30.44
-					}
-				],
-				[
-					{
-						"text": "なった",
-						"start": 30.44,
-						"end": 30.82
-					},
-					{
-						"text": "っていう",
-						"start": 30.82,
-						"end": 31.1
-					},
-					{
-						"text": "感じ",
-						"start": 31.1,
-						"end": 31.52
+						"text": "無駄遣い",
+						"start": 19.6,
+						"end": 20.22
 					}
 				]
 			]

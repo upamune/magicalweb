@@ -1,0 +1,119 @@
+{
+	"episode": {
+		"number": 267,
+		"title": "ジェダイとシス",
+		"titleLines": ["ジェダイとシス"],
+		"date": "2026年7月16日"
+	},
+	"bg": "candy",
+	"clipTitleLines": ["日常でフォースを", "使うなら"],
+	"clipStart": 427.7,
+	"clipEnd": 450.12,
+	"audioMuteAt": 447.92,
+	"note": "フォースは日常でやると便利→「リモコン」→ツッコミ「無駄遣いすぎ。トークンの無駄遣い。」→オチ「フォースマキシング」→michiruのエコー「フォース無駄遣い」。文字起こしは校正済み(虹状にあると→日常にあると / フォースマークシング→フォースマキシング)。話者はLISTENの話者分離+F0で判定(sp0≈180Hz=michiru、sp1≈100Hz=upamune)。エコー部分はLISTEN欠落のためF0(163Hz)でmichiruと判定、タイムスタンプは手調整",
+	"pages": [
+		{
+			"start": 427.7,
+			"end": 429.76,
+			"lines": [
+				[
+					{ "text": "で、", "start": 427.94, "end": 428.28 },
+					{ "text": "なんか", "start": 428.28, "end": 428.48 },
+					{ "text": "最後、", "start": 428.48, "end": 428.68 }
+				],
+				[
+					{ "text": "ライト", "start": 428.68, "end": 429.18 },
+					{ "text": "セーバーを", "start": 429.18, "end": 429.76 }
+				]
+			],
+			"speaker": "michiru"
+		},
+		{
+			"start": 429.76,
+			"end": 432.6,
+			"lines": [
+				[{ "text": "こうシュパって", "start": 429.76, "end": 430.4 }],
+				[{ "text": "フォースで", "start": 430.4, "end": 431.38 }],
+				[{ "text": "手繰り寄せて", "start": 431.38, "end": 432.6 }]
+			],
+			"speaker": "michiru"
+		},
+		{
+			"start": 432.6,
+			"end": 435.72,
+			"lines": [
+				[
+					{ "text": "バトルする", "start": 432.6, "end": 433.44 },
+					{ "text": "みたいな", "start": 433.44, "end": 433.88 }
+				],
+				[{ "text": "シーンが", "start": 433.88, "end": 434.34 }],
+				[{ "text": "多かったですね", "start": 434.34, "end": 435.72 }]
+			],
+			"speaker": "michiru"
+		},
+		{
+			"start": 435.72,
+			"end": 438.84,
+			"lines": [
+				[
+					{ "text": "はい、", "start": 435.72, "end": 436.24 },
+					{ "text": "確かに。", "start": 436.24, "end": 437.08 }
+				],
+				[
+					{ "text": "日常に", "start": 437.08, "end": 437.7 },
+					{ "text": "あると", "start": 437.7, "end": 437.88 }
+				],
+				[
+					{ "text": "便利な、", "start": 437.88, "end": 438.26 },
+					{ "text": "うん", "start": 438.26, "end": 438.84 }
+				]
+			],
+			"speaker": "upamune"
+		},
+		{
+			"start": 438.84,
+			"end": 440.96,
+			"lines": [[{ "text": "リモコン", "start": 438.84, "end": 439.76 }]],
+			"speaker": "upamune"
+		},
+		{
+			"start": 440.96,
+			"end": 442.34,
+			"lines": [[{ "text": "無駄遣いすぎ", "start": 440.96, "end": 442.02 }]],
+			"speaker": "michiru"
+		},
+		{
+			"start": 442.34,
+			"end": 445.06,
+			"lines": [
+				[
+					{ "text": "トークンの", "start": 442.34, "end": 443.04 },
+					{ "text": "無駄遣い", "start": 443.04, "end": 443.88 }
+				]
+			],
+			"speaker": "michiru"
+		},
+		{
+			"start": 445.06,
+			"end": 446.85,
+			"lines": [
+				[
+					{ "text": "フォース", "start": 445.06, "end": 445.68 },
+					{ "text": "マキシング", "start": 445.68, "end": 446.74 }
+				]
+			],
+			"speaker": "upamune"
+		},
+		{
+			"start": 446.85,
+			"end": 450.12,
+			"lines": [
+				[
+					{ "text": "フォース", "start": 446.85, "end": 447.3 },
+					{ "text": "無駄遣い", "start": 447.3, "end": 447.92 }
+				]
+			],
+			"speaker": "michiru"
+		}
+	]
+}

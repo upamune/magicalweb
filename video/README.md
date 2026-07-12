@@ -36,6 +36,9 @@ bun scripts/find-highlights.mjs episode.mp3 whisper.json --top 5
   喋っている側がハイライトされる。話者は LISTEN (listen.style) の話者分離を
   `scripts/fetch-listen-transcript.mjs` で取得して使う（ラベル0/1と名前の対応は
   文脈かF0ピッチで決める）。相槌が混ざるページは話者の切れ目で分割する
+- トップレベルの `"clipTitleLines": ["帝国がクローンを", "やめた理由"]` で
+  ショート動画としての見出しを指定する。タイトルカードにエピソード名の代わりに
+  表示される（省略時は従来どおりエピソードタイトル）
 - ゲスト回はプランのトップレベルに `"guest": { "name": "kita" }` を書くと
   ホスト2人の間にゲストのアバターが並び、`"speaker": "guest"` のページで
   ハイライトされる。画像は `avatar`（public/ 配下のファイル名）で指定でき、

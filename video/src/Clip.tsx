@@ -414,7 +414,7 @@ export const Clip: React.FC<{ data: ClipData }> = ({ data }) => {
 						flexDirection: "column",
 					}}
 				>
-					{data.episode.titleLines.map((line) => (
+					{(data.clipTitleLines ?? data.episode.titleLines).map((line) => (
 						<div key={line}>{line}</div>
 					))}
 				</div>
