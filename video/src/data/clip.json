@@ -1,241 +1,405 @@
 {
 	"episode": {
-		"number": 267,
-		"title": "ジェダイとシス",
+		"number": 270,
+		"title": "プライムデー2026",
 		"titleLines": [
-			"ジェダイとシス"
+			"プライムデー",
+			"2026"
 		],
-		"date": "2026年7月16日"
+		"date": "2026年7月27日"
 	},
 	"audioFile": "clip.mp3",
-	"durationSec": 22.42,
-	"bg": "candy",
+	"durationSec": 36.04,
+	"bg": "sky",
 	"clipTitleLines": [
-		"日常でフォースを",
-		"使うなら"
+		"一発で沈黙した",
+		"脱毛器"
 	],
 	"pages": [
 		{
 			"start": 0,
-			"end": 2.06,
+			"end": 3.06,
 			"speaker": "michiru",
 			"lines": [
 				[
-					{
-						"text": "で、",
-						"start": 0.24,
-						"end": 0.58
-					},
 					{
 						"text": "なんか",
-						"start": 0.58,
-						"end": 0.78
+						"start": 0,
+						"end": 0.68
 					},
 					{
-						"text": "最後、",
-						"start": 0.78,
-						"end": 0.98
+						"text": "1回",
+						"start": 0.68,
+						"end": 1.04
+					},
+					{
+						"text": "照射したら",
+						"start": 1.04,
+						"end": 1.74
 					}
 				],
 				[
 					{
-						"text": "ライト",
-						"start": 0.98,
-						"end": 1.48
+						"text": "二度と",
+						"start": 1.74,
+						"end": 2.14
 					},
 					{
-						"text": "セーバーを",
-						"start": 1.48,
-						"end": 2.06
+						"text": "使え",
+						"start": 2.14,
+						"end": 2.46
+					},
+					{
+						"text": "なくなって",
+						"start": 2.46,
+						"end": 3.06
 					}
 				]
 			]
 		},
 		{
-			"start": 2.06,
-			"end": 4.9,
-			"speaker": "michiru",
+			"start": 3.06,
+			"end": 4.62,
+			"speaker": "upamune",
 			"lines": [
 				[
 					{
-						"text": "こうシュパって",
-						"start": 2.06,
-						"end": 2.7
+						"text": "え?",
+						"start": 3.06,
+						"end": 3.28
+					},
+					{
+						"text": "使えないって",
+						"start": 3.48,
+						"end": 4.06
 					}
 				],
 				[
 					{
-						"text": "フォースで",
-						"start": 2.7,
-						"end": 3.68
-					}
-				],
-				[
+						"text": "どういう",
+						"start": 4.06,
+						"end": 4.3
+					},
 					{
-						"text": "手繰り寄せて",
-						"start": 3.68,
-						"end": 4.9
+						"text": "意味?",
+						"start": 4.3,
+						"end": 4.62
 					}
 				]
 			]
 		},
 		{
-			"start": 4.9,
-			"end": 8.02,
+			"start": 5,
+			"end": 7.02,
 			"speaker": "michiru",
 			"lines": [
 				[
 					{
-						"text": "バトルする",
-						"start": 4.9,
-						"end": 5.74
+						"text": "なんかもう",
+						"start": 5,
+						"end": 5.48
+					},
+					{
+						"text": "二度と",
+						"start": 5.48,
+						"end": 6.16
+					}
+				],
+				[
+					{
+						"text": "照射",
+						"start": 6.16,
+						"end": 6.52
+					},
+					{
+						"text": "されない",
+						"start": 6.52,
+						"end": 7.02
+					}
+				]
+			]
+		},
+		{
+			"start": 8.32,
+			"end": 10.72,
+			"speaker": "michiru",
+			"lines": [
+				[
+					{
+						"text": "電源に",
+						"start": 8.32,
+						"end": 9.36
+					},
+					{
+						"text": "繋いで",
+						"start": 9.36,
+						"end": 9.82
+					}
+				],
+				[
+					{
+						"text": "使うんです",
+						"start": 9.82,
+						"end": 10.44
+					},
+					{
+						"text": "けど",
+						"start": 10.44,
+						"end": 10.72
+					}
+				]
+			]
+		},
+		{
+			"start": 12.58,
+			"end": 14.24,
+			"speaker": "michiru",
+			"lines": [
+				[
+					{
+						"text": "ピストル",
+						"start": 12.58,
+						"end": 13.14
 					},
 					{
 						"text": "みたいな",
-						"start": 5.74,
-						"end": 6.18
+						"start": 13.14,
+						"end": 13.52
 					}
 				],
 				[
 					{
-						"text": "シーンが",
-						"start": 6.18,
-						"end": 6.64
-					}
-				],
-				[
+						"text": "形",
+						"start": 13.52,
+						"end": 13.72
+					},
 					{
-						"text": "多かったですね",
-						"start": 6.64,
-						"end": 8.02
+						"text": "なんですよ",
+						"start": 13.72,
+						"end": 14.24
 					}
 				]
 			]
 		},
 		{
-			"start": 8.02,
-			"end": 11.14,
+			"start": 14.24,
+			"end": 15.56,
 			"speaker": "upamune",
 			"lines": [
 				[
 					{
-						"text": "はい、",
-						"start": 8.02,
-						"end": 8.54
-					},
-					{
-						"text": "確かに。",
-						"start": 8.54,
-						"end": 9.38
+						"text": "ドライヤー",
+						"start": 14.24,
+						"end": 15.1
 					}
 				],
 				[
 					{
-						"text": "日常に",
-						"start": 9.38,
-						"end": 10
+						"text": "みたいなね",
+						"start": 15.1,
+						"end": 15.56
+					}
+				]
+			]
+		},
+		{
+			"start": 17.26,
+			"end": 20.7,
+			"speaker": "michiru",
+			"lines": [
+				[
+					{
+						"text": "指を",
+						"start": 17.26,
+						"end": 17.64
 					},
 					{
-						"text": "あると",
-						"start": 10,
-						"end": 10.18
+						"text": "引っ掛けて",
+						"start": 17.64,
+						"end": 18.3
 					}
 				],
 				[
 					{
-						"text": "便利な、",
-						"start": 10.18,
-						"end": 10.56
+						"text": "ボタンを",
+						"start": 18.3,
+						"end": 18.98
 					},
 					{
-						"text": "うん",
-						"start": 10.56,
-						"end": 11.14
+						"text": "押して",
+						"start": 18.98,
+						"end": 19.3
+					}
+				],
+				[
+					{
+						"text": "照射する",
+						"start": 19.3,
+						"end": 20.12
+					},
+					{
+						"text": "んですけど",
+						"start": 20.12,
+						"end": 20.7
 					}
 				]
 			]
 		},
 		{
-			"start": 11.14,
-			"end": 13.26,
+			"start": 21.72,
+			"end": 22.44,
 			"speaker": "upamune",
 			"lines": [
 				[
 					{
-						"text": "リモコン",
-						"start": 11.14,
-						"end": 12.06
-					}
-				]
-			]
-		},
-		{
-			"start": 13.26,
-			"end": 14.64,
-			"speaker": "michiru",
-			"lines": [
-				[
-					{
-						"text": "無駄遣いすぎ",
-						"start": 13.26,
-						"end": 14.32
-					}
-				]
-			]
-		},
-		{
-			"start": 14.64,
-			"end": 17.36,
-			"speaker": "michiru",
-			"lines": [
-				[
-					{
-						"text": "トークンの",
-						"start": 14.64,
-						"end": 15.34
+						"text": "例え",
+						"start": 21.72,
+						"end": 21.9
 					},
 					{
-						"text": "無駄遣い",
-						"start": 15.34,
-						"end": 16.18
+						"text": "ヤバすぎる",
+						"start": 21.9,
+						"end": 22.18
+					},
+					{
+						"text": "だろ",
+						"start": 22.18,
+						"end": 22.44
 					}
 				]
 			]
 		},
 		{
-			"start": 17.36,
-			"end": 19.15,
+			"start": 23,
+			"end": 26.46,
 			"speaker": "upamune",
 			"lines": [
 				[
 					{
-						"text": "フォース",
-						"start": 17.36,
-						"end": 17.98
+						"text": "例え",
+						"start": 23,
+						"end": 23.28
 					},
 					{
-						"text": "マキシング",
-						"start": 17.98,
-						"end": 19.04
+						"text": "ヤバすぎる",
+						"start": 23.28,
+						"end": 23.98
+					},
+					{
+						"text": "って",
+						"start": 23.98,
+						"end": 24.16
+					}
+				],
+				[
+					{
+						"text": "ピストル、",
+						"start": 24.16,
+						"end": 25.12
+					}
+				],
+				[
+					{
+						"text": "ドライヤー",
+						"start": 25.12,
+						"end": 26.1
+					},
+					{
+						"text": "でしょ",
+						"start": 26.1,
+						"end": 26.46
 					}
 				]
 			]
 		},
 		{
-			"start": 19.15,
-			"end": 22.42,
+			"start": 27.42,
+			"end": 28.92,
 			"speaker": "michiru",
 			"lines": [
 				[
 					{
-						"text": "フォース",
-						"start": 19.15,
-						"end": 19.6
+						"text": "でも",
+						"start": 27.42,
+						"end": 27.78
 					},
 					{
-						"text": "無駄遣い",
-						"start": 19.6,
-						"end": 20.22
+						"text": "ドライヤーは",
+						"start": 27.78,
+						"end": 28.42
+					}
+				],
+				[
+					{
+						"text": "別に",
+						"start": 28.42,
+						"end": 28.66
+					},
+					{
+						"text": "そんなさ…",
+						"start": 28.66,
+						"end": 28.92
+					}
+				]
+			]
+		},
+		{
+			"start": 28.92,
+			"end": 29.68,
+			"speaker": "upamune",
+			"lines": [
+				[
+					{
+						"text": "引き金って",
+						"start": 28.92,
+						"end": 29.34
+					},
+					{
+						"text": "こと?",
+						"start": 29.34,
+						"end": 29.68
+					}
+				]
+			]
+		},
+		{
+			"start": 29.88,
+			"end": 32.26,
+			"speaker": "michiru",
+			"lines": [
+				[
+					{
+						"text": "そうそうそう、",
+						"start": 29.88,
+						"end": 30.36
+					}
+				],
+				[
+					{
+						"text": "ターゲットに",
+						"start": 30.68,
+						"end": 31.42
+					}
+				],
+				[
+					{
+						"text": "向かってさ",
+						"start": 31.58,
+						"end": 32.26
+					}
+				]
+			]
+		},
+		{
+			"start": 32.26,
+			"end": 33.84,
+			"speaker": "michiru",
+			"lines": [
+				[
+					{
+						"text": "撃たないじゃん",
+						"start": 32.26,
+						"end": 33.84
 					}
 				]
 			]
