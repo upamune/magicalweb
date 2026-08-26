@@ -185,6 +185,19 @@ bun scripts/upload-clip.mjs out/magicalfm-264-clip.mp4 264 "50歳でもバリベ
   `upload-clip.mjs` / 音声DL）は `NODE_USE_ENV_PROXY=1 node <script>` で実行する
   （スクリプトは全て Node 22 で動く）。Remotion レンダリングと `bun install` は bun のままでよい。
   音声DLは `curl -sL <audioUrl> -o ep.mp3` でもよい
+- **Chrome**: サンドボックスに Playwright の Chrome が入っているので Remotion の自動DLは不要。
+  ただし Google Fonts の取得でプロキシの証明書を信頼させる必要がある:
+  ```bash
+  apt-get install -y libnss3-tools
+  cd /root/.ccr && csplit -z -f cert- -b "%02d.pem" ca-bundle.crt '/-----BEGIN CERTIFICATE-----/' '{*}' >/dev/null
+  for f in /root/.ccr/cert-*.pem; do certutil -d sql:/root/.pki/nssdb -A -t "C,," -n "ccr-$(basename $f)" -i "$f"; done
+  SHELL=$(ls -d /opt/pw-browsers/chromium_headless_shell-*/chrome-linux/headless_shell | head -1)
+  npx remotion render src/index.ts Clip out/magicalfm-N-clip.mp4 --browser-executable="$SHELL"
+  ```
+  （`chromium-*/chrome-linux/chrome` の方は旧 headless モードが無く起動に失敗する）
+- **git**: チェックアウトされるブランチ名は `main-xxxx` のようなランダム名になっている。
+  push は必ず `git pull --rebase origin main && git push origin HEAD:main`。
+  ブランチ名のまま push すると main に反映されない
 - **ユーザー確認をすべてスキップ**: ハイライト選定・ネタバレ確認・話者ラベル対応は
   手順 3〜4 の基準に従って自分で決める。迷ったら「単体で通じる」「オチで終わる」を優先し、
   下ネタ・特定個人への言及・公開前情報は避ける
