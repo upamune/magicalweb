@@ -159,6 +159,33 @@ bun scripts/upload-clip.mjs out/magicalfm-264-clip.mp4 264 "50歳でもバリベ
 エピソード詳細ページに「切り抜きクリップ」セクションとしてリンクが表示される。
 第3引数の `label` にはクリップのオチ・見どころを短く書く。
 
+## 無人モード（クラウド routine から呼ばれる場合）
+
+月・木 04:00 JST の routine が「最新エピソードのクリップを無人で作って公開する」ために
+このスキルを使う。人間に確認できないので、以下の差分で手順を進める:
+
+- **対象の決定**: `bun scripts/fetch-episodes.js`（リポジトリルート）で RSS を反映してから
+  `cd video && bun scripts/next-clip-target.mjs` を実行。終了コード 3（クリップ済み）または
+  4（文字起こし未コミット）なら何もせず正常終了する。出力 JSON の `audioUrl` を DL し、
+  `listenUrl` を `fetch-listen-transcript.mjs` に渡す
+- **文字起こし**: クラウドでは mlx-whisper が使えないので手順 2 は行わない。
+  手元のマシンで `bun scripts/transcribe-local.mjs`（faster-whisper）を実行してコミットされた
+  `video/transcripts/ep-N.json`（`transcriptPath`）をそのまま whisper JSON として使う
+- **前提ツール**: `ffmpeg` が無ければ `apt-get install -y ffmpeg` で入れる。
+  Remotion はレンダリング時に headless Chrome を自動 DL する
+- **ユーザー確認をすべてスキップ**: ハイライト選定・ネタバレ確認・話者ラベル対応は
+  手順 3〜4 の基準に従って自分で決める。迷ったら「単体で通じる」「オチで終わる」を優先し、
+  下ネタ・特定個人への言及・公開前情報は避ける
+- **アップロード**: `upload-clip.mjs` は `CLOUDFLARE_API_TOKEN` / `CLOUDFLARE_ACCOUNT_ID`
+  があれば `wrangler login` 不要で動く
+- **公開**: 変更されるのは `src/data/clips.json`（と `episodes.json`）のみ。
+  `video/plans/ep-N.json` も一緒にコミットする。`git add src/data video/plans` →
+  日本語で `#N の切り抜きクリップを追加` とコミット → `main` に push。
+  push で deploy.yml が走りサイトに反映される
+- 検証（手順 6）は無人でも**スキップ禁止**。はみ出し・タイミングずれがあれば
+  プランを直して再レンダリングする。3回直しても解消しなければアップロードせず、
+  最終報告に問題点を書いて終了する
+
 ## 報告に含めること
 
 - 選んだハイライトの根拠（エネルギー分析の順位 + 内容面の理由）

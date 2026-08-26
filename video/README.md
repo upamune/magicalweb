@@ -10,7 +10,13 @@
 # 例: mlx-whisper (Apple Silicon)
 mlx_whisper episode.mp3 --model mlx-community/whisper-large-v3-turbo \
   --language ja --word-timestamps True --output-format json
+
+# 例: faster-whisper (Linux amd64 / CPU・CUDA)。最新話をDLして transcripts/ep-N.json に保存
+bun scripts/transcribe-local.mjs            # 要 uv
 ```
+
+`transcripts/ep-N.json` をコミットしておくと、クラウドの routine（月・木 04:00 JST）が
+そのエピソードのクリップを無人で生成・アップロードする。
 
 ### 2. ハイライト検出
 
