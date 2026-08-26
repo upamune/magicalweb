@@ -179,6 +179,12 @@ bun scripts/upload-clip.mjs out/magicalfm-264-clip.mp4 264 "50歳でもバリベ
     手順 4 の校正は特に丁寧に行う
 - **前提ツール**: `ffmpeg` が無ければ `apt-get install -y ffmpeg` で入れる。
   Remotion はレンダリング時に headless Chrome を自動 DL する
+- **ネットワーク**: クラウドサンドボックスは HTTPS を中間プロキシ経由にしており、
+  **Bun の fetch は ECONNRESET で失敗する**。外部通信するスクリプト
+  （`scripts/fetch-episodes.js` / `transcribe-cloud.mjs` / `fetch-listen-transcript.mjs` /
+  `upload-clip.mjs` / 音声DL）は `NODE_USE_ENV_PROXY=1 node <script>` で実行する
+  （スクリプトは全て Node 22 で動く）。Remotion レンダリングと `bun install` は bun のままでよい。
+  音声DLは `curl -sL <audioUrl> -o ep.mp3` でもよい
 - **ユーザー確認をすべてスキップ**: ハイライト選定・ネタバレ確認・話者ラベル対応は
   手順 3〜4 の基準に従って自分で決める。迷ったら「単体で通じる」「オチで終わる」を優先し、
   下ネタ・特定個人への言及・公開前情報は避ける

@@ -3,6 +3,8 @@ import crypto from "node:crypto";
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import * as r2 from "./r2.mjs";
+import { hasR2Credentials } from "./r2.mjs";
 
 // レンダリング済みクリップ(out/*.mp4)をR2にアップロードし、
 // src/data/clips.json にエピソード番号キーで追記する
@@ -41,21 +43,13 @@ const hash = crypto
 const base = path.basename(filePath, path.extname(filePath));
 const key = `${base}-${hash}.mp4`;
 
-// R2_ACCESS_KEY_ID / R2_SECRET_ACCESS_KEY があれば S3 互換 API（バケット限定トークンで動く）、
-// 無ければ wrangler login 済みの前提で wrangler を使う
-const s3 =
-	process.env.R2_ACCESS_KEY_ID && process.env.R2_SECRET_ACCESS_KEY
-		? new Bun.S3Client({
-				accessKeyId: process.env.R2_ACCESS_KEY_ID,
-				secretAccessKey: process.env.R2_SECRET_ACCESS_KEY,
-				endpoint: `https://${process.env.CLOUDFLARE_ACCOUNT_ID ?? "8c67a35c9d0e73a771644e4fd2a8e07d"}.r2.cloudflarestorage.com`,
-				bucket: R2_BUCKET,
-			})
-		: null;
+// R2_ACCESS_KEY_ID / R2_SECRET_ACCESS_KEY / CLOUDFLARE_ACCOUNT_ID があれば S3 互換 API
+// （バケット限定トークンで動く。Bun / Node どちらでも可）、無ければ wrangler login 済みの前提で wrangler を使う
+const useS3 = hasR2Credentials();
 
 const r2Put = async (objectKey, file) => {
-	if (s3) {
-		await s3.write(objectKey, Bun.file(file), { type: "video/mp4" });
+	if (useS3) {
+		await r2.r2Put(R2_BUCKET, objectKey, file);
 		return;
 	}
 	execFileSync(
@@ -75,8 +69,8 @@ const r2Put = async (objectKey, file) => {
 };
 
 const r2Delete = async (objectKey) => {
-	if (s3) {
-		await s3.delete(objectKey);
+	if (useS3) {
+		await r2.r2Delete(R2_BUCKET, objectKey);
 		return;
 	}
 	execFileSync(
