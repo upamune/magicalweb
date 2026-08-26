@@ -11,12 +11,15 @@
 mlx_whisper episode.mp3 --model mlx-community/whisper-large-v3-turbo \
   --language ja --word-timestamps True --output-format json
 
+# 例: AssemblyAI (クラウド routine が使う。話者分離付きの ep.speakers.json も出る)
+ASSEMBLYAI_API_KEY=... bun scripts/transcribe-cloud.mjs assemblyai "<mp3 URL>" ep.json --keyterms "用語,用語"
+
 # 例: faster-whisper (Linux amd64 / CPU・CUDA)。最新話をDLして transcripts/ep-N.json に保存
 bun scripts/transcribe-local.mjs            # 要 uv
 ```
 
-`transcripts/ep-N.json` をコミットしておくと、クラウドの routine（月・木 04:00 JST）が
-そのエピソードのクリップを無人で生成・アップロードする。
+クラウドの routine（月・木 04:00 JST）が最新話のクリップを無人で生成・アップロードする。
+`transcripts/ep-N.json` がコミットされていればそれを使い、無ければ AssemblyAI で文字起こしする。
 
 ### 2. ハイライト検出
 

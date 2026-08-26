@@ -165,12 +165,18 @@ bun scripts/upload-clip.mjs out/magicalfm-264-clip.mp4 264 "50歳でもバリベ
 このスキルを使う。人間に確認できないので、以下の差分で手順を進める:
 
 - **対象の決定**: `bun scripts/fetch-episodes.js`（リポジトリルート）で RSS を反映してから
-  `cd video && bun scripts/next-clip-target.mjs` を実行。終了コード 3（クリップ済み）または
-  4（文字起こし未コミット）なら何もせず正常終了する。出力 JSON の `audioUrl` を DL し、
-  `listenUrl` を `fetch-listen-transcript.mjs` に渡す
-- **文字起こし**: クラウドでは mlx-whisper が使えないので手順 2 は行わない。
-  手元のマシンで `bun scripts/transcribe-local.mjs`（faster-whisper）を実行してコミットされた
-  `video/transcripts/ep-N.json`（`transcriptPath`）をそのまま whisper JSON として使う
+  `cd video && bun scripts/next-clip-target.mjs` を実行。終了コード 3（クリップ済み）なら
+  何もせず正常終了する。出力 JSON の `audioUrl` を DL し、`listenUrl` を
+  `fetch-listen-transcript.mjs` に渡す
+- **文字起こし**: クラウドでは mlx-whisper が使えないので手順 2 の代わりに:
+  - `transcriptPath` が非 null（手元で `transcribe-local.mjs` を実行してコミット済み）ならそれを使う
+  - 無ければ `bun scripts/transcribe-cloud.mjs assemblyai "<audioUrl>" ep.json --keyterms "<keyterms>"`
+    （要 `ASSEMBLYAI_API_KEY`。44分で約1分）。出力は mlx-whisper 互換で、
+    同時に書かれる `ep.speakers.json` は `fetch-listen-transcript.mjs` の出力と同形式の話者分離
+    （LISTEN と 93% 一致。0/1 が誰かは同様に文脈で決める）。LISTEN が取れればそちらと突き合わせ、
+    取れなければ `ep.speakers.json` のみで割り当てる
+  - AssemblyAI は「代官山→大関山」「upamune→オパミン」のような固有名詞の誤りが残るので
+    手順 4 の校正は特に丁寧に行う
 - **前提ツール**: `ffmpeg` が無ければ `apt-get install -y ffmpeg` で入れる。
   Remotion はレンダリング時に headless Chrome を自動 DL する
 - **ユーザー確認をすべてスキップ**: ハイライト選定・ネタバレ確認・話者ラベル対応は
