@@ -1,0 +1,123 @@
+{
+	"episode": {
+		"number": 277,
+		"title": "健康の鬼、散財する",
+		"titleLines": ["健康の鬼、", "散財する"],
+		"date": "2026年8月19日"
+	},
+	"bg": "lime",
+	"clipTitleLines": ["オーラリング", "なくした回数"],
+	"clipStart": 850.8,
+	"clipEnd": 877.8,
+	"note": "WHOOP購入の経緯。オーラリングを何回もなくした→それでも新しいのを買うのはシャク→でもトラックはしたい→「健康の鬼なのに」→オチ「鬼だからだろ」でタイトル回収。エネルギー上位8窓には入らないが、単体で通じてオチで締まる内容面の最有力。話者はLISTEN(sp0=upamune / sp1=michiru)とAssemblyAI(sp1=upamune / sp0=michiru)が一致。校正: 尺だな→シャクだな、だろう→だろ、フィラー(ね、で/ちょっと/てか)は省略",
+	"pages": [
+		{
+			"start": 850.8,
+			"end": 852.29,
+			"lines": [
+				[{ "text": "オーラリングは", "start": 850.8, "end": 851.55 }],
+				[
+					{ "text": "もう", "start": 851.55, "end": 851.71 },
+					{ "text": "使ってない", "start": 851.71, "end": 852.03 },
+					{ "text": "んですか?", "start": 852.03, "end": 852.29 }
+				]
+			],
+			"speaker": "michiru"
+		},
+		{
+			"start": 852.29,
+			"end": 853.1,
+			"lines": [
+				[{ "text": "オーラリングは", "start": 852.29, "end": 852.79 }],
+				[{ "text": "なくしました", "start": 852.79, "end": 853.1 }]
+			],
+			"speaker": "upamune"
+		},
+		{
+			"start": 854.99,
+			"end": 856.32,
+			"lines": [
+				[
+					{ "text": "何回目か", "start": 854.99, "end": 855.67 },
+					{ "text": "わかんない", "start": 855.67, "end": 856.32 }
+				]
+			],
+			"speaker": "upamune"
+		},
+		{
+			"start": 858.37,
+			"end": 862.06,
+			"lines": [
+				[
+					{ "text": "また", "start": 858.37, "end": 858.87 },
+					{ "text": "オーラリングの", "start": 858.87, "end": 859.59 }
+				],
+				[
+					{ "text": "新しいやつ", "start": 859.59, "end": 860.05 },
+					{ "text": "買うのも", "start": 860.05, "end": 861.07 }
+				],
+				[
+					{ "text": "シャクだな", "start": 861.07, "end": 861.59 },
+					{ "text": "みたいな", "start": 861.59, "end": 862.06 }
+				]
+			],
+			"speaker": "upamune"
+		},
+		{
+			"start": 862.17,
+			"end": 864.07,
+			"lines": [
+				[
+					{ "text": "しかも", "start": 862.17, "end": 862.49 },
+					{ "text": "また", "start": 862.49, "end": 862.83 }
+				],
+				[
+					{ "text": "絶対", "start": 862.83, "end": 863.11 },
+					{ "text": "なくすな", "start": 863.11, "end": 863.51 },
+					{ "text": "みたいな", "start": 863.51, "end": 864.07 }
+				]
+			],
+			"speaker": "upamune"
+		},
+		{
+			"start": 864.67,
+			"end": 865.79,
+			"lines": [
+				[
+					{ "text": "トラックは", "start": 864.67, "end": 865.23 },
+					{ "text": "したいんだ", "start": 865.23, "end": 865.79 }
+				]
+			],
+			"speaker": "michiru"
+		},
+		{
+			"start": 866.89,
+			"end": 869.85,
+			"lines": [
+				[{ "text": "もちろん。", "start": 866.89, "end": 868.13 }],
+				[
+					{ "text": "健康の", "start": 868.13, "end": 868.97 },
+					{ "text": "鬼なのに", "start": 868.97, "end": 869.85 }
+				]
+			],
+			"speaker": "upamune"
+		},
+		{
+			"start": 870.97,
+			"end": 873.87,
+			"lines": [
+				[
+					{ "text": "健康の鬼", "start": 870.97, "end": 872.39 },
+					{ "text": "なのに?", "start": 872.39, "end": 873.87 }
+				]
+			],
+			"speaker": "michiru"
+		},
+		{
+			"start": 873.87,
+			"end": 875.63,
+			"lines": [[{ "text": "鬼だからだろ", "start": 873.87, "end": 875.63 }]],
+			"speaker": "michiru"
+		}
+	]
+}

@@ -1,0 +1,175 @@
+{
+	"episode": {
+		"number": 276,
+		"title": "YouTube、始めました",
+		"titleLines": ["YouTube、", "始めました"],
+		"date": "2026年8月16日"
+	},
+	"bg": "lilac",
+	"clipTitleLines": ["ネカフェ収録の", "落とし穴"],
+	"clipStart": 552.3,
+	"clipEnd": 593.4,
+	"note": "YouTube収録環境の変遷・第二弾「ネカフェ収録」〜酸欠で眠くなる〜「二酸化炭素濃度高いなってなる」のオチまで。文字起こしはAssemblyAI(校正: 二酸化な二酸化炭素→二酸化炭素 / 句読点補完)。話者はLISTENとAssemblyAIの話者分離が一致(ネカフェ解説=upamune / 「あくびしまくり」「二酸化炭素濃度」=michiru)",
+	"pages": [
+		{
+			"start": 552.3,
+			"end": 556.4,
+			"lines": [
+				[
+					{ "text": "ネカフェの", "start": 552.42, "end": 553.16 },
+					{ "text": "ゲーミングPC", "start": 553.16, "end": 554.4 }
+				],
+				[
+					{ "text": "というか", "start": 554.4, "end": 554.74 },
+					{ "text": "普通のPCで、", "start": 554.74, "end": 555.46 }
+				]
+			],
+			"speaker": "upamune"
+		},
+		{
+			"start": 556.4,
+			"end": 560.9,
+			"lines": [
+				[
+					{ "text": "今言った", "start": 556.44, "end": 556.96 },
+					{ "text": "ゲームは", "start": 556.96, "end": 557.54 }
+				],
+				[
+					{ "text": "ノベルゲーなんで", "start": 557.54, "end": 558.36 }
+				],
+				[
+					{ "text": "オンボロでも", "start": 559.48, "end": 560.14 },
+					{ "text": "動くから", "start": 560.14, "end": 560.44 }
+				]
+			],
+			"speaker": "upamune"
+		},
+		{
+			"start": 560.9,
+			"end": 566.1,
+			"lines": [
+				[
+					{ "text": "それで", "start": 560.92, "end": 561.32 },
+					{ "text": "やってた", "start": 561.32, "end": 562.1 }
+				],
+				[
+					{ "text": "んですけど、", "start": 562.1, "end": 562.48 }
+				]
+			],
+			"speaker": "upamune"
+		},
+		{
+			"start": 566.1,
+			"end": 569.1,
+			"lines": [
+				[
+					{ "text": "毎回", "start": 566.5, "end": 566.76 },
+					{ "text": "収録のために", "start": 566.76, "end": 567.44 }
+				],
+				[
+					{ "text": "ネカフェに", "start": 567.44, "end": 567.82 },
+					{ "text": "行かないと", "start": 567.82, "end": 568.14 }
+				],
+				[
+					{ "text": "いけないし、", "start": 568.14, "end": 568.6 }
+				]
+			],
+			"speaker": "upamune"
+		},
+		{
+			"start": 569.1,
+			"end": 572.32,
+			"lines": [
+				[
+					{ "text": "さっき", "start": 569.2, "end": 569.58 },
+					{ "text": "言ったように", "start": 569.58, "end": 569.9 }
+				],
+				[
+					{ "text": "めっちゃ", "start": 569.9, "end": 571.0 },
+					{ "text": "読んだりするんで", "start": 571.0, "end": 572.32 }
+				]
+			],
+			"speaker": "upamune"
+		},
+		{
+			"start": 572.32,
+			"end": 576.35,
+			"lines": [
+				[
+					{ "text": "結構", "start": 572.32, "end": 572.76 },
+					{ "text": "呼吸をして、", "start": 573.36, "end": 574.24 }
+				],
+				[
+					{ "text": "ネカフェって", "start": 574.5, "end": 575.16 },
+					{ "text": "すごい", "start": 575.16, "end": 575.44 },
+					{ "text": "狭いから", "start": 575.44, "end": 576.25 }
+				]
+			],
+			"speaker": "upamune"
+		},
+		{
+			"start": 576.35,
+			"end": 580.34,
+			"lines": [
+				[
+					{ "text": "めっちゃ", "start": 576.4, "end": 576.76 },
+					{ "text": "酸素が", "start": 576.76, "end": 577.4 }
+				],
+				[
+					{ "text": "薄くなって、", "start": 577.4, "end": 578.32 }
+				],
+				[
+					{ "text": "クソ眠くなる", "start": 578.32, "end": 580.14 },
+					{ "text": "っていう", "start": 580.14, "end": 580.34 }
+				]
+			],
+			"speaker": "upamune"
+		},
+		{
+			"start": 580.34,
+			"end": 584.9,
+			"lines": [
+				[
+					{ "text": "後半も", "start": 580.34, "end": 581.22 },
+					{ "text": "あくびしまくり", "start": 581.22, "end": 582.54 }
+				]
+			],
+			"speaker": "michiru"
+		},
+		{
+			"start": 584.9,
+			"end": 588.24,
+			"lines": [
+				[
+					{ "text": "しょうがないです。", "start": 584.96, "end": 586.2 }
+				],
+				[
+					{ "text": "その構造上の", "start": 586.2, "end": 587.24 },
+					{ "text": "欠陥だよね", "start": 587.24, "end": 588.24 }
+				]
+			],
+			"speaker": "upamune"
+		},
+		{
+			"start": 588.24,
+			"end": 590.48,
+			"lines": [
+				[
+					{ "text": "もう", "start": 588.24, "end": 588.58 },
+					{ "text": "二酸化炭素濃度", "start": 589.22, "end": 590.48 }
+				]
+			],
+			"speaker": "michiru"
+		},
+		{
+			"start": 590.48,
+			"end": 593.4,
+			"lines": [
+				[
+					{ "text": "高いなってなる", "start": 590.48, "end": 591.2 }
+				]
+			],
+			"speaker": "michiru"
+		}
+	]
+}
