@@ -184,10 +184,19 @@ bun scripts/upload-clip.mjs out/magicalfm-264-clip.mp4 264 "50歳でもバリベ
   下ネタ・特定個人への言及・公開前情報は避ける
 - **アップロード**: `upload-clip.mjs` は `R2_ACCESS_KEY_ID` / `R2_SECRET_ACCESS_KEY` /
   `CLOUDFLARE_ACCOUNT_ID` があれば S3 互換 API で動く（`wrangler login` 不要）
-- **公開**: 変更されるのは `src/data/clips.json`（と `episodes.json`）のみ。
-  `video/plans/ep-N.json` も一緒にコミットする。`git add src/data video/plans` →
-  日本語で `#N の切り抜きクリップを追加` とコミット → `main` に push。
-  push で deploy.yml が走りサイトに反映される
+- **公開**: サイトに反映されるのは `src/data/clips.json`（と `episodes.json`）だけだが、
+  コミット対象はそれだけではない。`video/plans/ep-N.json` に加えて、
+  `build-clip.mjs` が上書きする**追跡済みのビルド成果物**
+  （`video/src/data/clip.json` / `video/public/clip.mp3`）も一緒にコミットする
+  （残すと作業ツリーが dirty のままになり、stop hook に引っかかる）:
+
+  ```bash
+  git add src/data video/plans video/src/data/clip.json video/public/clip.mp3
+  ```
+
+  → 日本語で `#N の切り抜きクリップを追加` とコミット → `main` に push。
+  push で deploy.yml が走りサイトに反映される。最後に `git status --porcelain` が
+  空になっていることを確認する
 - 検証（手順 6）は無人でも**スキップ禁止**。はみ出し・タイミングずれがあれば
   プランを直して再レンダリングする。3回直しても解消しなければアップロードせず、
   最終報告に問題点を書いて終了する
