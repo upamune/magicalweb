@@ -40,11 +40,60 @@ const hash = crypto
 	.slice(0, 8);
 const base = path.basename(filePath, path.extname(filePath));
 const key = `${base}-${hash}.mp4`;
-execFileSync(
-	"bunx",
-	["wrangler", "r2", "object", "put", `${R2_BUCKET}/${key}`, "--file", filePath, "--remote"],
-	{ cwd: videoDir, stdio: "inherit" },
-);
+
+// R2_ACCESS_KEY_ID / R2_SECRET_ACCESS_KEY があれば S3 互換 API（バケット限定トークンで動く）、
+// 無ければ wrangler login 済みの前提で wrangler を使う
+const s3 =
+	process.env.R2_ACCESS_KEY_ID && process.env.R2_SECRET_ACCESS_KEY
+		? new Bun.S3Client({
+				accessKeyId: process.env.R2_ACCESS_KEY_ID,
+				secretAccessKey: process.env.R2_SECRET_ACCESS_KEY,
+				endpoint: `https://${process.env.CLOUDFLARE_ACCOUNT_ID ?? "8c67a35c9d0e73a771644e4fd2a8e07d"}.r2.cloudflarestorage.com`,
+				bucket: R2_BUCKET,
+			})
+		: null;
+
+const r2Put = async (objectKey, file) => {
+	if (s3) {
+		await s3.write(objectKey, Bun.file(file), { type: "video/mp4" });
+		return;
+	}
+	execFileSync(
+		"bunx",
+		[
+			"wrangler",
+			"r2",
+			"object",
+			"put",
+			`${R2_BUCKET}/${objectKey}`,
+			"--file",
+			file,
+			"--remote",
+		],
+		{ cwd: videoDir, stdio: "inherit" },
+	);
+};
+
+const r2Delete = async (objectKey) => {
+	if (s3) {
+		await s3.delete(objectKey);
+		return;
+	}
+	execFileSync(
+		"bunx",
+		[
+			"wrangler",
+			"r2",
+			"object",
+			"delete",
+			`${R2_BUCKET}/${objectKey}`,
+			"--remote",
+		],
+		{ cwd: videoDir, stdio: "inherit" },
+	);
+};
+
+await r2Put(key, filePath);
 
 const url = `${PUBLIC_BASE_URL}/${key}`;
 
@@ -68,11 +117,7 @@ fs.writeFileSync(clipsPath, `${JSON.stringify(clips, null, "\t")}\n`);
 if (replacedUrl && replacedUrl !== url) {
 	const oldKey = replacedUrl.slice(`${PUBLIC_BASE_URL}/`.length);
 	try {
-		execFileSync(
-			"bunx",
-			["wrangler", "r2", "object", "delete", `${R2_BUCKET}/${oldKey}`, "--remote"],
-			{ cwd: videoDir, stdio: "inherit" },
-		);
+		await r2Delete(oldKey);
 	} catch {
 		console.warn(`Warning: failed to delete old object ${oldKey}`);
 	}

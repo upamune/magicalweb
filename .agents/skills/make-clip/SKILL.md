@@ -182,8 +182,8 @@ bun scripts/upload-clip.mjs out/magicalfm-264-clip.mp4 264 "50歳でもバリベ
 - **ユーザー確認をすべてスキップ**: ハイライト選定・ネタバレ確認・話者ラベル対応は
   手順 3〜4 の基準に従って自分で決める。迷ったら「単体で通じる」「オチで終わる」を優先し、
   下ネタ・特定個人への言及・公開前情報は避ける
-- **アップロード**: `upload-clip.mjs` は `CLOUDFLARE_API_TOKEN` / `CLOUDFLARE_ACCOUNT_ID`
-  があれば `wrangler login` 不要で動く
+- **アップロード**: `upload-clip.mjs` は `R2_ACCESS_KEY_ID` / `R2_SECRET_ACCESS_KEY` /
+  `CLOUDFLARE_ACCOUNT_ID` があれば S3 互換 API で動く（`wrangler login` 不要）
 - **公開**: 変更されるのは `src/data/clips.json`（と `episodes.json`）のみ。
   `video/plans/ep-N.json` も一緒にコミットする。`git add src/data video/plans` →
   日本語で `#N の切り抜きクリップを追加` とコミット → `main` に push。
