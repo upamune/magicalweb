@@ -42,6 +42,46 @@ export interface Episode {
 //  return sanitized;
 //}
 //
+// RSSの説明文にはスキームが抜けたhref（例: www.amazon.co.jp/dp/XXXX）や
+// URLですらないhrefが紛れており、そのままだと /ep/225/www.amazon.co.jp/... のような
+// 相対リンクになってしまうため、表示前に補正する
+function normalizeHref(rawHref: string): string | null {
+	const href = rawHref.trim();
+	if (!href) return null;
+
+	// すでに絶対URL・ページ内リンク・サイト内リンクならそのまま使う
+	if (/^(https?:|mailto:|tel:|#|\/)/i.test(href)) return href;
+
+	// プロトコル相対（//example.com/...）
+	if (href.startsWith("//")) return `https:${href}`;
+
+	// スキームだけが抜けているドメイン形式（www.amazon.co.jp/dp/XXXX など）
+	if (/^[\w-]+(\.[\w-]+)+(:\d+)?([/?#]|$)/.test(href)) return `https://${href}`;
+
+	// URLとして解釈できないものはリンクにしない
+	return null;
+}
+
+export function normalizeDescriptionLinks(html: string): string {
+	return html.replace(
+		/<a\b([^>]*)>([\s\S]*?)<\/a>/gi,
+		(anchor, attrs: string, inner: string) => {
+			const hrefMatch = attrs.match(/\shref\s*=\s*(?:"([^"]*)"|'([^']*)')/i);
+			if (!hrefMatch) return anchor;
+
+			const normalized = normalizeHref(hrefMatch[1] ?? hrefMatch[2] ?? "");
+			// リンクにできないhrefはアンカーを外してテキストだけ残す
+			if (!normalized) return inner;
+
+			const fixedAttrs = attrs.replace(
+				/\shref\s*=\s*(?:"[^"]*"|'[^']*')/i,
+				` href="${normalized}"`,
+			);
+			return `<a${fixedAttrs}>${inner}</a>`;
+		},
+	);
+}
+
 // 日付を日本語フォーマットに変換
 export function formatJapaneseDate(dateStr: string): string {
 	try {
@@ -55,7 +95,7 @@ export function formatJapaneseDate(dateStr: string): string {
 export async function getLatestEpisodes(count: number): Promise<Episode[]> {
 	return episodesData.slice(0, count).map((episode) => ({
 		...episode,
-		description: episode.description,
+		description: normalizeDescriptionLinks(episode.description),
 		pubDate: formatJapaneseDate(episode.pubDate),
 	}));
 }
@@ -72,7 +112,7 @@ export async function getEpisodeByNumber(
 
 	return {
 		...episode,
-		description: episode.description,
+		description: normalizeDescriptionLinks(episode.description),
 		pubDate: formatJapaneseDate(episode.pubDate),
 	};
 }
@@ -93,7 +133,7 @@ export async function getEpisodeBySlug(slug: string): Promise<Episode | null> {
 
 	return {
 		...episode,
-		description: episode.description,
+		description: normalizeDescriptionLinks(episode.description),
 		pubDate: formatJapaneseDate(episode.pubDate),
 	};
 }
