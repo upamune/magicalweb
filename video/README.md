@@ -77,6 +77,74 @@ bun scripts/upload-clip.mjs out/clip.mp4 263 "オチの一言"
 初回のみ `bunx wrangler login` でCloudflareにログインしておく。
 （`R2_ACCESS_KEY_ID` / `R2_SECRET_ACCESS_KEY` を環境変数に置けば wrangler 不要で S3 互換 API を使う）
 
+### 6. YouTube Shorts / Instagram Reels への投稿
+
+R2 にアップロード済み（＝ `clips.json` に載っている）クリップを両プラットフォームに投稿する:
+
+```bash
+cd video
+bun scripts/publish-social.mjs out/magicalfm-278-clip.mp4 278 --dry-run  # 文面だけ確認
+bun scripts/publish-social.mjs out/magicalfm-278-clip.mp4 278
+bun scripts/publish-social.mjs out/magicalfm-278-clip.mp4 278 --to instagram
+```
+
+- タイトル・説明・キャプションは `plans/ep-N.json` の `clipTitleLines`、`clips.json` の `label`、
+  `episodes.json` のタイトルから自動生成する（`--title` / `--caption` で上書き）
+- Instagram は公開URLからしか投稿できないので、**先に `upload-clip.mjs` を実行しておく**
+- 投稿結果は `video/social-posts.json` に記録され、同じクリップの二重投稿を防ぐ（再投稿は `--force`）。
+  記録には動画・本編ページ・YouTube・Instagram のURLが揃う。
+  人が見る一覧は同時に生成される [POSTS.md](POSTS.md)（JSON を直したら
+  `bun scripts/social-posts.mjs` で作り直す）
+- YouTube は **既定で限定公開（unlisted）**。内容を確認してから YouTube Studio で手動公開する。
+  監査を通した API プロジェクトを使う場合のみ `--privacy public` が意味を持つ
+- YouTube のタイトルは `【#278】見出し #ポッドキャスト #shorts`、説明は
+  「エピソードタイトル」より → 本編リンク → 番組紹介 → `#マヂカルfm` の順（magicalshorts と同じ流儀）
+- 縦1080×1920・3分以内なので、YouTube 側は自動的に Shorts として扱われる
+
+#### 初回セットアップ: YouTube
+
+OAuth クライアントは `magicalshorts` リポジトリと共用している（同じ Google アカウントの
+別チャンネル向けに作ったもの）。`~/ghq/github.com/upamune/magicalshorts/.env` の
+`YT_CLIENT_ID` / `YT_CLIENT_SECRET` を `YOUTUBE_CLIENT_ID` / `YOUTUBE_CLIENT_SECRET` として
+`video/.env` に置けば、Google Cloud 側の作業は不要。
+
+refresh token だけはチャンネルごとに要るので、投稿先のチャンネル（@magicalfm_）で取り直す:
+
+```bash
+bun scripts/youtube-auth.mjs   # ブラウザが開く。承認画面で @magicalfm_ を選ぶ
+```
+
+`.env` に `YOUTUBE_REFRESH_TOKEN` が自動で書き込まれる。
+新しくクライアントを作る場合は Google Cloud で YouTube Data API v3 を有効化し、
+「デスクトップアプリ」の OAuth クライアントを発行する。
+
+**重要**: 2020年7月28日以降に作られた未監査の API プロジェクトから `videos.insert` で
+アップロードした動画は「非公開にロック」され、YouTube Studio からも公開に変更できない。
+公開投稿するには <https://support.google.com/youtube/contact/yt_api_form> から
+コンプライアンス監査を申請して通す必要がある（用途の説明と OAuth フローのデモ動画が要る）。
+そのため既定は限定公開で上げて、公開は Studio から手動で行う運用にしている。
+
+#### 初回セットアップ: Instagram
+
+1. Instagram アカウントをプロアカウント（クリエイター or ビジネス）に切り替える
+2. <https://developers.facebook.com> でアプリを作り、「Instagram」プロダクトを追加する
+3. 「API setup with Instagram login」で対象アカウントを連携し、
+   `instagram_business_basic` / `instagram_business_content_publish` を付けて
+   アクセストークンを生成する（開発モードのままでも自分のアカウントには投稿できる）
+4. `video/.env` に `IG_ACCESS_TOKEN` と、同じ画面に出る `IG_USER_ID` を書く
+
+トークンは60日で切れるが、**期限内に延長すればまた60日伸びる**。`publish-social.mjs` は
+Instagram へ投稿するたびに自動で延長して `.env` に書き戻すので、通常は何もしなくてよい。
+2か月以上投稿しないときだけ手で延長する:
+
+```bash
+bun scripts/instagram-auth.mjs refresh
+```
+
+失効させた場合は Meta App の「Instagramログインによる API設定」からトークンを再生成する。
+
+Facebook ページ経由（Facebook Login）のトークンを使う場合は `IG_API_HOST=graph.facebook.com` を足す。
+
 ## デザイン
 
 `src/tokens.ts` は docs/design-system.md のトークンと同期。背景色はエピソード番号 % 4 のローテーション（OGPと同じ）。

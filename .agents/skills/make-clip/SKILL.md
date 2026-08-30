@@ -159,6 +159,21 @@ bun scripts/upload-clip.mjs out/magicalfm-264-clip.mp4 264 "50歳でもバリベ
 エピソード詳細ページに「切り抜きクリップ」セクションとしてリンクが表示される。
 第3引数の `label` にはクリップのオチ・見どころを短く書く。
 
+### 8. SNSへの投稿（依頼されたときだけ）
+
+YouTube Shorts と Instagram Reels への投稿は `publish-social.mjs` で行う。
+**手順7のあと、ユーザーから明示的に依頼されたときだけ実行する**（無人モードでは行わない）:
+
+```bash
+cd video
+bun scripts/publish-social.mjs out/magicalfm-278-clip.mp4 278 --dry-run  # まず文面を見せる
+bun scripts/publish-social.mjs out/magicalfm-278-clip.mp4 278
+```
+
+タイトル・説明・キャプションはプランの `clipTitleLines` などから自動生成される。
+セットアップと制約（YouTube は API プロジェクトの監査を通すまで動画が非公開に固定される）は
+`video/README.md` の該当節を参照。
+
 ## 無人モード（クラウド routine から呼ばれる場合）
 
 月・木 04:00 JST の routine が「最新エピソードのクリップを無人で作って公開する」ために
