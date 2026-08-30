@@ -56,5 +56,25 @@
 				"publishedAt": "2026-08-30T16:31:00.096Z"
 			}
 		}
+	],
+	"280": [
+		{
+			"clip": "magicalfm-280-clip",
+			"title": "楽譜書き起こしAI、待たれる",
+			"label": "楽譜書き起こしAI、うなぎ奢ります",
+			"url": "https://clips.magical.fm/magicalfm-280-clip-197f5512.mp4",
+			"episodeUrl": "https://magical.fm/ep/280",
+			"youtube": {
+				"id": "PBge4f4Ir-g",
+				"url": "https://www.youtube.com/shorts/PBge4f4Ir-g",
+				"privacyStatus": "unlisted",
+				"publishedAt": "2026-08-30T18:59:44.264Z"
+			},
+			"instagram": {
+				"id": "18140978599602802",
+				"url": "https://www.instagram.com/reel/DcrNlmbD_3B/",
+				"publishedAt": "2026-08-30T19:00:40.110Z"
+			}
+		}
 	]
 }
