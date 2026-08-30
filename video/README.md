@@ -79,6 +79,9 @@ bun scripts/render-episode.mjs 278        # 2000フレームずつ分割レン�
 ```
 
 - 校正結果は `transcripts/ep-N.proofread.json` にキャッシュされ、再実行時は未校正分だけ問い合わせる
+- LLM 校正だけでは表記が揺れるので、`build-episode.mjs` の `REPLACEMENTS` に固定置換を持つ
+  （マジカルFM→マヂカル.fm、うぱむね→うぱみゅん、分振り→文フリ など）。新しい誤認識を見つけたらここに足す
+- 1行 22 文字・1ページ 2 行で自動ページ化。セリフ枠は常時表示で、テキストとカラオケ強調だけが動く
 - 話者ラベル（A/B）とホストの対応は冒頭の会話から LLM が推定する。間違っていたら
   `--speakers A=michiru,B=upamune` で上書き
 - `src/data/episode.json` と `public/episode.mp3` は git 管理外。`--props` で Composition に渡す
@@ -109,7 +112,8 @@ bun scripts/publish-social.mjs out/magicalfm-278-clip.mp4 278 --dry-run  # 文�
 bun scripts/publish-social.mjs out/magicalfm-278-clip.mp4 278
 bun scripts/publish-social.mjs out/magicalfm-278-clip.mp4 278 --to instagram
 
-bun scripts/publish-social.mjs --pending 1        # 未投稿の古い順から1本（動画はR2から自動DL）
+bun scripts/publish-social.mjs --pending 1        # 未投稿の新しい順から1本（動画はR2から自動DL）
+bun scripts/publish-social.mjs --pending 1 --oldest  # 古い順
 ```
 
 `--pending` は `clips.json` と `social-posts.json` の差分から未投稿クリップを拾う。

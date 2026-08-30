@@ -161,18 +161,9 @@ bun scripts/upload-clip.mjs out/magicalfm-264-clip.mp4 264 "50歳でもバリベ
 
 ### 8. SNSへの投稿（依頼されたときだけ）
 
-YouTube Shorts と Instagram Reels への投稿は `publish-social.mjs` で行う。
-**手順7のあと、ユーザーから明示的に依頼されたときだけ実行する**（無人モードでは行わない）:
-
-```bash
-cd video
-bun scripts/publish-social.mjs out/magicalfm-278-clip.mp4 278 --dry-run  # まず文面を見せる
-bun scripts/publish-social.mjs out/magicalfm-278-clip.mp4 278
-```
-
-タイトル・説明・キャプションはプランの `clipTitleLines` などから自動生成される。
-セットアップと制約（YouTube は API プロジェクトの監査を通すまで動画が非公開に固定される）は
-`video/README.md` の該当節を参照。
+YouTube Shorts / Instagram Reels への投稿は **`post-clip` スキル**に従う。
+手順7のあと、ユーザーから明示的に依頼されたときだけ実行する（無人モードでは行わない）。
+このスキル内で文面をすでに見せていれば、post-clip の dry-run は省略してよい。
 
 ## 無人モード（クラウド routine から呼ばれる場合）
 
