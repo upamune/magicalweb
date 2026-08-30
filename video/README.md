@@ -65,6 +65,28 @@ bunx remotion render src/index.ts Clip out/clip.mp4
 bunx remotion studio
 ```
 
+### 4b. フル尺のビデオポッドキャスト（横1920×1080・15fps）
+
+同じ Remotion プロジェクトで、エピソード全編に字幕を付けた横動画も作れる（`Episode` Composition）。
+字幕は人手で校正せず、Ollama Cloud の LLM（既定 `deepseek-v4-flash:cloud`）で誤認識修正と語区切りを行い、
+自動でページ化する。ローカルで動かす前提（`ollama` が起動していること）:
+
+```bash
+cd video
+bun scripts/transcribe-cloud.mjs assemblyai "<mp3 URL>" transcripts/ep-278.json   # 文字起こし（話者分離付き）
+bun scripts/build-episode.mjs 278                                                  # 校正→ページ化→ episode.json / episode.mp3
+bun scripts/render-episode.mjs 278        # 2000フレームずつ分割レンダリング → out/magicalfm-278-episode.mp4
+```
+
+- 校正結果は `transcripts/ep-N.proofread.json` にキャッシュされ、再実行時は未校正分だけ問い合わせる
+- 話者ラベル（A/B）とホストの対応は冒頭の会話から LLM が推定する。間違っていたら
+  `--speakers A=michiru,B=upamune` で上書き
+- `src/data/episode.json` と `public/episode.mp3` は git 管理外。`--props` で Composition に渡す
+- 波形は事前計算した RMS エンベロープを使う（フル尺の音声を Remotion 側でデコードしないため）
+- 15fps でも 45分エピソードのレンダリングは M系Mac で 2時間強かかる（約5fps）。
+  一発の `remotion render` は数千フレームで Chrome がメモリ不足で落ちる（Target closed）ので、
+  `render-episode.mjs` がチャンク分割して ffmpeg で結合する。落ちても同じコマンドで再開できる
+
 ### 5. アップロードと配信
 
 レンダリングした動画は Cloudflare R2（`clips.magical.fm`）にアップロードし、
@@ -86,7 +108,14 @@ cd video
 bun scripts/publish-social.mjs out/magicalfm-278-clip.mp4 278 --dry-run  # 文面だけ確認
 bun scripts/publish-social.mjs out/magicalfm-278-clip.mp4 278
 bun scripts/publish-social.mjs out/magicalfm-278-clip.mp4 278 --to instagram
+
+bun scripts/publish-social.mjs --pending 1        # 未投稿の古い順から1本（動画はR2から自動DL）
 ```
+
+`--pending` は `clips.json` と `social-posts.json` の差分から未投稿クリップを拾う。
+**短時間に連投すると Shorts の初動テストの表示枠を自分の動画同士で奪い合う**ので、
+1日1〜2本で回すこと（3本以上を指定すると警告が出る）。溜まった過去クリップは
+cron や launchd で `--pending 1` を1日1回叩いて消化するのがよい。
 
 - タイトル・説明・キャプションは `plans/ep-N.json` の `clipTitleLines`、`clips.json` の `label`、
   `episodes.json` のタイトルから自動生成する（`--title` / `--caption` で上書き）

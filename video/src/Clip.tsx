@@ -14,7 +14,7 @@ import {
 import { C } from "./tokens";
 import type { CaptionPage, ClipData, Word } from "./types";
 
-const HOSTS = {
+export const HOSTS = {
 	michiru: { name: "michiru_da", avatar: "host-michiru.png" },
 	upamune: { name: "upamune", avatar: "host-upamune.png" },
 } as const;
@@ -24,10 +24,10 @@ export const FPS = 30;
 const mochiy = loadMochiy();
 const mplus = loadMPlus("normal", { weights: ["500", "700"] });
 
-const DISPLAY = mochiy.fontFamily;
-const BODY = mplus.fontFamily;
+export const DISPLAY = mochiy.fontFamily;
+export const BODY = mplus.fontFamily;
 
-function Sticker({
+export function Sticker({
 	children,
 	entrance,
 	rotate = -4,
@@ -87,12 +87,19 @@ function CaptionWord({ word, t }: { word: Word; t: number }) {
 	);
 }
 
-function Captions({
+export function Captions({
 	page,
 	t,
 	fps,
 	frame,
-}: { page: CaptionPage; t: number; fps: number; frame: number }) {
+	fontSize = 66,
+}: {
+	page: CaptionPage;
+	t: number;
+	fps: number;
+	frame: number;
+	fontSize?: number;
+}) {
 	const pageStartFrame = Math.round(page.start * fps);
 	const pop = spring({
 		frame: frame - pageStartFrame,
@@ -114,7 +121,7 @@ function Captions({
 				boxShadow: `16px 16px 0 ${C.ink}`,
 				padding: isPunchline ? "88px 60px" : "64px 60px",
 				fontFamily: DISPLAY,
-				fontSize: isPunchline ? 104 : 66,
+				fontSize: isPunchline ? fontSize * 1.58 : fontSize,
 				lineHeight: 1.5,
 				width: "100%",
 				transform: `scale(${0.92 + pop * 0.08}) rotate(${(1 - pop) * -1.5}deg)`,
@@ -143,7 +150,7 @@ function Captions({
 
 // 話者アバター: 喋っている方がポップして目立つ
 // avatar が無い話者（画像未登録のゲスト）は絵文字プレースホルダで表示する
-function SpeakerAvatar({
+export function SpeakerAvatar({
 	name,
 	avatar,
 	active,
@@ -230,7 +237,7 @@ function SpeakerAvatar({
 	);
 }
 
-function Waveform({
+export function Waveform({
 	frame,
 	audioFile,
 	barCount = 24,

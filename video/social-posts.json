@@ -18,5 +18,25 @@
 				"publishedAt": "2026-08-30T14:42:47.130Z"
 			}
 		}
+	],
+	"279": [
+		{
+			"clip": "magicalfm-279-clip",
+			"title": "映画館で寝落ちする男の言い訳",
+			"label": "映画を見るんだよ",
+			"url": "https://clips.magical.fm/magicalfm-279-clip-12b8ba9b.mp4",
+			"episodeUrl": "https://magical.fm/ep/279",
+			"youtube": {
+				"id": "uS_BQ0i_rKQ",
+				"url": "https://www.youtube.com/shorts/uS_BQ0i_rKQ",
+				"privacyStatus": "unlisted",
+				"publishedAt": "2026-08-30T15:51:34.086Z"
+			},
+			"instagram": {
+				"id": "17954082711248807",
+				"url": "https://www.instagram.com/reel/Dcq4DXjDZaN/",
+				"publishedAt": "2026-08-30T15:52:08.993Z"
+			}
+		}
 	]
 }

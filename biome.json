@@ -7,7 +7,7 @@
 	},
 	"files": {
 		"ignoreUnknown": false,
-		"ignore": []
+		"ignore": ["video/src/data/episode.json"]
 	},
 	"formatter": {
 		"enabled": true,
