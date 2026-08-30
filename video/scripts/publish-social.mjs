@@ -144,7 +144,7 @@ const ensureLocalFile = async (url, base) => {
 const truncate = (text, limit) =>
 	text.length <= limit ? text : `${text.slice(0, limit - 1)}…`;
 
-const buildMetadata = ({ episode, clipEntry }) => {
+const buildMetadata = ({ episode, clipEntry, base }) => {
 	const ep = episodes.find((e) => e.number === Number(episode));
 	if (!ep) throw new Error(`Episode #${episode} not found in episodes.json`);
 
@@ -152,8 +152,14 @@ const buildMetadata = ({ episode, clipEntry }) => {
 	const episodeTitle = ep.title.replace(/^#\d+:\s*/, "");
 	const episodeUrl = `${SITE_URL}/ep/${ep.customPath || ep.number}`;
 
-	const planPath = path.join(videoDir, "plans", `ep-${episode}.json`);
-	const plan = fs.existsSync(planPath) ? readJson(planPath) : null;
+	// 同一エピソードに複数クリップがある場合、magicalfm-279-clip-2 → plans/ep-279-2.json のように
+	// ベース名の連番をプラン名に引き継ぐ
+	const suffix = base?.match(/^magicalfm-\d+-clip(-\d+)$/)?.[1] ?? "";
+	const planPath = [
+		path.join(videoDir, "plans", `ep-${episode}${suffix}.json`),
+		path.join(videoDir, "plans", `ep-${episode}.json`),
+	].find((p) => fs.existsSync(p));
+	const plan = planPath ? readJson(planPath) : null;
 	const clipTitle =
 		plan?.clipTitleLines?.join("") ?? clipEntry?.label ?? episodeTitle;
 
