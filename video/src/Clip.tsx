@@ -57,7 +57,7 @@ export function Sticker({
 	);
 }
 
-function CaptionWord({ word, t }: { word: Word; t: number }) {
+export function CaptionWord({ word, t }: { word: Word; t: number }) {
 	const spoken = t >= word.end;
 	const active = t >= word.start && t < word.end;
 

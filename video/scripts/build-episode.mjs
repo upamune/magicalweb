@@ -38,7 +38,7 @@ if (!number) {
 }
 
 const FPS = 15;
-const MAX_LINE_CHARS = 17;
+const MAX_LINE_CHARS = 22;
 const MAX_LINES_PER_PAGE = 2;
 const HOLD_SEC = 1.5;
 const BATCH = 30;
@@ -60,9 +60,35 @@ const segments = transcript.segments.filter((s) => s.words?.length);
 
 // ---------- 1. 校正（Ollama） ----------
 
-const GLOSSARY = `番組: マヂカル.fm（関西人のPodcast。話者は michiru_da(みちるだ, PM) と upamune(うぱむね, エンジニア)。互いを「みちるさん」「うぱさん」と呼ぶ）
-よくある誤認識: やっぱさん/うばさん→うぱさん、みちるさん、硬くなに→頑なに、本の→ほんまに、プラ1→+1
-番組固有の用語: マヂカル.fm, Slack, Podcast, LISTEN`;
+const GLOSSARY = `番組: マヂカル.fm（関西人のPodcast。話者は michiru_da(みちるだ, PM) と upamune(うぱみゅん, エンジニア)。互いを「みちるさん」「うぱさん」と呼ぶ）
+番組表記: 「マヂカル.fm」（マジカルFM は誤り）、「うぱみゅん」（ウパミン/うぱむね は誤り）、オープニングの決まり文句は「関西人のプロダクトマネージャーみちるだと、関西人(?)のソフトウェアエンジニアのうぱみゅんが週2で配信する雑談ポッドキャスト」
+よくある誤認識: やっぱさん/うばさん→うぱさん、硬くなに→頑なに、本の→ほんまに、プラ1→+1、分振り/文振り→文フリ（文学フリマ）
+番組固有の用語: マヂカル.fm, Slack, Podcast, LISTEN, 文フリ`;
+
+// LLM の校正後に必ず適用する固定置換（表記ゆれを確実に潰す）。「|」区切りを跨いでもマッチする
+const REPLACEMENTS = [
+	["マジカルFM", "マヂカル.fm"],
+	["マジカルfm", "マヂカル.fm"],
+	["マジカル.fm", "マヂカル.fm"],
+	["関西人格好。", "関西人(?)の"],
+	["関西人格好", "関西人(?)"],
+	["ハテナの", ""],
+	["ウパミン", "うぱみゅん"],
+	["うぱみん", "うぱみゅん"],
+	["うぱむね", "うぱみゅん"],
+	["2026様", "2026 Summer"],
+	["分振り", "文フリ"],
+	["文振り", "文フリ"],
+];
+const escapeRe = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+const applyReplacements = (text) => {
+	let out = text;
+	for (const [from, to] of REPLACEMENTS) {
+		const re = new RegExp([...from].map(escapeRe).join("\\|?"), "g");
+		out = out.replace(re, to);
+	}
+	return out.replace(/\|\|+/g, "|").replace(/^\||\|$/g, "");
+};
 
 const topicLine = (episode.description ?? "")
 	.replace(/<[^>]+>/g, "\n")
@@ -267,7 +293,7 @@ const mergeShort = (parts) => {
 };
 
 const chunksOf = (seg) => {
-	const text = proofread[seg.id] ?? seg.text;
+	const text = applyReplacements(proofread[seg.id] ?? seg.text);
 	const parts = mergeShort(
 		text
 			.split("|")
@@ -440,6 +466,4 @@ fs.writeFileSync(dataPath, JSON.stringify({ data }));
 console.error(
 	`wrote ${dataPath} (${pages.length} pages, ${Math.round(durationSec / 60)} min) and ${outAudio}`,
 );
-console.error(
-	`render: bun scripts/render-episode.mjs ${number}`,
-);
+console.error(`render: bun scripts/render-episode.mjs ${number}`);

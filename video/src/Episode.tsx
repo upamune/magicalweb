@@ -8,13 +8,18 @@ import {
 	useCurrentFrame,
 	useVideoConfig,
 } from "remotion";
-import { BODY, Captions, DISPLAY, HOSTS, SpeakerAvatar, Sticker } from "./Clip";
+import {
+	BODY,
+	CaptionWord,
+	DISPLAY,
+	HOSTS,
+	SpeakerAvatar,
+	Sticker,
+} from "./Clip";
 import { C } from "./tokens";
-import type { EpisodeData } from "./types";
+import type { CaptionPage, EpisodeData } from "./types";
 
-const LEFT = 72;
-const LEFT_WIDTH = 640;
-const RIGHT = LEFT + LEFT_WIDTH + 64;
+const SIDE = 72;
 
 function formatTime(sec: number) {
 	const m = Math.floor(sec / 60);
@@ -80,7 +85,8 @@ export const Episode: React.FC<{ data: EpisodeData }> = ({ data }) => {
 			break;
 		}
 	}
-	const page = pageIndex >= 0 ? data.pages[pageIndex] : null;
+	const page: CaptionPage | null =
+		pageIndex >= 0 ? data.pages[pageIndex] : null;
 
 	const activeSpeaker = page?.speaker ?? null;
 	let speakerSince = page ? Math.round(page.start * fps) : 0;
@@ -111,6 +117,10 @@ export const Episode: React.FC<{ data: EpisodeData }> = ({ data }) => {
 	});
 
 	const progress = interpolate(frame, [0, durationInFrames], [0, 1]);
+	const charCount = page
+		? page.lines.flat().reduce((n, w) => n + w.text.length, 0)
+		: 0;
+	const isShort = page !== null && page.lines.length === 1 && charCount <= 8;
 
 	return (
 		<AbsoluteFill
@@ -143,13 +153,13 @@ export const Episode: React.FC<{ data: EpisodeData }> = ({ data }) => {
 				/>
 			</div>
 
-			{/* 左カラム: 話数 / タイトル / 話者 / ブランド */}
+			{/* タイトル行: 話数 → タイトル → 日付 */}
 			<div
 				style={{
 					position: "absolute",
-					top: 90,
-					left: LEFT,
-					width: LEFT_WIDTH,
+					top: 80,
+					left: SIDE,
+					right: SIDE,
 					display: "flex",
 					alignItems: "center",
 					gap: 28,
@@ -158,86 +168,97 @@ export const Episode: React.FC<{ data: EpisodeData }> = ({ data }) => {
 				<Sticker entrance={stickerIn}>#{data.episode.number}</Sticker>
 				<div
 					style={{
+						backgroundColor: C.card,
+						border: `7px solid ${C.ink}`,
+						borderRadius: 40,
+						boxShadow: `12px 12px 0 ${C.ink}`,
+						padding: "18px 40px",
+						fontFamily: DISPLAY,
+						fontSize: 44,
+						color: C.ink,
+						whiteSpace: "nowrap",
+						minWidth: 0,
+						overflow: "hidden",
+						textOverflow: "ellipsis",
+						transform: `scale(${0.9 + titleIn * 0.1})`,
+						opacity: titleIn,
+					}}
+				>
+					{data.episode.titleLines.join("")}
+				</div>
+				<div
+					style={{
 						fontWeight: 700,
 						fontSize: 30,
 						color: C.ink,
 						opacity: 0.72 * stickerIn,
+						whiteSpace: "nowrap",
+						flexShrink: 0,
 					}}
 				>
 					{data.episode.date}
 				</div>
 			</div>
 
+			{/* セリフ枠: 常時表示。中身だけ切り替える */}
 			<div
 				style={{
 					position: "absolute",
-					top: 250,
-					left: LEFT,
-					width: LEFT_WIDTH,
-					transform: `scale(${0.9 + titleIn * 0.1})`,
-					opacity: titleIn,
+					top: 290,
+					left: SIDE,
+					right: SIDE,
+					height: 460,
+					display: "flex",
+					alignItems: "center",
 				}}
 			>
 				<div
 					style={{
+						width: "100%",
+						boxSizing: "border-box",
+						minHeight: 380,
 						backgroundColor: C.card,
-						border: `7px solid ${C.ink}`,
-						borderRadius: 40,
-						boxShadow: `12px 12px 0 ${C.ink}`,
-						padding: "36px 44px",
+						border: `8px solid ${C.ink}`,
+						borderRadius: 48,
+						boxShadow: `16px 16px 0 ${C.ink}`,
+						padding: "64px 72px",
 						fontFamily: DISPLAY,
-						fontSize: 46,
-						lineHeight: 1.42,
+						fontSize: isShort ? 108 : 72,
+						lineHeight: 1.5,
 						color: C.ink,
 						display: "flex",
 						flexDirection: "column",
+						justifyContent: "center",
+						gap: 10,
 					}}
 				>
-					{data.episode.titleLines.map((line) => (
-						<div key={line}>{line}</div>
+					{page?.lines.map((line, li) => (
+						<div
+							key={String(li)}
+							style={{
+								display: "flex",
+								flexWrap: "nowrap",
+								justifyContent: isShort ? "center" : "flex-start",
+							}}
+						>
+							{line.map((word, wi) => (
+								<CaptionWord key={String(wi)} word={word} t={t} />
+							))}
+						</div>
 					))}
 				</div>
 			</div>
 
+			{/* 下段: ブランド + 経過時間 / 話者 + 波形 */}
 			<div
 				style={{
 					position: "absolute",
-					top: 600,
-					left: LEFT,
-					width: LEFT_WIDTH,
+					bottom: 60,
+					left: SIDE,
+					right: SIDE,
 					display: "flex",
 					alignItems: "center",
-					gap: 8,
-				}}
-			>
-				<SpeakerAvatar
-					{...HOSTS.michiru}
-					active={activeSpeaker === "michiru"}
-					activeSinceFrame={speakerSince}
-					frame={frame}
-					fps={fps}
-				/>
-				<div style={{ flex: 1 }}>
-					<EnvelopeBars envelope={data.envelope} frame={frame} />
-				</div>
-				<SpeakerAvatar
-					{...HOSTS.upamune}
-					active={activeSpeaker === "upamune"}
-					activeSinceFrame={speakerSince}
-					frame={frame}
-					fps={fps}
-				/>
-			</div>
-
-			<div
-				style={{
-					position: "absolute",
-					bottom: 72,
-					left: LEFT,
-					width: LEFT_WIDTH,
-					display: "flex",
-					alignItems: "center",
-					gap: 24,
+					gap: 40,
 					opacity: brandIn,
 				}}
 			>
@@ -264,9 +285,8 @@ export const Episode: React.FC<{ data: EpisodeData }> = ({ data }) => {
 				</div>
 				<div
 					style={{
-						marginLeft: "auto",
 						fontWeight: 700,
-						fontSize: 30,
+						fontSize: 28,
 						color: C.ink,
 						opacity: 0.65,
 						fontVariantNumeric: "tabular-nums",
@@ -276,23 +296,24 @@ export const Episode: React.FC<{ data: EpisodeData }> = ({ data }) => {
 				>
 					{formatTime(t)} / {formatTime(data.durationSec)}
 				</div>
-			</div>
-
-			{/* 右カラム: 字幕 */}
-			<div
-				style={{
-					position: "absolute",
-					top: 90,
-					bottom: 72,
-					left: RIGHT,
-					right: LEFT,
-					display: "flex",
-					alignItems: "center",
-				}}
-			>
-				{page && (
-					<Captions page={page} t={t} fps={fps} frame={frame} fontSize={58} />
-				)}
+				<div style={{ flexGrow: 1 }} />
+				<SpeakerAvatar
+					{...HOSTS.michiru}
+					active={activeSpeaker === "michiru"}
+					activeSinceFrame={speakerSince}
+					frame={frame}
+					fps={fps}
+				/>
+				<div style={{ width: 300 }}>
+					<EnvelopeBars envelope={data.envelope} frame={frame} />
+				</div>
+				<SpeakerAvatar
+					{...HOSTS.upamune}
+					active={activeSpeaker === "upamune"}
+					activeSinceFrame={speakerSince}
+					frame={frame}
+					fps={fps}
+				/>
 			</div>
 		</AbsoluteFill>
 	);
