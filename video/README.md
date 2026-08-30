@@ -65,7 +65,7 @@ bunx remotion render src/index.ts Clip out/clip.mp4
 bunx remotion studio
 ```
 
-### 4b. フル尺のビデオポッドキャスト（横1920×1080・15fps）
+### 4b. フル尺のビデオポッドキャスト（横1920×1080・24fps）
 
 同じ Remotion プロジェクトで、エピソード全編に字幕を付けた横動画も作れる（`Episode` Composition）。
 字幕は人手で校正せず、Ollama Cloud の LLM（既定 `deepseek-v4-flash:cloud`）で誤認識修正と語区切りを行い、
@@ -86,7 +86,7 @@ bun scripts/render-episode.mjs 278        # 2000フレームずつ分割レン�
   `--speakers A=michiru,B=upamune` で上書き
 - `src/data/episode.json` と `public/episode.mp3` は git 管理外。`--props` で Composition に渡す
 - 波形は事前計算した RMS エンベロープを使う（フル尺の音声を Remotion 側でデコードしないため）
-- 15fps でも 45分エピソードのレンダリングは M系Mac で 2時間強かかる（約5fps）。
+- 24fps の 45分エピソードで約 64,000 フレーム。M系Mac で 1 時間強かかる（約 15 フレーム/秒）。
   一発の `remotion render` は数千フレームで Chrome がメモリ不足で落ちる（Target closed）ので、
   `render-episode.mjs` がチャンク分割して ffmpeg で結合する。落ちても同じコマンドで再開できる
 

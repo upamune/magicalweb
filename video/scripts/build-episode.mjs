@@ -37,7 +37,7 @@ if (!number) {
 	process.exit(1);
 }
 
-const FPS = 15;
+const FPS = 24;
 const MAX_LINE_CHARS = 22;
 const MAX_LINES_PER_PAGE = 2;
 const HOLD_SEC = 1.5;

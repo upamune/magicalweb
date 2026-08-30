@@ -11,7 +11,7 @@ const episodePlaceholder: EpisodeData = {
 	episode: data.episode,
 	audioFile: "episode.mp3",
 	durationSec: 10,
-	fps: 15,
+	fps: 24,
 	bg: data.bg,
 	envelope: [],
 	pages: [],
@@ -32,8 +32,8 @@ export const RemotionRoot: React.FC = () => {
 			<Composition
 				id="Episode"
 				component={Episode}
-				durationInFrames={Math.ceil(episodePlaceholder.durationSec * 15)}
-				fps={15}
+				durationInFrames={Math.ceil(episodePlaceholder.durationSec * 24)}
+				fps={24}
 				width={1920}
 				height={1080}
 				defaultProps={{ data: episodePlaceholder }}
