@@ -1,13 +1,27 @@
 import fs from "node:fs/promises";
 import path from "node:path";
-import { format, isValid, parseISO } from "date-fns";
-import { ja } from "date-fns/locale";
+import { isValid } from "date-fns";
 import Parser from "rss-parser";
 
 const FEED_URL = "https://listen.style/p/magicalfm/rss";
 const OUTPUT_DIR = "src/data";
 const OUTPUT_FILE = "episodes.json";
 const CUSTOM_PATHS_FILE = "custom-paths.json";
+
+// GitHub Actions は UTC で動くので、配信日は必ず JST で解釈する
+const formatJstDate = (date) => {
+	const parts = Object.fromEntries(
+		new Intl.DateTimeFormat("en-US", {
+			timeZone: "Asia/Tokyo",
+			year: "numeric",
+			month: "numeric",
+			day: "numeric",
+		})
+			.formatToParts(date)
+			.map((part) => [part.type, part.value]),
+	);
+	return `${parts.year}年${Number(parts.month)}月${Number(parts.day)}日`;
+};
 
 const parser = new Parser({
 	customFields: {
@@ -62,9 +76,7 @@ async function fetchAndSaveEpisodes() {
 
 			// Parse the date and validate it before formatting
 			const dateObj = new Date(item.pubDate ?? new Date());
-			const pubDate = isValid(dateObj)
-				? format(dateObj, "yyyy年M月d日", { locale: ja })
-				: format(new Date(), "yyyy年M月d日", { locale: ja });
+			const pubDate = formatJstDate(isValid(dateObj) ? dateObj : new Date());
 
 			// Extract LISTEN ID and check for custom path
 			const listenId = extractListenId(item.content ?? "");
