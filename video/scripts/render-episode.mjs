@@ -91,3 +91,15 @@ execFileSync(
 	},
 );
 console.error(`wrote ${out}`);
+
+// Spotify / YouTube のアップロードで要求されるサムネイル（16:9）も一緒に書き出す
+const thumb = path.join(videoDir, "out", `magicalfm-${number}-thumbnail.png`);
+execFileSync(
+	"bun",
+	["scripts/generate-og.jsx", "--thumbnail", String(number)],
+	{
+		cwd: path.resolve(videoDir, ".."),
+		stdio: "inherit",
+	},
+);
+console.error(`wrote ${thumb}`);

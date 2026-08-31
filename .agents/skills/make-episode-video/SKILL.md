@@ -69,7 +69,9 @@ OK が出てから次へ。デザイン変更の要望はここで `src/Episode.
 nohup bun scripts/render-episode.mjs N > /tmp/render-N.log 2>&1 &
 ```
 
-- 2000 フレームずつ `out/episode-N-chunks/` に書き、最後に ffmpeg で `out/magicalfm-N-episode.mp4` に結合
+- 2000 フレームずつ `out/episode-N-chunks/` に書き、最後に ffmpeg で `out/magicalfm-N-episode.mp4` に結合し、
+  Spotify / YouTube のアップロードで要求される 16:9 サムネイル `out/magicalfm-N-thumbnail.png` も書き出す
+  （OGP と同じ組版エンジン。単体で作り直すなら リポジトリルートで `bun scripts/generate-og.jsx --thumbnail N`）
 - 落ちても同じコマンドで続きから再開できる。デザインを変えたときは `out/episode-N-chunks/` を消してから
 - 進捗はチャンクファイルの数（44分の回なら 32 個で完了）で見る。完了後は `ffprobe` で長さが音声と一致するか確認し、
   後半のフレーム（`ffmpeg -ss 2000 -i out/magicalfm-N-episode.mp4 -frames:v 1 check.png`）で崩れがないか見る
@@ -77,6 +79,9 @@ nohup bun scripts/render-episode.mjs N > /tmp/render-N.log 2>&1 &
 ### 6. 完成報告とコミット
 
 - 完成ファイルは 30MB を超えるので添付できない。`open` で開いてユーザーに見てもらう
+- Spotify へは Spotify for Creators の「エピソード」→ 三点メニュー →「動画をアップロード」で手で上げる
+  （公開 API が無くブラウザ操作のみ。RSS は LISTEN のままでよく、動画は Spotify 内だけで再生される）。
+  このときサムネイルを求められるので `out/magicalfm-N-thumbnail.png` を渡す
 - コミット対象: `transcripts/ep-N.json` / `ep-N.speakers.json` / `ep-N.proofread.json` と、
   `REPLACEMENTS` や `Episode.tsx` を変えていればそれら。`ep-N.raw.json` / `ep-N.mp3` / `out/` は含めない
 - YouTube への投稿は未対応（`publish-social.mjs` は Shorts 前提）。ユーザーが手動でアップロードする

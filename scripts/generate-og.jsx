@@ -44,6 +44,10 @@ const C = {
 	sun: "#FFD23F",
 };
 
+// 1200x630 を基準に、任意サイズへ相似で伸ばすためのスケール
+const scale = (value, s) => Math.round(value * s);
+const px = (value, s) => `${Math.round(value * s)}px`;
+
 // エピソード番号で背景色をローテーション（色面分割の思想）
 const BG_ROTATION = [C.lilac, C.lime, C.sky, C.candy];
 
@@ -51,6 +55,14 @@ const BG_ROTATION = [C.lilac, C.lime, C.sky, C.candy];
 const args = process.argv.slice(2);
 const forceOverwrite = args.includes("--force") || args.includes("-f");
 const generateSite = args.includes("--site");
+
+const thumbnailIndex = args.findIndex((arg) => arg === "--thumbnail");
+const thumbnailNumber =
+	thumbnailIndex !== -1 ? Number.parseInt(args[thumbnailIndex + 1], 10) : null;
+if (thumbnailIndex !== -1 && !Number.isFinite(thumbnailNumber)) {
+	console.error("Error: --thumbnail には話数を指定してください");
+	process.exit(1);
+}
 
 const latestIndex = args.findIndex((arg) => arg === "--latest" || arg === "-l");
 const latestCount =
@@ -348,10 +360,12 @@ function renderLine(line, fontSize, key) {
 // レンダリング
 // ============================================================
 
-async function renderToPng(element, graphemeImages, outPath) {
+async function renderToPng(element, graphemeImages, outPath, size = {}) {
+	const width = size.width ?? WIDTH;
+	const height = size.height ?? HEIGHT;
 	const svg = await satori(element, {
-		width: WIDTH,
-		height: HEIGHT,
+		width,
+		height,
 		fonts: [
 			{ name: "MochiyPopOne", data: fontDisplay, weight: 400, style: "normal" },
 			{
@@ -366,7 +380,7 @@ async function renderToPng(element, graphemeImages, outPath) {
 	});
 
 	const resvg = new Resvg(svg, {
-		fitTo: { mode: "width", value: WIDTH },
+		fitTo: { mode: "width", value: width },
 		background: "white",
 	});
 	fs.writeFileSync(outPath, resvg.render().asPng());
@@ -374,7 +388,7 @@ async function renderToPng(element, graphemeImages, outPath) {
 }
 
 // ステッカー風バッジ
-function Sticker({ children, bg = C.sun, rotate = -3, fontSize = 30 }) {
+function Sticker({ children, bg = C.sun, rotate = -3, fontSize = 30, s = 1 }) {
 	return (
 		<div
 			style={{
@@ -382,13 +396,13 @@ function Sticker({ children, bg = C.sun, rotate = -3, fontSize = 30 }) {
 				alignItems: "center",
 				backgroundColor: bg,
 				color: C.ink,
-				border: `4px solid ${C.ink}`,
+				border: `${px(4, s)} solid ${C.ink}`,
 				borderRadius: "9999px",
-				padding: "8px 26px",
+				padding: `${px(8, s)} ${px(26, s)}`,
 				fontFamily: "MochiyPopOne",
-				fontSize,
+				fontSize: scale(fontSize, s),
 				transform: `rotate(${rotate}deg)`,
-				boxShadow: `5px 5px 0 ${C.ink}`,
+				boxShadow: `${px(5, s)} ${px(5, s)} 0 ${C.ink}`,
 			}}
 		>
 			{children}
@@ -397,19 +411,20 @@ function Sticker({ children, bg = C.sun, rotate = -3, fontSize = 30 }) {
 }
 
 // 番組アートワークのロゴバッジ
-function MicBadge({ size = 56 }) {
+function MicBadge({ size = 56, s = 1 }) {
+	const px2 = scale(size, s);
 	return (
 		<img
 			src={artworkUri}
 			alt=""
-			width={size}
-			height={size}
+			width={px2}
+			height={px2}
 			style={{
-				width: size,
-				height: size,
-				border: `4px solid ${C.ink}`,
+				width: px2,
+				height: px2,
+				border: `${px(4, s)} solid ${C.ink}`,
 				borderRadius: "9999px",
-				boxShadow: `4px 4px 0 ${C.ink}`,
+				boxShadow: `${px(4, s)} ${px(4, s)} 0 ${C.ink}`,
 			}}
 		/>
 	);
@@ -421,17 +436,21 @@ function EpisodeOgp({
 	titleLayout,
 	subtitleLayout,
 	bg,
+	width = WIDTH,
+	height = HEIGHT,
+	s = 1,
 }) {
+	const dot = 3.5 * s;
 	return (
 		<div
 			style={{
-				width: WIDTH,
-				height: HEIGHT,
+				width,
+				height,
 				display: "flex",
 				backgroundColor: bg,
-				backgroundImage: `radial-gradient(circle, ${C.ink}24 3.5px, transparent 3.5px)`,
-				backgroundSize: "30px 30px",
-				padding: "38px 52px 50px 40px",
+				backgroundImage: `radial-gradient(circle, ${C.ink}24 ${dot}px, transparent ${dot}px)`,
+				backgroundSize: `${scale(30, s)}px ${scale(30, s)}px`,
+				padding: `${px(38, s)} ${px(52, s)} ${px(50, s)} ${px(40, s)}`,
 				fontFamily: "MochiyPopOne",
 			}}
 		>
@@ -441,21 +460,21 @@ function EpisodeOgp({
 					display: "flex",
 					flexDirection: "column",
 					backgroundColor: C.card,
-					border: `6px solid ${C.ink}`,
-					borderRadius: "36px",
-					boxShadow: `14px 14px 0 ${C.ink}`,
-					padding: "40px 52px 36px",
+					border: `${px(6, s)} solid ${C.ink}`,
+					borderRadius: px(36, s),
+					boxShadow: `${px(14, s)} ${px(14, s)} 0 ${C.ink}`,
+					padding: `${px(40, s)} ${px(52, s)} ${px(36, s)}`,
 				}}
 			>
 				{/* ヘッダー行: 話数ステッカー + 配信日 */}
-				<div style={{ display: "flex", alignItems: "center", gap: "24px" }}>
-					<Sticker>{`#${episodeNumber}`}</Sticker>
+				<div style={{ display: "flex", alignItems: "center", gap: px(24, s) }}>
+					<Sticker s={s}>{`#${episodeNumber}`}</Sticker>
 					<div
 						style={{
 							display: "flex",
 							fontFamily: "MPLUSRounded1c",
 							fontWeight: 700,
-							fontSize: "24px",
+							fontSize: px(24, s),
 							color: C.muted,
 						}}
 					>
@@ -470,9 +489,9 @@ function EpisodeOgp({
 						display: "flex",
 						flexDirection: "column",
 						justifyContent: "center",
-						gap: "18px",
-						paddingTop: "16px",
-						paddingBottom: "8px",
+						gap: px(18, s),
+						paddingTop: px(16, s),
+						paddingBottom: px(8, s),
 					}}
 				>
 					<div
@@ -523,9 +542,11 @@ function EpisodeOgp({
 						justifyContent: "space-between",
 					}}
 				>
-					<div style={{ display: "flex", alignItems: "center", gap: "18px" }}>
-						<MicBadge />
-						<div style={{ display: "flex", fontSize: "34px", color: C.ink }}>
+					<div
+						style={{ display: "flex", alignItems: "center", gap: px(18, s) }}
+					>
+						<MicBadge s={s} />
+						<div style={{ display: "flex", fontSize: px(34, s), color: C.ink }}>
 							マヂカル
 							<span style={{ color: C.tangerine }}>.fm</span>
 						</div>
@@ -535,7 +556,7 @@ function EpisodeOgp({
 							display: "flex",
 							fontFamily: "MPLUSRounded1c",
 							fontWeight: 700,
-							fontSize: "21px",
+							fontSize: px(21, s),
 							color: C.muted,
 						}}
 					>
@@ -625,7 +646,10 @@ function SiteOgp() {
 // エントリーポイント
 // ============================================================
 
-export async function generateEpisodeOgp(episode, outPath) {
+export async function generateEpisodeOgp(episode, outPath, size = {}) {
+	const width = size.width ?? WIDTH;
+	const height = size.height ?? HEIGHT;
+	const s = width / WIDTH;
 	const fullTitle = episode.title.replace(/~/g, "〜");
 
 	// 「タイトル 〜サブタイトル〜」を分離し、話数プレフィックスはステッカーと重複するので外す
@@ -635,16 +659,16 @@ export async function generateEpisodeOgp(episode, outPath) {
 		: [fullTitle, null];
 	const title = rawTitle.replace(/^#\d+[:：]\s*/, "").trim();
 
-	const contentWidth = 1000;
+	const contentWidth = scale(1000, s);
 	const titleLayout = layoutText(title, {
-		sizes: [76, 68, 60, 54, 48],
+		sizes: [76, 68, 60, 54, 48].map((v) => scale(v, s)),
 		containerWidthPx: contentWidth,
 		maxLines: 3,
 	});
 	const subtitleLayout = subtitle
 		? layoutText(subtitle, {
-				sizes: [34, 30, 26],
-				containerWidthPx: contentWidth - 68, // 前後の「〜」のぶん
+				sizes: [34, 30, 26].map((v) => scale(v, s)),
+				containerWidthPx: contentWidth - scale(68, s), // 前後の「〜」のぶん
 				maxLines: 2,
 			})
 		: null;
@@ -659,15 +683,40 @@ export async function generateEpisodeOgp(episode, outPath) {
 			titleLayout={titleLayout}
 			subtitleLayout={subtitleLayout}
 			bg={bg}
+			width={width}
+			height={height}
+			s={s}
 		/>,
 		graphemeImages,
 		outPath,
+		{ width, height },
 	);
+}
+
+// 動画サービス（Spotify / YouTube）のサムネイル用に 16:9 で書き出す
+export async function generateEpisodeThumbnail(episode, outPath) {
+	await generateEpisodeOgp(episode, outPath, { width: 1920, height: 1080 });
 }
 
 async function main() {
 	if (!fs.existsSync(OUT_DIR)) {
 		fs.mkdirSync(OUT_DIR, { recursive: true });
+	}
+
+	// 動画用サムネイル（16:9）。video/out/ に書き出す
+	if (thumbnailNumber !== null) {
+		const episode = episodesData.find((e) => e.number === thumbnailNumber);
+		if (!episode) {
+			console.error(`Error: #${thumbnailNumber} が episodes.json にありません`);
+			process.exit(1);
+		}
+		const dir = path.join(process.cwd(), "video", "out");
+		fs.mkdirSync(dir, { recursive: true });
+		await generateEpisodeThumbnail(
+			episode,
+			path.join(dir, `magicalfm-${thumbnailNumber}-thumbnail.png`),
+		);
+		return;
 	}
 
 	// サイト全体のOGP

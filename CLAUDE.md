@@ -15,6 +15,7 @@ bun scripts/fetch-episodes.js              # RSSから episodes.json を更新
 bun scripts/generate-og.jsx --latest 5     # 新着エピソードのOGP生成
 bun scripts/generate-og.jsx --site         # サイト全体用 public/ogp.png を生成
 bun scripts/generate-og.jsx --force        # 全話再生成（OGPデザイン変更時のみ）
+bun scripts/generate-og.jsx --thumbnail 280 # 動画用サムネイル(16:9)を video/out/ に生成
 ```
 
 ## アーキテクチャの要点
