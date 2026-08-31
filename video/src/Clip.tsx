@@ -15,8 +15,8 @@ import { C } from "./tokens";
 import type { CaptionPage, ClipData, Word } from "./types";
 
 export const HOSTS = {
-	michiru: { name: "michiru_da", avatar: "host-michiru.png" },
-	upamune: { name: "upamune", avatar: "host-upamune.png" },
+	michiru: { name: "みちるだ", avatar: "host-michiru.png" },
+	upamune: { name: "うぱ", avatar: "host-upamune.png" },
 } as const;
 
 export const FPS = 30;

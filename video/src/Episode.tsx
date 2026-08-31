@@ -97,14 +97,16 @@ export const Episode: React.FC<{ data: EpisodeData }> = ({ data }) => {
 		}
 	}
 
+	const firstSpeechFrame = Math.round((data.pages[0]?.start ?? 0) * fps);
+	// 上段の号数・タイトルは読み上げが始まった瞬間にブワーンとポップイン
 	const stickerIn = spring({
-		frame,
+		frame: frame - firstSpeechFrame,
 		fps,
 		config: { damping: 12, stiffness: 180 },
 		durationInFrames: 12,
 	});
 	const titleIn = spring({
-		frame: frame - 4,
+		frame: frame - firstSpeechFrame - 4,
 		fps,
 		config: { damping: 14, stiffness: 160 },
 		durationInFrames: 12,
@@ -121,6 +123,7 @@ export const Episode: React.FC<{ data: EpisodeData }> = ({ data }) => {
 		? page.lines.flat().reduce((n, w) => n + w.text.length, 0)
 		: 0;
 	const isShort = page !== null && page.lines.length === 1 && charCount <= 8;
+	const beforeFirstSpeech = t < (data.pages[0]?.start ?? 0);
 
 	return (
 		<AbsoluteFill
@@ -232,20 +235,37 @@ export const Episode: React.FC<{ data: EpisodeData }> = ({ data }) => {
 						gap: 10,
 					}}
 				>
-					{page?.lines.map((line, li) => (
+					{beforeFirstSpeech ? (
 						<div
-							key={String(li)}
 							style={{
+								width: "100%",
 								display: "flex",
-								flexWrap: "nowrap",
-								justifyContent: isShort ? "center" : "flex-start",
+								alignItems: "center",
+								justifyContent: "center",
+								gap: 32,
 							}}
 						>
-							{line.map((word, wi) => (
-								<CaptionWord key={String(wi)} word={word} t={t} />
-							))}
+							<Sticker entrance={1}>#{data.episode.number}</Sticker>
+							<div style={{ fontSize: 88 }}>
+								{data.episode.titleLines.join("")}
+							</div>
 						</div>
-					))}
+					) : (
+						page?.lines.map((line, li) => (
+							<div
+								key={String(li)}
+								style={{
+									display: "flex",
+									flexWrap: "nowrap",
+									justifyContent: isShort ? "center" : "flex-start",
+								}}
+							>
+								{line.map((word, wi) => (
+									<CaptionWord key={String(wi)} word={word} t={t} />
+								))}
+							</div>
+						))
+					)}
 				</div>
 			</div>
 
