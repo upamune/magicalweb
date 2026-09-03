@@ -13,7 +13,7 @@ description: エピソード全編に字幕を付けた横動画（1920×1080・
 ## 前提
 
 - `ollama` が起動していて `deepseek-v4-flash:cloud` が使えること（`ollama list` で確認）
-- `video/.env` に `ASSEMBLYAI_API_KEY`
+- `video/.env` に `ELEVENLABS_API_KEY`（Speech to Text 権限付きのキー）
 - `ffmpeg` / `ffprobe`
 
 ## 手順
@@ -21,11 +21,12 @@ description: エピソード全編に字幕を付けた横動画（1920×1080・
 ### 1. 文字起こし（話者分離付き）
 
 `video/transcripts/ep-N.json` があれば飛ばす。無ければ `src/data/episodes.json` の
-`audioUrl` を AssemblyAI に渡す（44分で約80秒）:
+`audioUrl` を ElevenLabs Scribe v2 に渡す（44分で約1分）:
 
 ```bash
 cd video
-bun scripts/transcribe-cloud.mjs assemblyai "<audioUrl>" transcripts/ep-N.json --keyterms "説明文の / 区切りトピック"
+bun scripts/transcribe-cloud.mjs elevenlabs "<audioUrl>" transcripts/ep-N.json --keyterms "説明文の / 区切りトピック"
+curl -sL "<audioUrl>" -o transcripts/ep-N.mp3   # 文字起こしと同じタイミングで音声も保存する（LISTEN は後日音声を差し替えることがある）
 ```
 
 ### 2. 校正とデータ生成

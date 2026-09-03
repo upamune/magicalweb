@@ -7,6 +7,7 @@ import fs from "node:fs";
 //
 // 音声のRMSエネルギー（笑い声・声量が大きい区間で高くなる）で窓をスコアリングし、
 // 各候補の文字起こしテキストを添えて出力する。最終的な選定は人間/AIが行う。
+// 文字起こしに音声イベント（ElevenLabs の [笑い] 等）があれば、窓内の笑いの数を加点する。
 
 const args = process.argv.slice(2);
 const positional = args.filter((a) => !a.startsWith("--"));
@@ -61,13 +62,42 @@ for (let s = 0; s < totalSec; s++) {
 	rms[s] = Math.sqrt(sum / SAMPLE_RATE);
 }
 
-// 窓ごとの平均エネルギー
-const scores = [];
+// 各候補窓の文字起こしを添える（mlx-whisperはNaNを出力することがあるので潰す）
+const transcript = JSON.parse(
+	fs.readFileSync(transcriptPath, "utf8").replace(/\bNaN\b/g, "null"),
+);
+const segments = transcript.segments ?? [];
+const laughs = (transcript.events ?? []).filter((e) =>
+	/笑|laugh/i.test(e.label),
+);
+
+// 文字起こし時の音声と手元の音声が別物なら字幕がずれるので止める（LISTEN は公開後に音声を差し替えることがある）
+if (
+	transcript.audioDuration &&
+	Math.abs(transcript.audioDuration - totalSec) > 1.5
+) {
+	console.error(
+		`音声の長さが文字起こし時（${transcript.audioDuration}s）と手元（${totalSec}s）で食い違っています。同じ音声で文字起こしをやり直してください。`,
+	);
+	process.exit(2);
+}
+
+// 窓ごとの平均エネルギー（最大値で正規化）に、窓内の笑いイベント1件につき 0.15 を加点する
+const LAUGH_BONUS = 0.15;
+const windows = [];
 for (let s = 0; s + windowSec <= totalSec; s++) {
 	let sum = 0;
 	for (let i = 0; i < windowSec; i++) sum += rms[s + i];
-	scores.push({ start: s, score: sum / windowSec });
+	const laughCount = laughs.filter(
+		(e) => e.start >= s && e.start < s + windowSec,
+	).length;
+	windows.push({ start: s, energy: sum / windowSec, laughCount });
 }
+const maxEnergy = Math.max(...windows.map((w) => w.energy), 1e-9);
+const scores = windows.map((w) => ({
+	...w,
+	score: w.energy / maxEnergy + w.laughCount * LAUGH_BONUS,
+}));
 
 // 重複しない上位窓を選ぶ
 scores.sort((a, b) => b.score - a.score);
@@ -80,21 +110,15 @@ for (const w of scores) {
 }
 picked.sort((a, b) => a.start - b.start);
 
-// 各候補窓の文字起こしを添える（mlx-whisperはNaNを出力することがあるので潰す）
-const transcript = JSON.parse(
-	fs.readFileSync(transcriptPath, "utf8").replace(/\bNaN\b/g, "null"),
-);
-const segments = transcript.segments ?? [];
-
 const fmt = (sec) =>
 	`${Math.floor(sec / 60)}:${String(Math.floor(sec % 60)).padStart(2, "0")}`;
 
 console.log(
-	`エネルギー上位 ${picked.length} 窓（${windowSec}秒窓 / 全${fmt(totalSec)}）\n`,
+	`エネルギー上位 ${picked.length} 窓（${windowSec}秒窓 / 全${fmt(totalSec)} / 笑いイベント${laughs.length}件）\n`,
 );
 for (const [rank, w] of picked.entries()) {
 	console.log(
-		`── 候補${rank + 1}: ${fmt(w.start)}〜${fmt(w.start + windowSec)} (${w.start}s〜) score=${w.score.toFixed(4)}`,
+		`── 候補${rank + 1}: ${fmt(w.start)}〜${fmt(w.start + windowSec)} (${w.start}s〜) score=${w.score.toFixed(3)} energy=${w.energy.toFixed(4)} 笑い=${w.laughCount}`,
 	);
 	for (const seg of segments) {
 		if (seg.end >= w.start && seg.start <= w.start + windowSec) {

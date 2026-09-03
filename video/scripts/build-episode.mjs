@@ -90,6 +90,12 @@ const REPLACEMENTS = [
 	["ウパミン", "うぱみゅん"],
 	["うぱみん", "うぱみゅん"],
 	["うぱむね", "うぱみゅん"],
+	["うぱむん", "うぱみゅん"],
+	["ぱむゆん", "うぱみゅん"],
+	["upamune", "うぱみゅん"],
+	["michiru_da", "みちるだ"],
+	["括弧ハテナの", "(?)の"],
+	["括弧はてなの", "(?)の"],
 	["ウパさん", "うぱさん"],
 	["おばさん", "うぱさん"],
 	["お父さん", "うぱさん"],
@@ -465,6 +471,15 @@ const durationSec = Number(
 		.toString()
 		.trim(),
 );
+// LISTEN は公開後に音声を差し替えることがある。文字起こし時と別の音声なら字幕がずれるので止める
+if (
+	transcript.audioDuration &&
+	Math.abs(transcript.audioDuration - durationSec) > 1.5
+) {
+	throw new Error(
+		`音声の長さが文字起こし時（${transcript.audioDuration}s）と ${audioPath}（${durationSec}s）で食い違っています。同じ音声で文字起こしをやり直してください`,
+	);
+}
 
 // 1フレームあたりの RMS（0〜1）。8kHz mono の PCM を読んで計算する
 const SR = 8000;

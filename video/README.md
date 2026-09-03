@@ -11,15 +11,18 @@
 mlx_whisper episode.mp3 --model mlx-community/whisper-large-v3-turbo \
   --language ja --word-timestamps True --output-format json
 
-# 例: AssemblyAI (クラウド routine が使う。話者分離付きの ep.speakers.json も出る)
-ASSEMBLYAI_API_KEY=... bun scripts/transcribe-cloud.mjs assemblyai "<mp3 URL>" ep.json --keyterms "用語,用語"
+# 標準: ElevenLabs Scribe v2（話者分離付きの ep.speakers.json と [笑い] イベントも出る）
+ELEVENLABS_API_KEY=... bun scripts/transcribe-cloud.mjs elevenlabs "<mp3 URL>" ep.json --keyterms "用語,用語"
+# assemblyai / soniox も同じ形で選べる。比較は scripts/compare-transcripts.mjs（5話比較の結果: ElevenLabs が固有名詞と話者分離で最良）
 
 # 例: faster-whisper (Linux amd64 / CPU・CUDA)。最新話をDLして transcripts/ep-N.json に保存
 bun scripts/transcribe-local.mjs            # 要 uv
 ```
 
 クラウドの routine（月・木 04:00 JST）が最新話のクリップを無人で生成・アップロードする。
-`transcripts/ep-N.json` がコミットされていればそれを使い、無ければ AssemblyAI で文字起こしする。
+`transcripts/ep-N.json` がコミットされていればそれを使い、無ければ ElevenLabs で文字起こしする。
+文字起こし JSON の `audioDuration` は文字起こし時の音声長で、LISTEN が公開後に音声を差し替えた場合（#279 で 2.5 秒伸びた）に
+`find-highlights.mjs` / `build-episode.mjs` が手元の音声との食い違いを検出して止まる。その場合は音声を落とし直して文字起こしからやり直す。
 
 ### 2. ハイライト検出
 
@@ -27,7 +30,7 @@ bun scripts/transcribe-local.mjs            # 要 uv
 bun scripts/find-highlights.mjs episode.mp3 whisper.json --top 5
 ```
 
-- 音声の RMS エネルギーで盛り上がり（笑い声）の候補窓をランキングし、文字起こし付きで表示
+- 音声の RMS エネルギーと文字起こしの [笑い] イベント数で盛り上がりの候補窓をランキングし、文字起こし付きで表示
 - 候補の前後を読んで、オチが決まる 20〜40秒 を選ぶ
 
 エピソード番号を渡すだけで全工程を回す場合は Claude Code で `/make-clip` スキルを使う。
@@ -73,7 +76,7 @@ bunx remotion studio
 
 ```bash
 cd video
-bun scripts/transcribe-cloud.mjs assemblyai "<mp3 URL>" transcripts/ep-278.json   # 文字起こし（話者分離付き）
+bun scripts/transcribe-cloud.mjs elevenlabs "<mp3 URL>" transcripts/ep-278.json   # 文字起こし（話者分離付き）
 bun scripts/build-episode.mjs 278                                                  # 校正→ページ化→ episode.json / episode.mp3
 bun scripts/render-episode.mjs 278        # 2000フレームずつ分割レンダリング → out/magicalfm-278-episode.mp4
 ```

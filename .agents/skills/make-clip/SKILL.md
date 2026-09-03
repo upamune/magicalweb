@@ -11,7 +11,8 @@ description: エピソード番号またはLISTENのプレビューURLから「�
 ## 前提ツール
 
 - `ffmpeg`（必須）
-- 文字起こし: mlx-whisper。スクラッチパッドに venv を作って使う:
+- 文字起こし: ElevenLabs Scribe v2（`video/.env` の `ELEVENLABS_API_KEY`。Speech to Text 権限が必要）。
+  キーが無いときのフォールバックは mlx-whisper（話者分離なし）。スクラッチパッドに venv を作って使う:
 
 ```bash
 python3 -m venv $SCRATCHPAD/venv && $SCRATCHPAD/venv/bin/pip install -q mlx-whisper
@@ -51,13 +52,25 @@ bun scripts/fetch-listen-transcript.mjs $SCRATCHPAD/preview.html listen.json  # 
 ### 2. 文字起こし（単語タイムスタンプ付き）
 
 ```bash
+cd video && bun scripts/transcribe-cloud.mjs elevenlabs "<audioUrl>" $SCRATCHPAD/ep.json --keyterms "<説明文の / 区切りトピック>"
+```
+
+44分で約1分。出力は mlx-whisper 互換（`segments[].words[]`）で、同時に `ep.speakers.json`（話者分離、
+`fetch-listen-transcript.mjs` と同形式）と `events`（`[笑い]` のタイムスタンプ）も入る。
+**音声は文字起こしと同じタイミングでダウンロードする**。LISTEN は公開後に音声を差し替えることがあり、
+JSON の `audioDuration` と手元の音声の長さが 1.5 秒以上違うと `find-highlights.mjs` が止まる。
+その場合は音声を落とし直して文字起こしからやり直す。
+
+ElevenLabs はサービス名を英字（Twitter / Netflix）、口語をひらがなで書くことがあるので、手順 4 の校正で番組の表記に揃える。
+
+`ELEVENLABS_API_KEY` が無いときのフォールバック（話者分離なし・数分かかるのでバックグラウンド実行）:
+
+```bash
 $SCRATCHPAD/venv/bin/mlx_whisper ep.mp3 \
   --model mlx-community/whisper-large-v3-turbo \
   --language ja --word-timestamps True \
   --output-dir $SCRATCHPAD --output-format json --verbose False
 ```
-
-19分エピソードで数分かかるので **バックグラウンド実行** し、待ち時間に他の準備を進める。
 
 ### 3. ハイライト候補の検出
 
@@ -65,7 +78,7 @@ $SCRATCHPAD/venv/bin/mlx_whisper ep.mp3 \
 cd video && bun scripts/find-highlights.mjs <ep.mp3> <whisper.json> --top 5
 ```
 
-RMSエネルギー上位の窓が文字起こし付きで出る。**スコアはあくまで候補**。
+RMSエネルギー（最大値で正規化）に窓内の `[笑い]` イベント数を加点したスコア上位の窓が文字起こし付きで出る。**スコアはあくまで候補**。
 各候補の前後の文脈を transcript で読み、以下の基準で1つ選ぶ:
 
 - **オチで終わる**（言い切りの一言・ツッコミで締まる）
@@ -174,15 +187,14 @@ YouTube Shorts / Instagram Reels への投稿は **`post-clip` スキル**に従
   `cd video && bun scripts/next-clip-target.mjs` を実行。終了コード 3（クリップ済み）なら
   何もせず正常終了する。出力 JSON の `audioUrl` を DL し、`listenUrl` を
   `fetch-listen-transcript.mjs` に渡す
-- **文字起こし**: クラウドでは mlx-whisper が使えないので手順 2 の代わりに:
-  - `transcriptPath` が非 null（手元で `transcribe-local.mjs` を実行してコミット済み）ならそれを使う
-  - 無ければ `bun scripts/transcribe-cloud.mjs assemblyai "<audioUrl>" ep.json --keyterms "<keyterms>"`
-    （要 `ASSEMBLYAI_API_KEY`。44分で約1分）。出力は mlx-whisper 互換で、
-    同時に書かれる `ep.speakers.json` は `fetch-listen-transcript.mjs` の出力と同形式の話者分離
-    （LISTEN と 93% 一致。0/1 が誰かは同様に文脈で決める）。LISTEN が取れればそちらと突き合わせ、
+- **文字起こし**: 手順 2 と同じく `bun scripts/transcribe-cloud.mjs elevenlabs "<audioUrl>" ep.json --keyterms "<keyterms>"`
+  （要 `ELEVENLABS_API_KEY`。44分で約1分）。
+  - `transcriptPath` が非 null（コミット済みの文字起こしがある）でも、その JSON の `audioDuration` が
+    ダウンロードした音声の長さと 1.5 秒以上違えば使わず、文字起こしをやり直す（`find-highlights.mjs` が検出して止まる）
+  - 同時に書かれる `ep.speakers.json` は `fetch-listen-transcript.mjs` の出力と同形式の話者分離
+    （LISTEN と 97% 一致。0/1 が誰かは同様に文脈で決める）。LISTEN が取れればそちらと突き合わせ、
     取れなければ `ep.speakers.json` のみで割り当てる
-  - AssemblyAI は「代官山→大関山」「upamune→オパミン」のような固有名詞の誤りが残るので
-    手順 4 の校正は特に丁寧に行う
+  - 固有名詞は概ね正しいが、サービス名が英字（Twitter / Netflix）になるので手順 4 の校正で番組の表記に揃える
 - **前提ツール**: `ffmpeg` が無ければ `apt-get install -y ffmpeg` で入れる。
   Remotion はレンダリング時に headless Chrome を自動 DL する
 - **ネットワーク**: クラウドサンドボックスは HTTPS を中間プロキシ経由にしており、
