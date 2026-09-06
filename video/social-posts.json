@@ -116,5 +116,45 @@
 				"publishedAt": "2026-08-30T19:00:40.110Z"
 			}
 		}
+	],
+	"281": [
+		{
+			"clip": "magicalfm-281-clip",
+			"title": "3週間に1回しか頭を洗わない男",
+			"label": "3週間に1回しか頭洗ってない",
+			"url": "https://clips.magical.fm/magicalfm-281-clip-71eca753.mp4",
+			"episodeUrl": "https://magical.fm/ep/281",
+			"youtube": {
+				"id": "4yAgp4ubNzY",
+				"url": "https://www.youtube.com/shorts/4yAgp4ubNzY",
+				"privacyStatus": "unlisted",
+				"publishedAt": "2026-09-06T19:34:52.724Z"
+			},
+			"instagram": {
+				"id": "18127662604761367",
+				"url": "https://www.instagram.com/reel/Dc9TLCdlTMZ/",
+				"publishedAt": "2026-09-06T19:35:28.322Z"
+			}
+		}
+	],
+	"282": [
+		{
+			"clip": "magicalfm-282-clip",
+			"title": "今年、あと4ヶ月しかない",
+			"label": "今年あと4ヶ月しかないことに気づく",
+			"url": "https://clips.magical.fm/magicalfm-282-clip-2a35a141.mp4",
+			"episodeUrl": "https://magical.fm/ep/282",
+			"youtube": {
+				"id": "bcP_PSo6hWQ",
+				"url": "https://www.youtube.com/shorts/bcP_PSo6hWQ",
+				"privacyStatus": "unlisted",
+				"publishedAt": "2026-09-06T19:35:32.179Z"
+			},
+			"instagram": {
+				"id": "18015380465926216",
+				"url": "https://www.instagram.com/reel/Dc9TP49CYBB/",
+				"publishedAt": "2026-09-06T19:36:05.257Z"
+			}
+		}
 	]
 }

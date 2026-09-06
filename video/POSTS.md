@@ -7,6 +7,8 @@ YouTube は既定で限定公開なので、内容を確認してから YouTube 
 
 | 話数 | クリップ | YouTube | Instagram | 動画 |
 | --- | --- | --- | --- | --- |
+| [#282](https://magical.fm/ep/282) | 今年、あと4ヶ月しかない | [限定公開](https://www.youtube.com/shorts/bcP_PSo6hWQ) 2026/09/06 | [公開](https://www.instagram.com/reel/Dc9TP49CYBB/) 2026/09/06 | [mp4](https://clips.magical.fm/magicalfm-282-clip-2a35a141.mp4) |
+| [#281](https://magical.fm/ep/281) | 3週間に1回しか頭を洗わない男 | [限定公開](https://www.youtube.com/shorts/4yAgp4ubNzY) 2026/09/06 | [公開](https://www.instagram.com/reel/Dc9TLCdlTMZ/) 2026/09/06 | [mp4](https://clips.magical.fm/magicalfm-281-clip-71eca753.mp4) |
 | [#280](https://magical.fm/ep/280) | 楽譜書き起こしAI、待たれる | [限定公開](https://www.youtube.com/shorts/PBge4f4Ir-g) 2026/08/30 | [公開](https://www.instagram.com/reel/DcrNlmbD_3B/) 2026/08/30 | [mp4](https://clips.magical.fm/magicalfm-280-clip-197f5512.mp4) |
 | [#279](https://magical.fm/ep/279) | 映画館で寝落ちする男の言い訳 | [限定公開](https://www.youtube.com/shorts/uS_BQ0i_rKQ) 2026/08/30 | [公開](https://www.instagram.com/reel/Dcq4DXjDZaN/) 2026/08/30 | [mp4](https://clips.magical.fm/magicalfm-279-clip-12b8ba9b.mp4) |
 | [#279](https://magical.fm/ep/279) | 喋れるのはハチワレだけ | [限定公開](https://www.youtube.com/shorts/JDdiXd8JaZc) 2026/08/30 | [公開](https://www.instagram.com/reel/Dcq8f5SjBpK/) 2026/08/30 | [mp4](https://clips.magical.fm/magicalfm-279-clip-2-61e599fc.mp4) |
