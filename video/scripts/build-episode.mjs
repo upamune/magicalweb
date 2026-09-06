@@ -154,6 +154,18 @@ const REPLACEMENTS = [
 	["ライブで使うウェルキーボード", "ライブで使うキーボード"],
 	["石原君のオリジナルソングの", "一緒に組んどる"],
 	["文振り", "文フリ"],
+	["ゲズ書店", "技術書典"],
+	["はちわれ", "ハチワレ"],
+	["アセンブリAI", "AssemblyAI"],
+	["この村上さんは", "この村山さんは"],
+	["Listen", "LISTEN"],
+	["AppleMusic", "Apple Music"],
+	["ApplePodcast", "Apple Podcast"],
+	["YouTubeMusic", "YouTube Music"],
+	["若い彼氏の頃の思いね", "若かりし頃の思い出ね"],
+	["#マヂカルFM、全部小文字", "#magicalfm"],
+	["#マヂカル.fm、全部小文字", "#magicalfm"],
+	["ハッシュタグマヂカル.fm全部小文字", "ハッシュタグ #magicalfm"],
 ];
 const escapeRe = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 const applyReplacements = (text) => {
