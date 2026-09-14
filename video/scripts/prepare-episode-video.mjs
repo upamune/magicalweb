@@ -24,6 +24,14 @@ const manifest = JSON.parse(fs.readFileSync(manifestPath, "utf8"));
 const propsPath = path.join(videoDir, "src/data/episode.json");
 const props = JSON.parse(fs.readFileSync(propsPath, "utf8"));
 const { data } = props;
+if (
+	manifest.episodeNumber !== undefined &&
+	manifest.episodeNumber !== data.episode.number
+) {
+	throw new Error(
+		`Manifest is for #${manifest.episodeNumber}, episode.json is for #${data.episode.number}; build the matching master first`,
+	);
+}
 if (!Array.isArray(manifest.videoSegments))
 	throw new Error("Manifest must contain videoSegments");
 validateVideoSegments(manifest.videoSegments, data.durationSec, data.fps);

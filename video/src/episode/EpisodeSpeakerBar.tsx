@@ -1,56 +1,32 @@
 import { Img, staticFile } from "remotion";
-import { BODY, HOSTS } from "../Clip";
-import { C } from "../tokens";
+import { HOSTS } from "../Clip";
 import type { Speaker } from "../types";
 
+export const SPEAKER_COLORS: Record<Speaker, string> = {
+	michiru: "#ff8bd8",
+	upamune: "#65d9ff",
+	guest: "#ffe366",
+};
+
+// Street view shows only the current host, immediately left of their telop.
 export function EpisodeSpeakerBar({
 	activeSpeaker,
 }: { activeSpeaker: Speaker | null }) {
+	if (!activeSpeaker || activeSpeaker === "guest") return null;
+	const host = HOSTS[activeSpeaker];
 	return (
-		<div
+		<Img
+			src={staticFile(host.avatar)}
+			alt={host.name}
 			style={{
-				display: "flex",
-				justifyContent: "center",
-				gap: 48,
-				fontFamily: BODY,
+				width: 116,
+				height: 116,
+				flexShrink: 0,
+				borderRadius: "50%",
+				objectFit: "cover",
+				border: "6px solid white",
+				boxShadow: `0 0 0 4px ${SPEAKER_COLORS[activeSpeaker]}, 0 3px 5px #0008`,
 			}}
-		>
-			{(["michiru", "upamune"] as const).map((speaker) => {
-				const active = activeSpeaker === speaker;
-				const host = HOSTS[speaker];
-				return (
-					<div
-						key={speaker}
-						style={{
-							display: "flex",
-							alignItems: "center",
-							gap: 16,
-							opacity: active ? 1 : 0.65,
-						}}
-					>
-						<Img
-							src={staticFile(host.avatar)}
-							style={{
-								width: 64,
-								height: 64,
-								borderRadius: "50%",
-								objectFit: "cover",
-								border: `4px solid ${active ? C.sun : "white"}`,
-								transform: `scale(${active ? 1.08 : 1})`,
-							}}
-						/>
-						<span
-							style={{
-								color: active ? C.sun : "white",
-								fontSize: 28,
-								fontWeight: 700,
-							}}
-						>
-							{host.name}
-						</span>
-					</div>
-				);
-			})}
-		</div>
+		/>
 	);
 }

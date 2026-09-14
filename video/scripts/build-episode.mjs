@@ -29,6 +29,9 @@ const model = opt(
 const speakersArg = opt("--speakers", null);
 const audioArg = opt("--audio", null);
 const transcriptArg = opt("--transcript", null);
+const episodeMetaArg = opt("--episode-meta", null);
+const noProofread = argv.includes("--no-proofread");
+if (noProofread) argv.splice(argv.indexOf("--no-proofread"), 1);
 if (audioArg && !fs.existsSync(audioArg))
 	throw new Error(`Master audio not found: ${audioArg}`);
 const number = Number(argv[0]);
@@ -48,10 +51,21 @@ const CONTEXT = 3;
 const CONCURRENCY = 4;
 const OLLAMA = process.env.OLLAMA_HOST ?? "http://localhost:11434";
 
-const episodes = JSON.parse(
-	fs.readFileSync(path.join(root, "src/data/episodes.json"), "utf8"),
-);
-const episode = episodes.find((e) => e.number === number);
+const episode = episodeMetaArg
+	? JSON.parse(fs.readFileSync(episodeMetaArg, "utf8"))
+	: JSON.parse(
+			fs.readFileSync(path.join(root, "src/data/episodes.json"), "utf8"),
+		).find((e) => e.number === number);
+if (
+	episode &&
+	(episode.number !== number ||
+		typeof episode.title !== "string" ||
+		typeof episode.pubDate !== "string")
+) {
+	throw new Error(
+		"Episode metadata must contain the matching number, title and pubDate",
+	);
+}
 if (!episode) throw new Error(`episode #${number} not found in episodes.json`);
 
 const transcriptPath =
@@ -227,6 +241,10 @@ const proofread = fs.existsSync(proofreadPath)
 const saveProofread = () =>
 	fs.writeFileSync(proofreadPath, `${JSON.stringify(proofread, null, "\t")}\n`);
 
+if (noProofread) {
+	for (const segment of segments)
+		proofread[segment.id] = segment.words.map((word) => word.word).join("|");
+}
 const pending = segments.filter((s) => !proofread[s.id]);
 console.error(
 	`#${number}: ${segments.length} segments, ${pending.length} to proofread with ${model}`,

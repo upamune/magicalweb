@@ -33,22 +33,24 @@ export function StreetVideoView({
 					style={{ width: "100%", height: "100%", objectFit: "cover" }}
 				/>
 			</Sequence>
-			<div
-				style={{
-					position: "absolute",
-					bottom: 0,
-					left: 0,
-					right: 0,
-					height: 310,
-					background: "linear-gradient(transparent, rgba(0,0,0,0.78) 35%)",
-				}}
-			/>
-			<div style={{ position: "absolute", left: 160, right: 160, bottom: 140 }}>
-				<EpisodeCaption page={page} t={t} />
-			</div>
-			<div style={{ position: "absolute", left: 72, right: 72, bottom: 48 }}>
-				<EpisodeSpeakerBar activeSpeaker={page?.speaker ?? null} />
-			</div>
+			{page && (
+				<div
+					style={{
+						position: "absolute",
+						left: 80,
+						right: 80,
+						bottom: 64,
+						display: "flex",
+						alignItems: "center",
+						gap: 36,
+					}}
+				>
+					<EpisodeSpeakerBar activeSpeaker={page.speaker ?? null} />
+					<div style={{ flex: 1, minWidth: 0 }}>
+						<EpisodeCaption page={page} t={t} />
+					</div>
+				</div>
+			)}
 		</AbsoluteFill>
 	);
 }

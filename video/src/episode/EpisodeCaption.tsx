@@ -1,6 +1,6 @@
 import { BODY } from "../Clip";
-import { C } from "../tokens";
 import type { CaptionPage } from "../types";
+import { SPEAKER_COLORS } from "./EpisodeSpeakerBar";
 
 export function findCaptionPage(pages: CaptionPage[], t: number) {
 	let lo = 0;
@@ -31,10 +31,14 @@ export function EpisodeCaption({
 			style={{
 				fontFamily: BODY,
 				fontWeight: 700,
-				fontSize: Math.min(52, 1480 / maxChars),
-				lineHeight: 1.4,
-				textAlign: "center",
-				textShadow: "0 2px 6px #000",
+				fontSize: Math.min(72, 1510 / maxChars),
+				lineHeight: 1.3,
+				textAlign: "left",
+				color: SPEAKER_COLORS[page.speaker ?? "guest"],
+				WebkitTextStroke: "8px white",
+				paintOrder: "stroke fill",
+				textShadow:
+					"-3px -3px 0 #222, 3px -3px 0 #222, -3px 3px 0 #222, 3px 3px 0 #222, 0 5px 3px #0009",
 			}}
 		>
 			{page.lines.map((line, li) => (
@@ -43,8 +47,9 @@ export function EpisodeCaption({
 						<span
 							key={String(wi)}
 							style={{
-								color: t >= word.start && t < word.end ? C.sun : "white",
-								opacity: t >= word.start ? 1 : 0.7,
+								display: "inline-block",
+								transform:
+									t >= word.start && t < word.end ? "translateY(-2px)" : "none",
 							}}
 						>
 							{word.text}

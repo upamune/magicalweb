@@ -8,3 +8,5 @@ transcripts/*.raw.json
 work/
 public/episode-video-*
 .episode-video-stage-*/
+__pycache__/
+*.pyc
