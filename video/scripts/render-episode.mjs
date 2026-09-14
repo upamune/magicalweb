@@ -1,6 +1,10 @@
 import { execFileSync } from "node:child_process";
 import fs from "node:fs";
 import path from "node:path";
+import {
+	renderFingerprint,
+	validatePreparedVideo,
+} from "./lib/episode-video.mjs";
 
 // フル尺（Episode）を CHUNK フレームずつ分割レンダリングして ffmpeg で結合する。
 // 一発レンダリングだと Chrome のタブがフレーム数に比例して肥大し数千フレームで落ちる（Target closed）ため。
@@ -32,8 +36,22 @@ if (data.episode.number !== number) {
 		`episode.json is for #${data.episode.number}; run build-episode.mjs ${number} first`,
 	);
 }
+if (!Number.isInteger(chunk) || chunk <= 0)
+	throw new Error("--chunk must be a positive integer");
+if (!Number.isInteger(Number(concurrency)) || Number(concurrency) <= 0)
+	throw new Error("--concurrency must be a positive integer");
+validatePreparedVideo(data, path.join(videoDir, "public"));
+const fingerprint = renderFingerprint(videoDir, propsPath, {
+	chunk,
+	concurrency,
+});
 const totalFrames = Math.ceil(data.durationSec * data.fps);
-const chunkDir = path.join(videoDir, "out", `episode-${number}-chunks`);
+const chunkDir = path.join(
+	videoDir,
+	"out",
+	`episode-${number}-chunks`,
+	fingerprint,
+);
 fs.mkdirSync(chunkDir, { recursive: true });
 
 const parts = [];
@@ -58,6 +76,7 @@ for (let start = 0; start < totalFrames; start += chunk) {
 			`--props=${propsPath}`,
 			`--frames=${start}-${end}`,
 			`--concurrency=${concurrency}`,
+			"--muted",
 		],
 		{ cwd: videoDir, stdio: "inherit" },
 	);
@@ -67,8 +86,19 @@ for (let start = 0; start < totalFrames; start += chunk) {
 	} catch {}
 }
 
+if (
+	renderFingerprint(videoDir, propsPath, { chunk, concurrency }) !== fingerprint
+) {
+	fs.rmSync(chunkDir, { recursive: true, force: true });
+	throw new Error(
+		"Render inputs changed while rendering; discarded inconsistent chunks. Run again with fixed inputs.",
+	);
+}
 const listPath = path.join(chunkDir, "concat.txt");
-fs.writeFileSync(listPath, parts.map((p) => `file '${p}'\n`).join(""));
+fs.writeFileSync(
+	listPath,
+	parts.map((p) => `file '${path.basename(p)}'\n`).join(""),
+);
 const out = path.join(videoDir, "out", `magicalfm-${number}-episode.mp4`);
 execFileSync(
 	"ffmpeg",
@@ -82,8 +112,22 @@ execFileSync(
 		"0",
 		"-i",
 		listPath,
-		"-c",
+		"-i",
+		path.join(videoDir, "public", data.audioFile),
+		"-map",
+		"0:v:0",
+		"-map",
+		"1:a:0",
+		"-c:v",
 		"copy",
+		"-c:a",
+		"aac",
+		"-b:a",
+		"192k",
+		"-t",
+		String(data.durationSec),
+		"-movflags",
+		"+faststart",
 		out,
 	],
 	{

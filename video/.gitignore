@@ -5,3 +5,6 @@ src/data/episode.json
 public/episode.mp3
 transcripts/*.mp3
 transcripts/*.raw.json
+work/
+public/episode-video-*
+.episode-video-stage-*/

@@ -29,6 +29,8 @@ const model = opt(
 const speakersArg = opt("--speakers", null);
 const audioArg = opt("--audio", null);
 const transcriptArg = opt("--transcript", null);
+if (audioArg && !fs.existsSync(audioArg))
+	throw new Error(`Master audio not found: ${audioArg}`);
 const number = Number(argv[0]);
 if (!number) {
 	console.error(

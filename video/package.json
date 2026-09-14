@@ -3,7 +3,9 @@
 	"private": true,
 	"scripts": {
 		"studio": "remotion studio",
-		"render": "remotion render Clip ../out/clip.mp4"
+		"render": "remotion render Clip ../out/clip.mp4",
+		"test:episode": "node --test scripts/episode-video.test.mjs",
+		"prepare:episode-video": "node scripts/prepare-episode-video.mjs"
 	},
 	"dependencies": {
 		"@remotion/cli": "4.0.243",
