@@ -34,6 +34,15 @@ export interface ClipData {
 }
 
 // フル尺ビデオポッドキャスト（横1920×1080）用。scripts/build-episode.mjs が生成する
+export interface EpisodeVideoSegment {
+	file: string;
+	// 完成Podcast音声の時間軸。終了は含まない。
+	timelineStartSec: number;
+	timelineEndSec: number;
+	// clean動画内で timelineStartSec に対応する時刻
+	sourceStartSec: number;
+}
+
 export interface EpisodeData {
 	episode: ClipData["episode"];
 	audioFile: string;
@@ -43,4 +52,5 @@ export interface EpisodeData {
 	// フレームごとの RMS（0〜1）。フル尺の音声を Remotion 側でデコードせずに波形を出すため
 	envelope: number[];
 	pages: CaptionPage[];
+	videoSegments?: EpisodeVideoSegment[];
 }

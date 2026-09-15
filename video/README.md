@@ -184,3 +184,7 @@ Facebook ページ経由（Facebook Login）のトークンを使う場合は `I
 ## デザイン
 
 `src/tokens.ts` は docs/design-system.md のトークンと同期。背景色はエピソード番号 % 4 のローテーション（OGPと同じ）。
+
+## フル尺の実写混在動画
+
+Resolveで同期・顔ぼかしを済ませたclean映像を使う手順は [Hybrid Episode Pipeline](docs/hybrid-episode-video.md) を参照。
