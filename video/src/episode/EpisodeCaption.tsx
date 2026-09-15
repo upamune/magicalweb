@@ -1,6 +1,8 @@
-import { BODY } from "../Clip";
+import { loadFont } from "@remotion/google-fonts/NotoSansJP";
 import type { CaptionPage } from "../types";
 import { SPEAKER_COLORS } from "./EpisodeSpeakerBar";
+
+const telop = loadFont("normal", { weights: ["900"] });
 
 export function findCaptionPage(pages: CaptionPage[], t: number) {
 	let lo = 0;
@@ -29,16 +31,16 @@ export function EpisodeCaption({
 	return (
 		<div
 			style={{
-				fontFamily: BODY,
-				fontWeight: 700,
+				fontFamily: telop.fontFamily,
+				fontWeight: 900,
 				fontSize: Math.min(72, 1510 / maxChars),
 				lineHeight: 1.3,
 				textAlign: "left",
 				color: SPEAKER_COLORS[page.speaker ?? "guest"],
 				WebkitTextStroke: "8px white",
 				paintOrder: "stroke fill",
-				textShadow:
-					"-3px -3px 0 #222, 3px -3px 0 #222, -3px 3px 0 #222, 3px 3px 0 #222, 0 5px 3px #0009",
+				filter:
+					"drop-shadow(0 2px 0 #222) drop-shadow(0 -2px 0 #222) drop-shadow(2px 0 0 #222) drop-shadow(-2px 0 0 #222) drop-shadow(0 3px 2px #0009)",
 			}}
 		>
 			{page.lines.map((line, li) => (
