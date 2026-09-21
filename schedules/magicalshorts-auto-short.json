@@ -1,0 +1,61 @@
+{
+  "_trigger_id": "trig_01YWeUMktG67djU2ADjjbjiv",
+  "name": "magicalshorts: 新着からショートを自動生成",
+  "cron_expression": "0 21 * * *",
+  "enabled": false,
+  "mcp_connections": [
+    {
+      "connector_uuid": "12260594-5255-4fb6-8820-c24e05e51086",
+      "name": "Linear",
+      "url": "https://mcp.linear.app/sse"
+    },
+    {
+      "connector_uuid": "23fec444-f6ff-4f04-ae7c-f1f7234b8854",
+      "name": "otakuctl",
+      "url": "https://otakuctl-mcp.serizawa.workers.dev/mcp"
+    },
+    {
+      "connector_uuid": "bf7c680d-5fdc-5ef4-b4a0-abadb619bf0a",
+      "name": "Claude_Code_Remote",
+      "url": "https://api.anthropic.com/v1/code/mcp/meta"
+    }
+  ],
+  "job_config": {
+    "ccr": {
+      "environment_id": "env_011PTbpSgmCWpNqxLZWaFnmp",
+      "session_context": {
+        "model": "claude-opus-5",
+        "sources": [
+          {
+            "git_repository": {
+              "url": "https://github.com/upamune/magicalshorts"
+            }
+          }
+        ],
+        "allowed_tools": [
+          "Bash",
+          "Read",
+          "Write",
+          "Edit",
+          "Glob",
+          "Grep",
+          "WebFetch"
+        ]
+      },
+      "events": [
+        {
+          "data": {
+            "uuid": "6f1c2a4e-9b3d-4c7a-8e5f-2d1b0a9c8e7f",
+            "session_id": "",
+            "type": "user",
+            "parent_tool_use_id": null,
+            "message": {
+              "content": "マヂカルちゃんねる（https://www.youtube.com/@magical_ch）の新着動画からショート動画を1本作り、YouTube に限定公開でアップロードして、元動画ごとの GitHub Issue（公開チェックリスト）と PR を開いてください。\n\n手順はリポジトリの `.agents/skills/auto-short/SKILL.md` に自己完結で書いてあります。必ず最初にそのファイルと `AGENTS.md`、`.agents/skills/make-short/SKILL.md` を読んで、auto-short の手順を 0 から 8 まで順番に実行してください。要点:\n\n- セットアップスクリプトが bun / ffmpeg / uvx を入れている。無ければ手順 0 の通り自分で入れる（`export PATH=\"$HOME/.bun/bin:$HOME/.local/bin:$PATH\"` を忘れずに）\n- 環境変数 `ELEVENLABS_API_KEY` / `YT_CLIENT_ID` / `YT_CLIENT_SECRET` / `YT_REFRESH_TOKEN` / `SPEAKER_MAP` は環境に設定済み。無ければ理由を出力して終了（Issue/PR は作らない）\n- `bun run watch --latest --json` が空配列なら「新着なし」と出力して終了\n- 文字起こしは常に `STT=elevenlabs`（環境変数の `STT` の値に頼らず、`score` と `transcribe` のコマンドに `STT=elevenlabs` を明示する）。scoring の `transcript.events[]` の `[笑い]` が集まる時間帯は盛り上がり候補の手がかりにする。テロップは make-short ステップ6の校正・組版ルール（1行8文字・2行以内・自然な語区切り・話者アイコン）を守って正本化する。ElevenLabs はサービス名を英字で書くことがあるので番組の表記に揃える\n- `config.json` には `videoId` / `videoTitle` / `game` を必ず入れる\n- レンダー後に必ずフレームを3枚以上抽出して字幕のはみ出し・ズレ・CTA を確認する\n- `bun run upload <id>` で限定公開アップロード（公開にはしない）\n- 手順 8 のテンプレート通りに GitHub Issue（限定公開 URL・採用タイトルと候補2つ・関連動画に設定する元動画名・このセッションの URL・公開チェックリスト）と PR（ブランチ `short/<id>`、mp4/wav はコミットしない）を作る\n- コミットメッセージは日本語、末尾に `prompt: auto-short ルーティン` の行\n\n迷った判断は止まらずに最も妥当な選択をして Issue/PR 本文に書いてください。",
+              "role": "user"
+            }
+          }
+        }
+      ]
+    }
+  }
+}

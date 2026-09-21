@@ -1,0 +1,63 @@
+{
+  "_trigger_id": "trig_01CsHqP42Wk8SbVAdnVyvqyx",
+  "name": "magicalfm-auto-clip",
+  "cron_expression": "0 19 * * 0,3",
+  "enabled": true,
+  "mcp_connections": [
+    {
+      "connector_uuid": "bf7c680d-5fdc-5ef4-b4a0-abadb619bf0a",
+      "name": "Claude_Code_Remote",
+      "url": "https://api.anthropic.com/v1/code/mcp/meta"
+    }
+  ],
+  "job_config": {
+    "ccr": {
+      "environment_id": "env_01Y45FLzFXoJcXtn9xWR6kZG",
+      "session_context": {
+        "model": "claude-opus-5",
+        "sources": [
+          {
+            "git_repository": {
+              "url": "https://github.com/upamune/magicalweb"
+            }
+          }
+        ],
+        "allowed_tools": [
+          "Bash",
+          "Read",
+          "Write",
+          "Edit",
+          "Glob",
+          "Grep"
+        ],
+        "outcomes": [
+          {
+            "git_repository": {
+              "git_info": {
+                "repo": "upamune/magicalweb",
+                "branches": [
+                  "main"
+                ]
+              }
+            }
+          }
+        ],
+        "autofix_on_pr_create": false
+      },
+      "events": [
+        {
+          "data": {
+            "uuid": "100caf08-93b4-468e-8901-a83f9bc1f97e",
+            "session_id": "",
+            "type": "user",
+            "parent_tool_use_id": null,
+            "message": {
+              "content": "あなたは Podcast「マヂカル.fm」の切り抜きショート動画を無人で作成・公開する定期ジョブです。人間には確認できないので、すべて自分で判断して最後まで完走してください。\n\n## やること\n\n1. まず `.agents/skills/make-clip/SKILL.md` を全文読む。特に「無人モード（クラウド routine から呼ばれる場合）」の節が今回の手順の差分です（ネットワーク・Chrome・git のクラウド固有の注意点もそこにある）。`video/README.md` と `docs/design-system.md` も参照する。\n2. `bun install` をリポジトリルートと `video/` の両方で実行する。\n3. リポジトリルートで `NODE_USE_ENV_PROXY=1 node scripts/fetch-episodes.js` を実行して RSS を `src/data/episodes.json` に反映する。\n4. `cd video && node scripts/next-clip-target.mjs` を実行する。終了コード 3（最新話は既にクリップ済み）なら、その旨を最終報告に書いて**何もせず終了**する。\n5. 終了コード 0 なら出力 JSON を使って SKILL.md 無人モードの通りに進める: `audioUrl` を DL → 文字起こし（`transcribe-cloud.mjs elevenlabs` に `audioUrl` と `keyterms` を渡す。`transcriptPath` があってもその JSON の `audioDuration` が DL した音声の長さと 1.5 秒以上違えば使わない）→ 手順 3（ハイライト検出。`find-highlights.mjs` が音声長の食い違いで止まったら文字起こしをやり直す）→ 4（字幕プラン手組み・校正・話者割り当て。`listenUrl` の話者分離と `ep.speakers.json` を使う。ElevenLabs はサービス名を英字で書くので番組の表記に揃える）→ 5（ビルド・レンダリング）→ 6（検証。スキップ禁止）→ 7（`upload-clip.mjs` で R2 にアップロード）。\n6. `git add src/data video/plans` → 日本語で `#N の切り抜きクリップを追加` とコミット → **`git pull --rebase origin main` してから `git push origin HEAD:main`** で main に直接 push する。ローカルのブランチ名（`main-xxxx` など）に push しない。PR も作らない。\n\n## 判断基準\n\n- ハイライトは「単体で通じる」「オチで終わる」「20〜40秒」を優先。下ネタ・特定個人への言及・未公開情報は避ける。\n- 検証で字幕のはみ出しやタイミングずれがあればプランを直して再レンダリング。3回直しても解消しなければアップロードも push もせず、問題点を最終報告に書いて終了する。\n- 環境変数 `ELEVENLABS_API_KEY`（文字起こし）/ `R2_ACCESS_KEY_ID` / `R2_SECRET_ACCESS_KEY` / `CLOUDFLARE_ACCOUNT_ID`（アップロード）が無ければ該当ステップは失敗する。その場合は push もせず、どの環境変数が無かったかを報告して終了する。\n\n## 最終報告に含めること\n\n- 対象エピソード番号とタイトル\n- 選んだハイライトの根拠（エネルギー分析の順位 + 内容面の理由）、施した校正の一覧\n- 公開した動画 URL と main のコミットハッシュ、またはスキップ/失敗の理由",
+              "role": "user"
+            }
+          }
+        }
+      ]
+    }
+  }
+}
