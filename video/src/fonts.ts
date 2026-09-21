@@ -2,7 +2,7 @@ import { loadFont } from "@remotion/fonts";
 
 export const DISPLAY = "MochiyPopOne";
 export const BODY = "MPLUSRounded1c";
-export const TELOP = "NotoSansJP";
+export const TELOP = "Keifont";
 
 if (typeof FontFace !== "undefined") {
 	void loadFont({
@@ -34,10 +34,7 @@ if (typeof FontFace !== "undefined") {
 
 	void loadFont({
 		family: TELOP,
-		url: new URL(
-			"../../fonts/noto-sans-jp/NotoSansJP[wght].ttf",
-			import.meta.url,
-		).href,
-		weight: "100 900",
+		url: new URL("../../fonts/keifont/keifont.ttf", import.meta.url).href,
+		weight: "400",
 	});
 }

@@ -31,6 +31,8 @@ test("street telop stays identical across word timing boundaries", () => {
 	expect(frames[0]).toContain("京都の");
 	expect(frames[0]).toContain("街歩き");
 	expect(frames[0]).toContain("#65d9ff");
+	expect(frames[0]).toContain("font-family:Keifont");
+	expect(frames[0]).toContain("drop-shadow(0 1px 0 #222)");
 });
 
 test("page display still switches at its own start and end", () => {

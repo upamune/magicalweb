@@ -27,7 +27,7 @@ export function EpisodeCaption({ page }: { page: CaptionPage | null }) {
 		<div
 			style={{
 				fontFamily: TELOP,
-				fontWeight: 900,
+				fontWeight: 400,
 				fontSize: Math.min(72, 1510 / maxChars),
 				lineHeight: 1.3,
 				textAlign: "left",
@@ -35,7 +35,7 @@ export function EpisodeCaption({ page }: { page: CaptionPage | null }) {
 				WebkitTextStroke: "8px white",
 				paintOrder: "stroke fill",
 				filter:
-					"drop-shadow(0 2px 0 #222) drop-shadow(0 -2px 0 #222) drop-shadow(2px 0 0 #222) drop-shadow(-2px 0 0 #222) drop-shadow(0 3px 2px #0009)",
+					"drop-shadow(0 1px 0 #222) drop-shadow(0 -1px 0 #222) drop-shadow(1px 0 0 #222) drop-shadow(-1px 0 0 #222) drop-shadow(0 3px 2px #0009)",
 			}}
 		>
 			{page.lines.map((line, li) => (
