@@ -103,7 +103,8 @@ bun scripts/upload-clip.mjs out/clip.mp4 263 "オチの一言"
 ```
 
 初回のみ `bunx wrangler login` でCloudflareにログインしておく。
-（`R2_ACCESS_KEY_ID` / `R2_SECRET_ACCESS_KEY` を環境変数に置けば wrangler 不要で S3 互換 API を使う）
+（ローカルでは `R2_ACCESS_KEY_ID` / `R2_SECRET_ACCESS_KEY` で S3 互換 API を使える。
+Codex Cloud では大容量 PUT のプロキシ制約を避けるため `CLOUDFLARE_API_TOKEN` を設定し、Wrangler を使う）
 
 ### 6. YouTube Shorts / Instagram Reels への投稿
 

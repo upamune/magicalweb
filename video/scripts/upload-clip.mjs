@@ -43,9 +43,12 @@ const hash = crypto
 const base = path.basename(filePath, path.extname(filePath));
 const key = `${base}-${hash}.mp4`;
 
-// R2_ACCESS_KEY_ID / R2_SECRET_ACCESS_KEY / CLOUDFLARE_ACCOUNT_ID があれば S3 互換 API
-// （バケット限定トークンで動く。Bun / Node どちらでも可）、無ければ wrangler login 済みの前提で wrangler を使う
-const useS3 = hasR2Credentials();
+// CLOUDFLARE_API_TOKEN があれば Wrangler を優先する。Codex Cloud の中間
+// プロキシは大きな S3 PUT から Content-Length を落とすため、動画の公開には
+// Cloudflare API 経由の Wrangler を使う。ローカルでは従来どおり、R2 の
+// バケット限定アクセスキーだけでも S3 互換 API でアップロードできる。
+const useWrangler = Boolean(process.env.CLOUDFLARE_API_TOKEN);
+const useS3 = !useWrangler && hasR2Credentials();
 
 const r2Put = async (objectKey, file) => {
 	if (useS3) {
