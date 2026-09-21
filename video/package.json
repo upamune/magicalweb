@@ -4,7 +4,7 @@
 	"scripts": {
 		"studio": "remotion studio",
 		"render": "remotion render Clip ../out/clip.mp4",
-		"test:episode": "node --test scripts/episode-video.test.mjs",
+		"test:episode": "node --test scripts/episode-video.test.mjs && bun test scripts/episode-caption.test.tsx",
 		"test:hybrid": "uv run scripts/test_hybrid.py",
 		"ingest:hybrid": "uv run scripts/hybrid_pipeline.py",
 		"prepare:episode-video": "node scripts/prepare-episode-video.mjs"

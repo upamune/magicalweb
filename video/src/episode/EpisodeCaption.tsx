@@ -17,10 +17,7 @@ export function findCaptionPage(pages: CaptionPage[], t: number) {
 	return null;
 }
 
-export function EpisodeCaption({
-	page,
-	t,
-}: { page: CaptionPage | null; t: number }) {
+export function EpisodeCaption({ page }: { page: CaptionPage | null }) {
 	if (!page) return null;
 	if (page.lines.length > 2)
 		throw new Error("Street captions must have at most two lines");
@@ -50,8 +47,6 @@ export function EpisodeCaption({
 							key={String(wi)}
 							style={{
 								display: "inline-block",
-								transform:
-									t >= word.start && t < word.end ? "translateY(-2px)" : "none",
 							}}
 						>
 							{word.text}

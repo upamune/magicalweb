@@ -47,7 +47,7 @@ export function StreetVideoView({
 				>
 					<EpisodeSpeakerBar activeSpeaker={page.speaker ?? null} />
 					<div style={{ flex: 1, minWidth: 0 }}>
-						<EpisodeCaption page={page} t={t} />
+						<EpisodeCaption page={page} />
 					</div>
 				</div>
 			)}
