@@ -3,9 +3,6 @@ import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import type { CaptionPage } from "../src/types";
 
-mock.module("@remotion/google-fonts/NotoSansJP", () => ({
-	loadFont: () => ({ fontFamily: "Noto Sans JP" }),
-}));
 mock.module("../src/episode/EpisodeSpeakerBar", () => ({
 	SPEAKER_COLORS: { michiru: "#ff8bd8", upamune: "#65d9ff", guest: "#ffe366" },
 }));

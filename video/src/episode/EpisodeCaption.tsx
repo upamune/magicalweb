@@ -1,8 +1,6 @@
-import { loadFont } from "@remotion/google-fonts/NotoSansJP";
+import { TELOP } from "../fonts";
 import type { CaptionPage } from "../types";
 import { SPEAKER_COLORS } from "./EpisodeSpeakerBar";
-
-const telop = loadFont("normal", { weights: ["900"] });
 
 export function findCaptionPage(pages: CaptionPage[], t: number) {
 	let lo = 0;
@@ -28,7 +26,7 @@ export function EpisodeCaption({ page }: { page: CaptionPage | null }) {
 	return (
 		<div
 			style={{
-				fontFamily: telop.fontFamily,
+				fontFamily: TELOP,
 				fontWeight: 900,
 				fontSize: Math.min(72, 1510 / maxChars),
 				lineHeight: 1.3,

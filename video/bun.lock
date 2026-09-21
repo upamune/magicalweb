@@ -7,7 +7,6 @@
       "dependencies": {
         "@remotion/cli": "4.0.243",
         "@remotion/fonts": "4.0.243",
-        "@remotion/google-fonts": "4.0.243",
         "@remotion/media-utils": "4.0.243",
         "react": "^18.2.0",
         "react-dom": "^18.2.0",
@@ -178,8 +177,6 @@
     "@remotion/compositor-win32-x64-msvc": ["@remotion/compositor-win32-x64-msvc@4.0.243", "", { "os": "win32", "cpu": "x64" }, "sha512-3MRpHkKCj5408So3QarNiZ/Di+nHTIJNNFe/hD1KLYXLNZHdiECY741K/MmiYeb3HJcqCJ4kFmUfUytxji8P1g=="],
 
     "@remotion/fonts": ["@remotion/fonts@4.0.243", "", { "dependencies": { "remotion": "4.0.243" } }, "sha512-xdlFtPgy4H4l74jtWtxXMGAKNEIiwLeTzt+JoSnWClNKoUx/+Sm6mOwwwO4kAqJoE40CYxaoCqH6/sWoY/bUAQ=="],
-
-    "@remotion/google-fonts": ["@remotion/google-fonts@4.0.243", "", { "dependencies": { "remotion": "4.0.243" } }, "sha512-NttDulccnxBPbtBleaW+qKnbtL3MzfeVlgxC+NhQTPFFZqB27WcUj4wH0CoanvojRcpTWi0hLz1NQRhogtYT2w=="],
 
     "@remotion/media-parser": ["@remotion/media-parser@4.0.243", "", {}, "sha512-/xoW2o/h4lahS1wxUAByJvu0tFYmEv/neeJpSnOuGb+yfE6j+6c99/FcxRd0/YzGZlY7ldco3hpEWv6vGw58Fw=="],
 

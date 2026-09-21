@@ -1,5 +1,3 @@
-import { loadFont as loadMPlus } from "@remotion/google-fonts/MPLUSRounded1c";
-import { loadFont as loadMochiy } from "@remotion/google-fonts/MochiyPopOne";
 import { useAudioData, visualizeAudio } from "@remotion/media-utils";
 import {
 	AbsoluteFill,
@@ -11,6 +9,7 @@ import {
 	useCurrentFrame,
 	useVideoConfig,
 } from "remotion";
+import { BODY, DISPLAY } from "./fonts";
 import { C } from "./tokens";
 import type { CaptionPage, ClipData, Word } from "./types";
 
@@ -21,11 +20,7 @@ export const HOSTS = {
 
 export const FPS = 30;
 
-const mochiy = loadMochiy();
-const mplus = loadMPlus("normal", { weights: ["500", "700"] });
-
-export const DISPLAY = mochiy.fontFamily;
-export const BODY = mplus.fontFamily;
+export { BODY, DISPLAY };
 
 export function Sticker({
 	children,
