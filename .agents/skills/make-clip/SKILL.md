@@ -168,7 +168,8 @@ cd video
 bun scripts/upload-clip.mjs out/magicalfm-264-clip.mp4 264 "50歳でもバリベイビー"
 ```
 
-初回のみ `bunx wrangler login` でCloudflareにログインしておく。
+ローカルでは R2 のアクセスキーを使う。アクセスキーがない場合だけ、初回に
+`bunx wrangler login` でCloudflareにログインしておく。
 エピソード詳細ページに「切り抜きクリップ」セクションとしてリンクが表示される。
 第3引数の `label` にはクリップのオチ・見どころを短く書く。
 
@@ -219,8 +220,9 @@ YouTube Shorts / Instagram Reels への投稿は **`post-clip` スキル**に従
 - **ユーザー確認をすべてスキップ**: ハイライト選定・ネタバレ確認・話者ラベル対応は
   手順 3〜4 の基準に従って自分で決める。迷ったら「単体で通じる」「オチで終わる」を優先し、
   下ネタ・特定個人への言及・公開前情報は避ける
-- **アップロード**: Codex Cloud では `CLOUDFLARE_API_TOKEN` / `CLOUDFLARE_ACCOUNT_ID` を設定し、
-  `upload-clip.mjs` の Wrangler 経路を使う（大きな S3 PUT は中間プロキシで失敗する）。
+- **アップロード**: Codex Cloud では `rclone` をセットアップ済みにして
+  `R2_UPLOAD_DRIVER=rclone` を設定し、R2 のアクセスキーでアップロードする。
+  Node.js の大きな S3 PUT は中間プロキシで失敗するため使わない。
   ローカルでは `R2_ACCESS_KEY_ID` / `R2_SECRET_ACCESS_KEY` / `CLOUDFLARE_ACCOUNT_ID` があれば
   S3 互換 API でも動く
 - **公開**: 変更されるのは `src/data/clips.json`（と `episodes.json`）のみ。

@@ -43,14 +43,44 @@ const hash = crypto
 const base = path.basename(filePath, path.extname(filePath));
 const key = `${base}-${hash}.mp4`;
 
-// CLOUDFLARE_API_TOKEN があれば Wrangler を優先する。Codex Cloud の中間
-// プロキシは大きな S3 PUT から Content-Length を落とすため、動画の公開には
-// Cloudflare API 経由の Wrangler を使う。ローカルでは従来どおり、R2 の
-// バケット限定アクセスキーだけでも S3 互換 API でアップロードできる。
-const useWrangler = Boolean(process.env.CLOUDFLARE_API_TOKEN);
-const useS3 = !useWrangler && hasR2Credentials();
+// Codex Cloud の中間プロキシは大きな fetch PUT から Content-Length を落とす。
+// クラウド環境では Go の HTTP プロキシ対応が安定している rclone を使い、
+// ローカルでは従来の S3 互換 API、API トークンだけの環境では Wrangler を使う。
+const useRclone = process.env.R2_UPLOAD_DRIVER === "rclone";
+const useWrangler = !useRclone && Boolean(process.env.CLOUDFLARE_API_TOKEN);
+const useS3 = !useRclone && !useWrangler && hasR2Credentials();
+
+const rcloneEnv = () => {
+	if (!hasR2Credentials() || !process.env.CLOUDFLARE_ACCOUNT_ID) {
+		throw new Error(
+			"rclone requires R2_ACCESS_KEY_ID, R2_SECRET_ACCESS_KEY, and CLOUDFLARE_ACCOUNT_ID",
+		);
+	}
+	return {
+		...process.env,
+		RCLONE_CONFIG_R2_TYPE: "s3",
+		RCLONE_CONFIG_R2_PROVIDER: "Cloudflare",
+		RCLONE_CONFIG_R2_ACCESS_KEY_ID: process.env.R2_ACCESS_KEY_ID,
+		RCLONE_CONFIG_R2_SECRET_ACCESS_KEY: process.env.R2_SECRET_ACCESS_KEY,
+		RCLONE_CONFIG_R2_ENDPOINT: `https://${process.env.CLOUDFLARE_ACCOUNT_ID}.r2.cloudflarestorage.com`,
+	};
+};
 
 const r2Put = async (objectKey, file) => {
+	if (useRclone) {
+		execFileSync(
+			"rclone",
+			[
+				"copyto",
+				file,
+				`r2:${R2_BUCKET}/${objectKey}`,
+				"--s3-no-check-bucket",
+				"--quiet",
+			],
+			{ cwd: videoDir, env: rcloneEnv(), stdio: "inherit" },
+		);
+		return;
+	}
 	if (useS3) {
 		await r2.r2Put(R2_BUCKET, objectKey, file);
 		return;
@@ -72,6 +102,19 @@ const r2Put = async (objectKey, file) => {
 };
 
 const r2Delete = async (objectKey) => {
+	if (useRclone) {
+		execFileSync(
+			"rclone",
+			[
+				"deletefile",
+				`r2:${R2_BUCKET}/${objectKey}`,
+				"--s3-no-check-bucket",
+				"--quiet",
+			],
+			{ cwd: videoDir, env: rcloneEnv(), stdio: "inherit" },
+		);
+		return;
+	}
 	if (useS3) {
 		await r2.r2Delete(R2_BUCKET, objectKey);
 		return;

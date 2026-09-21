@@ -102,9 +102,10 @@ bun scripts/render-episode.mjs 278        # 2000フレームずつ分割レン�
 bun scripts/upload-clip.mjs out/clip.mp4 263 "オチの一言"
 ```
 
-初回のみ `bunx wrangler login` でCloudflareにログインしておく。
-（ローカルでは `R2_ACCESS_KEY_ID` / `R2_SECRET_ACCESS_KEY` で S3 互換 API を使える。
-Codex Cloud では大容量 PUT のプロキシ制約を避けるため `CLOUDFLARE_API_TOKEN` を設定し、Wrangler を使う）
+ローカルでは `R2_ACCESS_KEY_ID` / `R2_SECRET_ACCESS_KEY` で S3 互換 API を使う。
+アクセスキーがない場合だけ、初回に `bunx wrangler login` でCloudflareにログインしておく。
+Codex Cloud では大容量 PUT のプロキシ制約を避けるため `rclone` をセットアップし、
+`R2_UPLOAD_DRIVER=rclone` を設定する。
 
 ### 6. YouTube Shorts / Instagram Reels への投稿
 
