@@ -33,15 +33,15 @@ const request = async (method, bucket, key, body, contentType) => {
 	const dateStamp = amzDate.slice(0, 8);
 	const payloadHash = body ? sha256(body) : sha256("");
 
-	const headers = {
+	const signedHeadersMap = {
 		host,
 		"x-amz-content-sha256": payloadHash,
 		"x-amz-date": amzDate,
 		...(contentType ? { "content-type": contentType } : {}),
 	};
-	const signedHeaderNames = Object.keys(headers).sort();
+	const signedHeaderNames = Object.keys(signedHeadersMap).sort();
 	const canonicalHeaders = signedHeaderNames
-		.map((h) => `${h}:${headers[h]}\n`)
+		.map((h) => `${h}:${signedHeadersMap[h]}\n`)
 		.join("");
 	const signedHeaders = signedHeaderNames.join(";");
 	const canonicalRequest = [
@@ -71,7 +71,12 @@ const request = async (method, bucket, key, body, contentType) => {
 	const res = await fetch(`https://${host}${path}`, {
 		method,
 		headers: {
-			...headers,
+			...signedHeadersMap,
+			// Codex Cloud のプロキシは長さが明示されていない PUT を
+			// chunked 転送し、R2 が MissingContentLength を返す。
+			// プロキシによる正規化で署名が壊れないよう、送信はするが
+			// SigV4 の SignedHeaders には含めない。
+			...(body ? { "content-length": String(body.byteLength) } : {}),
 			authorization: `AWS4-HMAC-SHA256 Credential=${accessKey}/${scope}, SignedHeaders=${signedHeaders}, Signature=${signature}`,
 		},
 		body,
