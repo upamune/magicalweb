@@ -1,0 +1,209 @@
+{
+	"episode": {
+		"number": 165,
+		"title": "おしえて、VALORANT ~即ピは戦争の始まり~",
+		"titleLines": [
+			"おしえて、VALORANT",
+			"即ピは戦争の始まり"
+		],
+		"date": "2025年7月24日"
+	},
+	"clipStart": 328.28,
+	"clipEnd": 347.56,
+	"bg": "lime",
+	"clipTitleLines": [
+		"片目だけ",
+		"ICLしますよ"
+	],
+	"pages": [
+		{
+			"start": 328.28,
+			"end": 331.84,
+			"speaker": "upamune",
+			"lines": [
+				[
+					{
+						"text": "課金して、あの、",
+						"start": 328.28,
+						"end": 329.7
+					}
+				],
+				[
+					{
+						"text": "強くなるっていうことを",
+						"start": 330.14,
+						"end": 331.18
+					}
+				],
+				[
+					{
+						"text": "PayToWinって",
+						"start": 331.18,
+						"end": 331.84
+					}
+				]
+			]
+		},
+		{
+			"start": 332.06,
+			"end": 333.74,
+			"speaker": "upamune",
+			"lines": [
+				[
+					{
+						"text": "いうんですけど、",
+						"start": 332.06,
+						"end": 332.86
+					}
+				],
+				[
+					{
+						"text": "それは一切、まあ、",
+						"start": 332.92,
+						"end": 333.74
+					}
+				]
+			]
+		},
+		{
+			"start": 333.92,
+			"end": 334.32,
+			"speaker": "michiru",
+			"lines": [
+				[
+					{
+						"text": "あ、そうなんだ。",
+						"start": 333.92,
+						"end": 334.32
+					}
+				]
+			]
+		},
+		{
+			"start": 334.36,
+			"end": 335.22,
+			"speaker": "upamune",
+			"lines": [
+				[
+					{
+						"text": "もちろんないです。",
+						"start": 334.36,
+						"end": 335.22
+					}
+				]
+			]
+		},
+		{
+			"start": 335.36,
+			"end": 337.94,
+			"speaker": "michiru",
+			"lines": [
+				[
+					{
+						"text": "ロマン代なんだ。",
+						"start": 335.36,
+						"end": 336.4
+					}
+				],
+				[
+					{
+						"text": "Mac買えるな。",
+						"start": 336.4,
+						"end": 337.94
+					}
+				]
+			]
+		},
+		{
+			"start": 338.6,
+			"end": 338.88,
+			"speaker": "upamune",
+			"lines": [
+				[
+					{
+						"text": "確かに。",
+						"start": 338.6,
+						"end": 338.88
+					}
+				]
+			]
+		},
+		{
+			"start": 339.18,
+			"end": 339.9,
+			"speaker": "michiru",
+			"lines": [
+				[
+					{
+						"text": "私に買ってくれ。",
+						"start": 339.18,
+						"end": 339.9
+					}
+				]
+			]
+		},
+		{
+			"start": 339.96,
+			"end": 341.42,
+			"speaker": "upamune",
+			"lines": [
+				[
+					{
+						"text": "なんでやねん。",
+						"start": 339.96,
+						"end": 341.42
+					}
+				]
+			]
+		},
+		{
+			"start": 343.22,
+			"end": 345.58,
+			"speaker": "michiru",
+			"lines": [
+				[
+					{
+						"text": "色に、色に",
+						"start": 343.22,
+						"end": 343.54
+					}
+				],
+				[
+					{
+						"text": "二十五万払う",
+						"start": 343.54,
+						"end": 344.8
+					}
+				],
+				[
+					{
+						"text": "余裕があるんだったら。",
+						"start": 344.8,
+						"end": 345.58
+					}
+				]
+			]
+		},
+		{
+			"start": 345.78,
+			"end": 347.56,
+			"speaker": "upamune",
+			"lines": [
+				[
+					{
+						"text": "みちるさんの片目だけ",
+						"start": 345.78,
+						"end": 346.82
+					}
+				],
+				[
+					{
+						"text": "ICLしますよ。",
+						"start": 346.82,
+						"end": 347.56
+					}
+				]
+			]
+		}
+	]
+}

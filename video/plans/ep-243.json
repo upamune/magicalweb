@@ -9,8 +9,8 @@
 		],
 		"date": "2026年4月23日"
 	},
-	"audioFile": "clip.mp3",
-	"durationSec": 76.44,
+	"clipStart": 1685.27,
+	"clipEnd": 1761.71,
 	"bg": "candy",
 	"clipTitleLines": [
 		"あなたもエージェント",
@@ -18,547 +18,547 @@
 	],
 	"pages": [
 		{
-			"start": 0,
-			"end": 2.2,
+			"start": 1685.27,
+			"end": 1687.47,
 			"speaker": "upamune",
 			"lines": [
 				[
 					{
 						"text": "で、OpenRouterは",
-						"start": 0,
-						"end": 1.02
+						"start": 1685.27,
+						"end": 1686.29
 					}
 				],
 				[
 					{
 						"text": "ギフトカードもあるんで。",
-						"start": 1.02,
-						"end": 2.2
+						"start": 1686.29,
+						"end": 1687.47
 					}
 				]
 			]
 		},
 		{
-			"start": 2.92,
-			"end": 6.34,
+			"start": 1688.19,
+			"end": 1691.61,
 			"speaker": "upamune",
 			"lines": [
 				[
 					{
 						"text": "あの、皆さんあの、",
-						"start": 2.92,
-						"end": 4.06
+						"start": 1688.19,
+						"end": 1689.33
 					}
 				],
 				[
 					{
 						"text": "スタバカードじゃなくて、",
-						"start": 4.14,
-						"end": 6.22
+						"start": 1689.41,
+						"end": 1691.49
 					}
 				],
 				[
 					{
 						"text": "OpenRouterの",
-						"start": 5.12,
-						"end": 6.34
+						"start": 1690.39,
+						"end": 1691.61
 					}
 				]
 			]
 		},
 		{
-			"start": 6.34,
-			"end": 10.22,
+			"start": 1691.61,
+			"end": 1695.49,
 			"speaker": "upamune",
 			"lines": [
 				[
 					{
 						"text": "二十ドルチケットとかを",
-						"start": 6.34,
-						"end": 7.42
+						"start": 1691.61,
+						"end": 1692.69
 					}
 				],
 				[
 					{
 						"text": "みんなに、こう渡して",
-						"start": 7.42,
-						"end": 9.42
+						"start": 1692.69,
+						"end": 1694.69
 					}
 				],
 				[
 					{
 						"text": "あげると喜ばれる。",
-						"start": 9.44,
-						"end": 10.22
+						"start": 1694.71,
+						"end": 1695.49
 					}
 				]
 			]
 		},
 		{
-			"start": 10.28,
-			"end": 11.3,
+			"start": 1695.55,
+			"end": 1696.57,
 			"speaker": "michiru",
 			"lines": [
 				[
 					{
 						"text": "ギークすぎるだろ。",
-						"start": 10.28,
-						"end": 11.3
+						"start": 1695.55,
+						"end": 1696.57
 					}
 				]
 			]
 		},
 		{
-			"start": 12.9,
-			"end": 14.9,
+			"start": 1698.17,
+			"end": 1700.17,
 			"speaker": "michiru",
 			"lines": [
 				[
 					{
 						"text": "エンジニアでも",
-						"start": 12.9,
-						"end": 13.98
+						"start": 1698.17,
+						"end": 1699.25
 					}
 				],
 				[
 					{
 						"text": "使ってんのかな、みんな。",
-						"start": 13.98,
-						"end": 14.9
+						"start": 1699.25,
+						"end": 1700.17
 					}
 				]
 			]
 		},
 		{
-			"start": 15.56,
-			"end": 17.62,
+			"start": 1700.83,
+			"end": 1702.89,
 			"speaker": "upamune",
 			"lines": [
 				[
 					{
 						"text": "ああ、どうなんだろう。",
-						"start": 15.56,
-						"end": 16.2
+						"start": 1700.83,
+						"end": 1701.47
 					}
 				],
 				[
 					{
 						"text": "結構前からある。",
-						"start": 16.72,
-						"end": 17.62
+						"start": 1701.99,
+						"end": 1702.89
 					}
 				]
 			]
 		},
 		{
-			"start": 17.96,
-			"end": 20.38,
+			"start": 1703.23,
+			"end": 1705.65,
 			"speaker": "michiru",
 			"lines": [
 				[
 					{
 						"text": "エージェント好きな",
-						"start": 17.96,
-						"end": 18.96
+						"start": 1703.23,
+						"end": 1704.23
 					}
 				],
 				[
 					{
 						"text": "エンジニアしか",
-						"start": 18.98,
-						"end": 19.82
+						"start": 1704.25,
+						"end": 1705.09
 					}
 				],
 				[
 					{
 						"text": "使ってないか。",
-						"start": 19.82,
-						"end": 20.38
+						"start": 1705.09,
+						"end": 1705.65
 					}
 				]
 			]
 		},
 		{
-			"start": 21,
-			"end": 24.1,
+			"start": 1706.27,
+			"end": 1709.37,
 			"speaker": "upamune",
 			"lines": [
 				[
 					{
 						"text": "前私、なんだっけ、",
-						"start": 21,
-						"end": 22.58
+						"start": 1706.27,
+						"end": 1707.85
 					}
 				],
 				[
 					{
 						"text": "LoRAコード、Klein",
-						"start": 22.24,
-						"end": 23.56
+						"start": 1707.51,
+						"end": 1708.83
 					}
 				],
 				[
 					{
 						"text": "みたいなやつ。",
-						"start": 23.56,
-						"end": 24.1
+						"start": 1708.83,
+						"end": 1709.37
 					}
 				]
 			]
 		},
 		{
-			"start": 24.28,
-			"end": 25.58,
+			"start": 1709.55,
+			"end": 1710.85,
 			"speaker": "michiru",
 			"lines": [
 				[
 					{
 						"text": "ああ、ありましたね、",
-						"start": 24.28,
-						"end": 25.58
+						"start": 1709.55,
+						"end": 1710.85
 					}
 				],
 				[
 					{
 						"text": "LoRA。",
-						"start": 24.96,
-						"end": 25.58
+						"start": 1710.23,
+						"end": 1710.85
 					}
 				]
 			]
 		},
 		{
-			"start": 25.64,
-			"end": 30.12,
+			"start": 1710.91,
+			"end": 1715.39,
 			"speaker": "upamune",
 			"lines": [
 				[
 					{
 						"text": "あれにコントリビュート",
-						"start": 25.64,
-						"end": 26.66
+						"start": 1710.91,
+						"end": 1711.93
 					}
 				],
 				[
 					{
 						"text": "した時とかは",
-						"start": 26.66,
-						"end": 27.44
+						"start": 1711.93,
+						"end": 1712.71
 					}
 				],
 				[
 					{
 						"text": "センキューって言われて、",
-						"start": 27.44,
-						"end": 28.54
+						"start": 1712.71,
+						"end": 1713.81
 					}
 				],
 				[
 					{
 						"text": "百ドル分のOpenRouterの",
-						"start": 28.72,
-						"end": 30.12
+						"start": 1713.99,
+						"end": 1715.39
 					}
 				]
 			]
 		},
 		{
-			"start": 30.22,
-			"end": 30.56,
+			"start": 1715.49,
+			"end": 1715.83,
 			"speaker": "michiru",
 			"lines": [
 				[
 					{
 						"text": "へー。",
-						"start": 30.22,
-						"end": 30.56
+						"start": 1715.49,
+						"end": 1715.83
 					}
 				]
 			]
 		},
 		{
-			"start": 30.76,
-			"end": 33.34,
+			"start": 1716.03,
+			"end": 1718.61,
 			"speaker": "upamune",
 			"lines": [
 				[
 					{
 						"text": "バウチャーみたいなの",
-						"start": 30.76,
-						"end": 31.58
+						"start": 1716.03,
+						"end": 1716.85
 					}
 				],
 				[
 					{
 						"text": "もらったんで、",
-						"start": 31.58,
-						"end": 32.28
+						"start": 1716.85,
+						"end": 1717.55
 					}
 				],
 				[
 					{
 						"text": "それ結構便利でした。",
-						"start": 32.34,
-						"end": 33.34
+						"start": 1717.61,
+						"end": 1718.61
 					}
 				]
 			]
 		},
 		{
-			"start": 33.38,
-			"end": 33.72,
+			"start": 1718.65,
+			"end": 1718.99,
 			"speaker": "michiru",
 			"lines": [
 				[
 					{
 						"text": "うんうん。",
-						"start": 33.38,
-						"end": 33.72
+						"start": 1718.65,
+						"end": 1718.99
 					}
 				]
 			]
 		},
 		{
-			"start": 34.8,
-			"end": 39.5,
+			"start": 1720.07,
+			"end": 1724.77,
 			"speaker": "upamune",
 			"lines": [
 				[
 					{
 						"text": "それこそOpen、えー、",
-						"start": 34.8,
-						"end": 36.46
+						"start": 1720.07,
+						"end": 1721.73
 					}
 				],
 				[
 					{
 						"text": "LoRAコードとかKlein",
-						"start": 36.24,
-						"end": 37.22
+						"start": 1721.51,
+						"end": 1722.49
 					}
 				],
 				[
 					{
 						"text": "とかにOpenRouterの",
-						"start": 37.22,
-						"end": 38.46
+						"start": 1722.49,
+						"end": 1723.73
 					}
 				],
 				[
 					{
 						"text": "モデルセットできるんで、",
-						"start": 38.46,
-						"end": 39.5
+						"start": 1723.73,
+						"end": 1724.77
 					}
 				]
 			]
 		},
 		{
-			"start": 41.4,
-			"end": 43.66,
+			"start": 1726.67,
+			"end": 1728.93,
 			"speaker": "upamune",
 			"lines": [
 				[
 					{
 						"text": "そっからO11使うことも",
-						"start": 41.4,
-						"end": 42.64
+						"start": 1726.67,
+						"end": 1727.91
 					}
 				],
 				[
 					{
 						"text": "できるしっていう感じ。",
-						"start": 42.64,
-						"end": 43.66
+						"start": 1727.91,
+						"end": 1728.93
 					}
 				]
 			]
 		},
 		{
-			"start": 44.48,
-			"end": 47.66,
+			"start": 1729.75,
+			"end": 1732.93,
 			"speaker": "upamune",
 			"lines": [
 				[
 					{
 						"text": "また有益な情報を",
-						"start": 44.48,
-						"end": 46.079
+						"start": 1729.75,
+						"end": 1731.349
 					}
 				],
 				[
 					{
 						"text": "提供して、LLM越えも。",
-						"start": 46.079,
-						"end": 47.66
+						"start": 1731.349,
+						"end": 1732.93
 					}
 				]
 			]
 		},
 		{
-			"start": 53.64,
-			"end": 54.32,
+			"start": 1738.91,
+			"end": 1739.59,
 			"speaker": "michiru",
 			"lines": [
 				[
 					{
 						"text": "よかった。",
-						"start": 53.64,
-						"end": 54.06
+						"start": 1738.91,
+						"end": 1739.33
 					}
 				],
 				[
 					{
 						"text": "よかったですね。",
-						"start": 54.12,
-						"end": 54.32
+						"start": 1739.39,
+						"end": 1739.59
 					}
 				]
 			]
 		},
 		{
-			"start": 54.42,
-			"end": 55.5,
+			"start": 1739.69,
+			"end": 1740.77,
 			"speaker": "upamune",
 			"lines": [
 				[
 					{
 						"text": "よかったですね。",
-						"start": 54.42,
-						"end": 55.5
+						"start": 1739.69,
+						"end": 1740.77
 					}
 				]
 			]
 		},
 		{
-			"start": 56.7,
-			"end": 60.3,
+			"start": 1741.97,
+			"end": 1745.57,
 			"speaker": "michiru",
 			"lines": [
 				[
 					{
 						"text": "じゃあOpenRouterの",
-						"start": 56.7,
-						"end": 58.18
+						"start": 1741.97,
+						"end": 1743.45
 					}
 				],
 				[
 					{
 						"text": "ギフトカード欲しいよって",
-						"start": 58.18,
-						"end": 59.64
+						"start": 1743.45,
+						"end": 1744.91
 					}
 				],
 				[
 					{
 						"text": "いう人いたら。",
-						"start": 59.64,
-						"end": 60.3
+						"start": 1744.91,
+						"end": 1745.57
 					}
 				]
 			]
 		},
 		{
-			"start": 60.52,
-			"end": 61.46,
+			"start": 1745.79,
+			"end": 1746.73,
 			"speaker": "upamune",
 			"lines": [
 				[
 					{
 						"text": "人は何なんだよ。",
-						"start": 60.52,
-						"end": 61.46
+						"start": 1745.79,
+						"end": 1746.73
 					}
 				]
 			]
 		},
 		{
-			"start": 63.14,
-			"end": 65.16,
+			"start": 1748.41,
+			"end": 1750.43,
 			"speaker": "michiru",
 			"lines": [
 				[
 					{
 						"text": "あなたもエージェント",
-						"start": 63.14,
-						"end": 64.12
+						"start": 1748.41,
+						"end": 1749.39
 					}
 				],
 				[
 					{
 						"text": "好きなんですねって。",
-						"start": 64.12,
-						"end": 65.16
+						"start": 1749.39,
+						"end": 1750.43
 					}
 				]
 			]
 		},
 		{
-			"start": 65.64,
-			"end": 65.82,
+			"start": 1750.91,
+			"end": 1751.09,
 			"speaker": "upamune",
 			"lines": [
 				[
 					{
 						"text": "うん。",
-						"start": 65.64,
-						"end": 65.82
+						"start": 1750.91,
+						"end": 1751.09
 					}
 				]
 			]
 		},
 		{
-			"start": 67,
-			"end": 69.44,
+			"start": 1752.27,
+			"end": 1754.71,
 			"speaker": "michiru",
 			"lines": [
 				[
 					{
 						"text": "欲しいよっていう人",
-						"start": 67,
-						"end": 67.76
+						"start": 1752.27,
+						"end": 1753.03
 					}
 				],
 				[
 					{
 						"text": "いたらお便りください。",
-						"start": 67.76,
-						"end": 69.44
+						"start": 1753.03,
+						"end": 1754.71
 					}
 				]
 			]
 		},
 		{
-			"start": 69.52,
-			"end": 74.24,
+			"start": 1754.79,
+			"end": 1759.51,
 			"speaker": "upamune",
 			"lines": [
 				[
 					{
 						"text": "お便りください。",
-						"start": 69.52,
-						"end": 71
+						"start": 1754.79,
+						"end": 1756.27
 					}
 				],
 				[
 					{
 						"text": "なんだそれ、",
-						"start": 71.42,
-						"end": 72.16
+						"start": 1756.69,
+						"end": 1757.43
 					}
 				],
 				[
 					{
 						"text": "あげますよとか",
-						"start": 72.98,
-						"end": 73.84
+						"start": 1758.25,
+						"end": 1759.11
 					}
 				],
 				[
 					{
 						"text": "じゃないの？",
-						"start": 73.84,
-						"end": 74.24
+						"start": 1759.11,
+						"end": 1759.51
 					}
 				]
 			]

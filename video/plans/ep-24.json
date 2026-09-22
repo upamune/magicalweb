@@ -1,0 +1,300 @@
+{
+	"episode": {
+		"number": 24,
+		"title": "ガンダムにハマらせたい ~この先10年分のエンタメ~",
+		"titleLines": [
+			"ガンダムにハマらせたい",
+			"この先10年分のエンタメ"
+		],
+		"date": "2024年3月18日"
+	},
+	"clipStart": 79.88,
+	"clipEnd": 105.92,
+	"bg": "lilac",
+	"clipTitleLines": [
+		"アムロ・レイは",
+		"ガンダムじゃないの？"
+	],
+	"pages": [
+		{
+			"start": 79.88,
+			"end": 80.64,
+			"speaker": "michiru",
+			"lines": [
+				[
+					{
+						"text": "私はガンダム。",
+						"start": 79.88,
+						"end": 80.64
+					}
+				]
+			]
+		},
+		{
+			"start": 81.3,
+			"end": 83.46,
+			"speaker": "upamune",
+			"lines": [
+				[
+					{
+						"text": "あ、確かに前提、",
+						"start": 81.3,
+						"end": 82.16
+					}
+				],
+				[
+					{
+						"text": "前提として",
+						"start": 82.34,
+						"end": 82.94
+					}
+				],
+				[
+					{
+						"text": "みちるさんは？",
+						"start": 82.94,
+						"end": 83.46
+					}
+				]
+			]
+		},
+		{
+			"start": 84.6,
+			"end": 87.2,
+			"speaker": "michiru",
+			"lines": [
+				[
+					{
+						"text": "マジで全く",
+						"start": 84.6,
+						"end": 85.64
+					}
+				],
+				[
+					{
+						"text": "見たことないです。",
+						"start": 85.64,
+						"end": 87.2
+					}
+				]
+			]
+		},
+		{
+			"start": 87.54,
+			"end": 88.86,
+			"speaker": "michiru",
+			"lines": [
+				[
+					{
+						"text": "で、アムーロ・レイ",
+						"start": 87.54,
+						"end": 88.56
+					}
+				],
+				[
+					{
+						"text": "とか。",
+						"start": 88.56,
+						"end": 88.86
+					}
+				]
+			]
+		},
+		{
+			"start": 89.38,
+			"end": 91.86,
+			"speaker": "upamune",
+			"lines": [
+				[
+					{
+						"text": "なん",
+						"start": 89.38,
+						"end": 89.48
+					}
+				],
+				[
+					{
+						"text": "で？",
+						"start": 90.32,
+						"end": 90.32
+					}
+				],
+				[
+					{
+						"text": "アムーロ・レイ",
+						"start": 90.36,
+						"end": 91.1
+					}
+				],
+				[
+					{
+						"text": "誰？",
+						"start": 91.56,
+						"end": 91.86
+					}
+				]
+			]
+		},
+		{
+			"start": 91.96,
+			"end": 92.82,
+			"speaker": "michiru",
+			"lines": [
+				[
+					{
+						"text": "え、ガンダム",
+						"start": 91.96,
+						"end": 92.42
+					}
+				],
+				[
+					{
+						"text": "じゃない？",
+						"start": 92.44,
+						"end": 92.82
+					}
+				]
+			]
+		},
+		{
+			"start": 92.86,
+			"end": 93.42,
+			"speaker": "upamune",
+			"lines": [
+				[
+					{
+						"text": "アムロ・レイね。",
+						"start": 92.86,
+						"end": 93.42
+					}
+				]
+			]
+		},
+		{
+			"start": 93.44,
+			"end": 94.2,
+			"speaker": "michiru",
+			"lines": [
+				[
+					{
+						"text": "アムロ・レイ。",
+						"start": 93.44,
+						"end": 94.2
+					}
+				]
+			]
+		},
+		{
+			"start": 94.32,
+			"end": 95.1,
+			"speaker": "upamune",
+			"lines": [
+				[
+					{
+						"text": "アムーロ・レイ。",
+						"start": 94.32,
+						"end": 95.1
+					}
+				]
+			]
+		},
+		{
+			"start": 96.8,
+			"end": 97.7,
+			"speaker": "michiru",
+			"lines": [
+				[
+					{
+						"text": "ガンダムでは",
+						"start": 96.8,
+						"end": 97.34
+					}
+				],
+				[
+					{
+						"text": "あった。",
+						"start": 97.34,
+						"end": 97.7
+					}
+				]
+			]
+		},
+		{
+			"start": 98.22,
+			"end": 99.58,
+			"speaker": "michiru",
+			"lines": [
+				[
+					{
+						"text": "とか、シャアとか",
+						"start": 98.22,
+						"end": 99.58
+					}
+				]
+			]
+		},
+		{
+			"start": 100.42,
+			"end": 103.14,
+			"speaker": "michiru",
+			"lines": [
+				[
+					{
+						"text": "ザクって単語は",
+						"start": 100.42,
+						"end": 102.1
+					}
+				],
+				[
+					{
+						"text": "聞いたことあります。",
+						"start": 102.1,
+						"end": 103.14
+					}
+				]
+			]
+		},
+		{
+			"start": 103.46,
+			"end": 104.34,
+			"speaker": "upamune",
+			"lines": [
+				[
+					{
+						"text": "はいはいはいはい。",
+						"start": 103.46,
+						"end": 104.34
+					}
+				]
+			]
+		},
+		{
+			"start": 104.78,
+			"end": 105.32,
+			"speaker": "upamune",
+			"lines": [
+				[
+					{
+						"text": "ちょうどいいです。",
+						"start": 104.78,
+						"end": 105.32
+					}
+				]
+			]
+		},
+		{
+			"start": 105.42,
+			"end": 105.92,
+			"speaker": "michiru",
+			"lines": [
+				[
+					{
+						"text": "ぐらいです。",
+						"start": 105.42,
+						"end": 105.92
+					}
+				]
+			]
+		}
+	]
+}

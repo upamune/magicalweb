@@ -1,0 +1,300 @@
+{
+	"episode": {
+		"number": 40,
+		"title": "韓国行ってきた ~リスナーの愛称を決めよう~",
+		"titleLines": [
+			"韓国行ってきた",
+			"リスナーの愛称を決めよう"
+		],
+		"date": "2024年5月13日"
+	},
+	"clipStart": 528.21,
+	"clipEnd": 558.45,
+	"bg": "lilac",
+	"clipTitleLines": [
+		"なんか全てが",
+		"良くなるやつ"
+	],
+	"pages": [
+		{
+			"start": 528.21,
+			"end": 528.71,
+			"speaker": "upamune",
+			"lines": [
+				[
+					{
+						"text": "ポナンザ？",
+						"start": 528.21,
+						"end": 528.71
+					}
+				]
+			]
+		},
+		{
+			"start": 529.75,
+			"end": 530.21,
+			"speaker": "michiru",
+			"lines": [
+				[
+					{
+						"text": "ポテンツァ。",
+						"start": 529.75,
+						"end": 530.21
+					}
+				]
+			]
+		},
+		{
+			"start": 531.25,
+			"end": 531.95,
+			"speaker": "michiru",
+			"lines": [
+				[
+					{
+						"text": "ポナンザって何？",
+						"start": 531.25,
+						"end": 531.95
+					}
+				]
+			]
+		},
+		{
+			"start": 531.97,
+			"end": 533.09,
+			"speaker": "upamune",
+			"lines": [
+				[
+					{
+						"text": "将棋AIの最強。",
+						"start": 531.97,
+						"end": 533.09
+					}
+				]
+			]
+		},
+		{
+			"start": 535.15,
+			"end": 537.19,
+			"speaker": "michiru",
+			"lines": [
+				[
+					{
+						"text": "Alpha、AlphaGo",
+						"start": 535.15,
+						"end": 536.93
+					}
+				],
+				[
+					{
+						"text": "みたいな。",
+						"start": 536.93,
+						"end": 537.19
+					}
+				]
+			]
+		},
+		{
+			"start": 538.09,
+			"end": 540.05,
+			"speaker": "upamune",
+			"lines": [
+				[
+					{
+						"text": "で、",
+						"start": 538.09,
+						"end": 538.27
+					}
+				],
+				[
+					{
+						"text": "ポテンツァは",
+						"start": 538.31,
+						"end": 538.99
+					}
+				],
+				[
+					{
+						"text": "？",
+						"start": 540.03,
+						"end": 540.05
+					}
+				]
+			]
+		},
+		{
+			"start": 540.09,
+			"end": 542.69,
+			"speaker": "michiru",
+			"lines": [
+				[
+					{
+						"text": "ポテンツァは、",
+						"start": 540.09,
+						"end": 540.93
+					}
+				],
+				[
+					{
+						"text": "なんか全てが",
+						"start": 541.43,
+						"end": 542.09
+					}
+				],
+				[
+					{
+						"text": "良くなるやつって。",
+						"start": 542.09,
+						"end": 542.69
+					}
+				]
+			]
+		},
+		{
+			"start": 542.75,
+			"end": 543.69,
+			"speaker": "upamune",
+			"lines": [
+				[
+					{
+						"text": "おい怖いって。",
+						"start": 542.75,
+						"end": 543.69
+					}
+				]
+			]
+		},
+		{
+			"start": 544.05,
+			"end": 544.69,
+			"speaker": "michiru",
+			"lines": [
+				[
+					{
+						"text": "言われてて。",
+						"start": 544.05,
+						"end": 544.69
+					}
+				]
+			]
+		},
+		{
+			"start": 545.55,
+			"end": 545.93,
+			"speaker": "upamune",
+			"lines": [
+				[
+					{
+						"text": "誰から？",
+						"start": 545.55,
+						"end": 545.93
+					}
+				]
+			]
+		},
+		{
+			"start": 547.49,
+			"end": 549.25,
+			"speaker": "upamune",
+			"lines": [
+				[
+					{
+						"text": "世間から",
+						"start": 547.49,
+						"end": 547.95
+					}
+				],
+				[
+					{
+						"text": "？",
+						"start": 549.23,
+						"end": 549.25
+					}
+				]
+			]
+		},
+		{
+			"start": 549.39,
+			"end": 550.99,
+			"speaker": "michiru",
+			"lines": [
+				[
+					{
+						"text": "一応パープレキシティで",
+						"start": 549.39,
+						"end": 550.21
+					}
+				],
+				[
+					{
+						"text": "調べたら。",
+						"start": 550.43,
+						"end": 550.99
+					}
+				]
+			]
+		},
+		{
+			"start": 551.23,
+			"end": 551.39,
+			"speaker": "upamune",
+			"lines": [
+				[
+					{
+						"text": "うん。",
+						"start": 551.23,
+						"end": 551.39
+					}
+				]
+			]
+		},
+		{
+			"start": 552.35,
+			"end": 554.03,
+			"speaker": "michiru",
+			"lines": [
+				[
+					{
+						"text": "えー、肝斑、",
+						"start": 552.35,
+						"end": 552.95
+					}
+				],
+				[
+					{
+						"text": "小じわ、毛穴の開き、",
+						"start": 553.05,
+						"end": 554.03
+					}
+				]
+			]
+		},
+		{
+			"start": 554.11,
+			"end": 558.45,
+			"speaker": "michiru",
+			"lines": [
+				[
+					{
+						"text": "ニキビ跡など様々な",
+						"start": 554.11,
+						"end": 555.55
+					}
+				],
+				[
+					{
+						"text": "肌の悩みに対する",
+						"start": 555.55,
+						"end": 556.23
+					}
+				],
+				[
+					{
+						"text": "最新の美容治療器。",
+						"start": 556.31,
+						"end": 558.45
+					}
+				]
+			]
+		}
+	]
+}

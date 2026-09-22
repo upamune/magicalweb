@@ -1,0 +1,165 @@
+{
+	"episode": {
+		"number": 169,
+		"title": "2025年上半期 買ってよかったもの 後編 ~巻き取り式ケーブル地獄~",
+		"titleLines": ["2025年上半期 買ってよかったもの 後編", "巻き取り式ケーブル地獄"],
+		"date": "2025年8月7日"
+	},
+	"bg": "lime",
+	"clipStart": 52.7,
+	"clipEnd": 80.5,
+	"clipTitleLines": ["iPad買いました", "何用？"],
+	"note": "候補1(0:40〜 / score=1.294・笑い3件)を採用。『俺のターン。iPad買いました』→『何用？』→『全てですよね』→『用途は？』→『家でiPhoneじゃなくてiPad』→『見よがしにリュックからチラ見せ』→『中国の城とかに使われてそうな金色』→『ピンクと迷った』まで一連。話者は ElevenLabs の話者分離: sp0=みちる、sp1=うぱみゅん。校正: 言い淀みを整理 / 句読点を補完。",
+	"pages": [
+		{
+			"start": 52.84,
+			"end": 55.64,
+			"speaker": "upamune",
+			"lines": [
+				[
+					{ "text": "俺のターン。", "start": 52.84, "end": 53.46 }
+				],
+				[
+					{ "text": "えっと、iPad買いました。", "start": 54.64, "end": 55.64 }
+				]
+			]
+		},
+		{
+			"start": 56.84,
+			"end": 57.32,
+			"speaker": "michiru",
+			"lines": [
+				[
+					{ "text": "何用？", "start": 56.84, "end": 57.32 }
+				]
+			]
+		},
+		{
+			"start": 58.66,
+			"end": 59.62,
+			"speaker": "upamune",
+			"lines": [
+				[
+					{ "text": "なに、何用？", "start": 58.66, "end": 59.62 }
+				]
+			]
+		},
+		{
+			"start": 59.88,
+			"end": 60.32,
+			"speaker": "michiru",
+			"lines": [
+				[
+					{ "text": "何用？", "start": 59.88, "end": 60.32 }
+				]
+			]
+		},
+		{
+			"start": 60.74,
+			"end": 60.88,
+			"speaker": "upamune",
+			"lines": [
+				[
+					{ "text": "全てですよね。", "start": 60.74, "end": 60.88 }
+				]
+			]
+		},
+		{
+			"start": 61.08,
+			"end": 61.62,
+			"speaker": "michiru",
+			"lines": [
+				[
+					{ "text": "用途は？", "start": 61.08, "end": 61.62 }
+				]
+			]
+		},
+		{
+			"start": 61.7,
+			"end": 64.0,
+			"speaker": "upamune",
+			"lines": [
+				[
+					{ "text": "その家で", "start": 61.7, "end": 62.64 }
+				],
+				[
+					{ "text": "iPhoneじゃなくてiPad。", "start": 62.64, "end": 64.0 }
+				]
+			]
+		},
+		{
+			"start": 64.94,
+			"end": 69.22,
+			"speaker": "michiru",
+			"lines": [
+				[
+					{ "text": "ちょっと今もね、", "start": 64.94, "end": 65.56 }
+				],
+				[
+					{ "text": "これ見よがしに", "start": 65.64, "end": 66.48 }
+				],
+				[
+					{ "text": "リュックからチラ見せ", "start": 67.2, "end": 68.3 }
+				],
+				[
+					{ "text": "されてるんですよね。", "start": 68.3, "end": 69.22 }
+				]
+			]
+		},
+		{
+			"start": 69.3,
+			"end": 70.5,
+			"speaker": "michiru",
+			"lines": [
+				[
+					{ "text": "あのゴールドの。", "start": 69.3, "end": 70.5 }
+				]
+			]
+		},
+		{
+			"start": 70.66,
+			"end": 72.02,
+			"speaker": "upamune",
+			"lines": [
+				[
+					{ "text": "黄色ね。", "start": 70.66, "end": 71.28 }
+				],
+				[
+					{ "text": "ゴールド。", "start": 71.36, "end": 72.02 }
+				]
+			]
+		},
+		{
+			"start": 72.64,
+			"end": 79.24,
+			"speaker": "michiru",
+			"lines": [
+				[
+					{ "text": "なんか中国の、", "start": 72.64, "end": 74.58 }
+				],
+				[
+					{ "text": "なんか城とかに", "start": 76.3, "end": 77.8 }
+				],
+				[
+					{ "text": "使われてそうな", "start": 77.8, "end": 78.56 }
+				],
+				[
+					{ "text": "金色の。", "start": 78.76, "end": 79.24 }
+				]
+			]
+		},
+		{
+			"start": 79.66,
+			"end": 80.9,
+			"speaker": "upamune",
+			"lines": [
+				[
+					{ "text": "ピンクと迷ったんです。", "start": 79.66, "end": 80.28 }
+				],
+				[
+					{ "text": "iPad。", "start": 80.34, "end": 80.9 }
+				]
+			]
+		}
+	]
+}
