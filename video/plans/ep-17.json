@@ -9,7 +9,7 @@
 		"date": "2024年2月22日"
 	},
 	"clipStart": 365.67,
-	"clipEnd": 394.99,
+	"clipEnd": 397.19,
 	"bg": "lime",
 	"clipTitleLines": [
 		"もちろん",
@@ -282,5 +282,6 @@
 				]
 			]
 		}
-	]
+	],
+	"audioMuteAt": 395.29
 }

@@ -9,7 +9,7 @@
 		"date": "2024年6月13日"
 	},
 	"clipStart": 1655.74,
-	"clipEnd": 1682.86,
+	"clipEnd": 1685.06,
 	"bg": "lime",
 	"clipTitleLines": [
 		"関西弁が普段出なくて",
@@ -282,5 +282,6 @@
 				]
 			]
 		}
-	]
+	],
+	"audioMuteAt": 1683.16
 }

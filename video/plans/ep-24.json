@@ -9,7 +9,7 @@
 		"date": "2024年3月18日"
 	},
 	"clipStart": 79.88,
-	"clipEnd": 105.92,
+	"clipEnd": 108.12,
 	"bg": "lilac",
 	"clipTitleLines": [
 		"アムロ・レイは",
@@ -296,5 +296,6 @@
 				]
 			]
 		}
-	]
+	],
+	"audioMuteAt": 106.22
 }

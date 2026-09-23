@@ -9,7 +9,7 @@
 		"date": "2024年9月2日"
 	},
 	"clipStart": 1371.84,
-	"clipEnd": 1418.8,
+	"clipEnd": 1421,
 	"bg": "lilac",
 	"clipTitleLines": [
 		"僕がいいから",
@@ -422,5 +422,6 @@
 				]
 			]
 		}
-	]
+	],
+	"audioMuteAt": 1418.83
 }

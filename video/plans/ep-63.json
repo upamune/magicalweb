@@ -9,7 +9,7 @@
 		"date": "2024年8月1日"
 	},
 	"clipStart": 2060.93,
-	"clipEnd": 2100.53,
+	"clipEnd": 2102.73,
 	"bg": "candy",
 	"clipTitleLines": [
 		"どうか私を",
@@ -359,5 +359,6 @@
 				]
 			]
 		}
-	]
+	],
+	"audioMuteAt": 2100.56
 }

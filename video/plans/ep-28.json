@@ -9,7 +9,7 @@
 		"date": "2024年4月1日"
 	},
 	"clipStart": 525.71,
-	"clipEnd": 563.99,
+	"clipEnd": 566.19,
 	"bg": "lilac",
 	"clipTitleLines": [
 		"一羽八百円",
@@ -394,5 +394,6 @@
 				]
 			]
 		}
-	]
+	],
+	"audioMuteAt": 564.29
 }

@@ -9,7 +9,7 @@
 		"date": "2024年5月13日"
 	},
 	"clipStart": 528.21,
-	"clipEnd": 558.45,
+	"clipEnd": 560.65,
 	"bg": "lilac",
 	"clipTitleLines": [
 		"なんか全てが",
@@ -296,5 +296,6 @@
 				]
 			]
 		}
-	]
+	],
+	"audioMuteAt": 558.75
 }

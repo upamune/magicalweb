@@ -9,7 +9,7 @@
 		"date": "2024年10月7日"
 	},
 	"clipStart": 1017.94,
-	"clipEnd": 1052,
+	"clipEnd": 1054.2,
 	"bg": "sky",
 	"clipTitleLines": [
 		"私を代表取締役に",
@@ -331,5 +331,6 @@
 				]
 			]
 		}
-	]
+	],
+	"audioMuteAt": 1052.3
 }

@@ -9,7 +9,7 @@
 		"date": "2024年1月11日"
 	},
 	"clipStart": 1237.6,
-	"clipEnd": 1307.96,
+	"clipEnd": 1310.16,
 	"bg": "lime",
 	"clipTitleLines": [
 		"おばあちゃんに",
@@ -660,5 +660,6 @@
 				]
 			]
 		}
-	]
+	],
+	"audioMuteAt": 1307.99
 }

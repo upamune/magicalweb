@@ -9,7 +9,7 @@
 		"date": "2024年7月15日"
 	},
 	"clipStart": 73.24,
-	"clipEnd": 117.88,
+	"clipEnd": 120.08,
 	"bg": "sky",
 	"clipTitleLines": [
 		"みちるだ怖い",
@@ -478,5 +478,6 @@
 				]
 			]
 		}
-	]
+	],
+	"audioMuteAt": 117.93
 }

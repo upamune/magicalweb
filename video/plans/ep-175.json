@@ -9,7 +9,7 @@
 		"date": "2025年8月28日"
 	},
 	"clipStart": 1838.04,
-	"clipEnd": 1878.98,
+	"clipEnd": 1881.18,
 	"bg": "candy",
 	"clipTitleLines": [
 		"鹿児島の飲食店に",
@@ -373,5 +373,6 @@
 				]
 			]
 		}
-	]
+	],
+	"audioMuteAt": 1879.28
 }

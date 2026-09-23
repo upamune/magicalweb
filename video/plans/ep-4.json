@@ -9,7 +9,7 @@
 		"date": "2024年1月8日"
 	},
 	"clipStart": 787.31,
-	"clipEnd": 822.59,
+	"clipEnd": 824.79,
 	"bg": "lilac",
 	"clipTitleLines": [
 		"属人化をなくしてる",
@@ -310,5 +310,6 @@
 				]
 			]
 		}
-	]
+	],
+	"audioMuteAt": 822.89
 }
