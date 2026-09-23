@@ -19,3 +19,5 @@ YouTube は既定で限定公開なので、内容を確認してから YouTube 
 | [#278](https://magical.fm/ep/278) | 最適解を教えても実践しない人 | [限定公開](https://www.youtube.com/shorts/wYvh8u1nsm8) 2026/08/30 | [公開](https://www.instagram.com/reel/DcqwHXAD5my/) 2026/08/30 | [mp4](https://clips.magical.fm/magicalfm-278-clip-d91b8a46.mp4) |
 | [#277](https://magical.fm/ep/277) | オーラリングなくした回数 | [限定公開](https://www.youtube.com/shorts/lwSd_HSJahE) 2026/09/01 | [公開](https://www.instagram.com/reel/DcvwIHyk0hq/) 2026/09/01 | [mp4](https://clips.magical.fm/magicalfm-277-clip-b95c806c.mp4) |
 | [#276](https://magical.fm/ep/276) | ネカフェ収録の落とし穴 | [限定公開](https://www.youtube.com/shorts/W_RAHeuNAvY) 2026/09/01 | [公開](https://www.instagram.com/reel/DcvwMnyD2fl/) 2026/09/01 | [mp4](https://clips.magical.fm/magicalfm-276-clip-0276e281.mp4) |
+| [#145](https://magical.fm/ep/145) | 「お二人は何なんですか」 | — | [公開](https://www.instagram.com/reel/DdnuJEbkpCF/) 2026/09/23 | [mp4](https://clips.magical.fm/magicalfm-145-clip-030a6b45.mp4) |
+| [#136](https://magical.fm/ep/136) | AIが友達みたいに話しかけてきた | — | [公開](https://www.instagram.com/reel/DdnuCvjE9kP/) 2026/09/23 | [mp4](https://clips.magical.fm/magicalfm-136-clip-bf7e43c4.mp4) |

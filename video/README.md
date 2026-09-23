@@ -119,9 +119,12 @@ bun scripts/publish-social.mjs out/magicalfm-278-clip.mp4 278 --to instagram
 
 bun scripts/publish-social.mjs --pending 1        # 未投稿の新しい順から1本（動画はR2から自動DL）
 bun scripts/publish-social.mjs --pending 1 --oldest  # 古い順
+bun scripts/publish-social.mjs --pending 1 --order playback  # 再生回数の多い順
 ```
 
 `--pending` は `clips.json` と `social-posts.json` の差分から未投稿クリップを拾う。
+`--order playback` は `video/episode_playbacks.csv`（LISTEN の再生数エクスポート。
+`--playbacks <path>` で差し替え可）の Media Play Count 順に並べる。
 **短時間に連投すると Shorts の初動テストの表示枠を自分の動画同士で奪い合う**ので、
 1日1〜2本で回すこと（3本以上を指定すると警告が出る）。溜まった過去クリップは
 cron や launchd で `--pending 1` を1日1回叩いて消化するのがよい。

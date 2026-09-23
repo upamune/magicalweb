@@ -53,7 +53,7 @@ for (let i = 0; i < argv.length; i++) {
 const usage =
 	"Usage: bun scripts/publish-social.mjs <path/to/clip.mp4> <episode> [options]\n" +
 	"       bun scripts/publish-social.mjs --pending <本数> [options]\n" +
-	"Options: [--to youtube,instagram] [--url <公開URL>] [--title <text>] [--caption <text>] [--privacy public|unlisted|private] [--oldest] [--dry-run] [--force]";
+	"Options: [--to youtube,instagram] [--url <公開URL>] [--title <text>] [--caption <text>] [--privacy public|unlisted|private] [--oldest] [--order playback] [--playbacks <csv>] [--dry-run] [--force]";
 
 const pendingCount = flags.pending ? Number(flags.pending) : null;
 const [filePathArg, episodeArg] = positional;
@@ -94,7 +94,47 @@ const baseFromUrl = (url) =>
 const recordFor = (episode, base) =>
 	(posts[episode] ?? []).find((e) => e.clip === base) ?? null;
 
-// 投稿の対象を決める。--pending は clips.json 全体から未投稿を新しい順（--oldest で古い順）に拾う
+// --order playback: episode_playbacks.csv の Media Play Count で降順に並べる
+const parseCsvLine = (line) => {
+	const cells = [];
+	let cur = "";
+	let inQ = false;
+	for (const ch of line) {
+		if (inQ) {
+			if (ch === '"') inQ = false;
+			else cur += ch;
+		} else if (ch === '"') inQ = true;
+		else if (ch === ",") {
+			cells.push(cur);
+			cur = "";
+		} else cur += ch;
+	}
+	cells.push(cur);
+	return cells;
+};
+
+const playbackRank = (() => {
+	if (flags.order !== "playback") return null;
+	const csvPath =
+		flags.playbacks ?? path.join(videoDir, "episode_playbacks.csv");
+	if (!fs.existsSync(csvPath)) {
+		console.error(
+			`再生回数CSVが見つかりません: ${csvPath}（--playbacks <path> で指定）`,
+		);
+		process.exit(1);
+	}
+	const rank = new Map();
+	for (const line of fs.readFileSync(csvPath, "utf8").split("\n").slice(1)) {
+		if (!line.trim()) continue;
+		const cells = parseCsvLine(line);
+		const ep = cells[0]?.match(/^(\d+):/)?.[1];
+		const count = Number(cells[2]);
+		if (ep && Number.isFinite(count)) rank.set(Number(ep), count);
+	}
+	return rank;
+})();
+
+// 投稿の対象を決める。--pending は clips.json 全体から未投稿を新しい順（--oldest で古い順、--order playback で再生回数順）に拾う
 const selectJobs = () => {
 	if (pendingCount === null) {
 		const base = path.basename(filePathArg, path.extname(filePathArg));
@@ -112,9 +152,15 @@ const selectJobs = () => {
 			},
 		];
 	}
-	return Object.keys(clips)
-		.map(Number)
-		.sort((a, b) => (flags.oldest ? a - b : b - a))
+	const numbers = Object.keys(clips).map(Number);
+	if (playbackRank) {
+		numbers.sort(
+			(a, b) => (playbackRank.get(b) ?? -1) - (playbackRank.get(a) ?? -1),
+		);
+	} else {
+		numbers.sort((a, b) => (flags.oldest ? a - b : b - a));
+	}
+	return numbers
 		.flatMap((number) =>
 			(clips[String(number)] ?? []).map((clipEntry) => ({
 				episode: String(number),
