@@ -1,6 +1,6 @@
 ---
 name: post-clip
-description: R2 公開済みの切り抜きクリップを YouTube Shorts と Instagram Reels に投稿し、投稿記録をコミットする。ユーザーが「クリップ上げて」「未投稿のクリップ投稿して」「#N を Shorts/Reels に上げて」「SNS に投稿して」などと言ったとき、または make-clip の直後に投稿を頼まれたときに使う。クリップの生成はしない（それは make-clip）。
+description: R2 公開済みの切り抜きクリップを YouTube Shorts と Instagram Reels に投稿し、投稿記録をコミットする。ユーザーが「クリップ上げて」「未投稿のクリップ投稿して」「投稿の続き」「再生回数順に上げて」「#N を Shorts/Reels に上げて」「SNS に投稿して」などと言ったとき、または make-clip の直後に投稿を頼まれたときに使う。クリップの生成はしない（それは make-clip）。
 ---
 
 # post-clip: 切り抜きクリップの SNS 投稿
@@ -15,8 +15,9 @@ description: R2 公開済みの切り抜きクリップを YouTube Shorts と In
 
 | 依頼 | コマンド |
 |---|---|
-| 「未投稿を1本」「何か上げて」 | `--pending 1`（新しい順。「古いのから」なら `--oldest`） |
+| 「未投稿を1本」「続き」「何か上げて」 | `--pending 1 --order playback`（再生回数順が既定。話数順なら `--oldest`） |
 | 「#279 上げて」 | `out/magicalfm-279-clip.mp4 279`（2本目は `-clip-2`） |
+| 片方のプラットフォームだけ | `--to youtube` / `--to instagram`（未投稿側だけ `--pending` が拾う） |
 | make-clip 直後 | 今レンダリングした `out/magicalfm-N-clip*.mp4` |
 
 手元に mp4 が無いときは `--pending` が R2 から自動 DL する。エピソード指定で無いときは
@@ -32,7 +33,7 @@ description: R2 公開済みの切り抜きクリップを YouTube Shorts と In
 
 ```bash
 cd video
-bun scripts/publish-social.mjs --pending 1 --dry-run
+bun scripts/publish-social.mjs --pending 1 --order playback --dry-run
 ```
 
 出力の YouTube タイトル（`【#N】見出し #ポッドキャスト #shorts`）と Instagram キャプションを
@@ -42,7 +43,7 @@ bun scripts/publish-social.mjs --pending 1 --dry-run
 ### 4. 投稿
 
 ```bash
-bun scripts/publish-social.mjs --pending 1
+bun scripts/publish-social.mjs --pending 1 --order playback
 ```
 
 - 二重投稿はスクリプトが弾く（再投稿は `--force`）
@@ -72,6 +73,7 @@ git pull --rebase origin main && git push origin main
 | 症状 | 対処 |
 |---|---|
 | `[Instagram] ... failed: 400 ... Session has expired` | トークン失効。Meta App「Instagramログインによる API設定」→ magical_fm →「トークンを生成」して `.env` の `IG_ACCESS_TOKEN` を差し替え |
+| `[YouTube] token refresh failed: 400 invalid_grant` | リフレッシュトークン失効。`bun scripts/youtube-auth.mjs` を**ユーザーに実行してもらう**（ブラウザ承認・チャンネル @magicalfm_ を選択）。再発行後に `--to youtube --pending` で未投稿分を補完 |
 | `[YouTube] 警告: 公開設定が private` | 監査未通過で非公開ロック。`--privacy public` を使わない |
 | `[Instagram] skip: 公開URLが見つかりません` | `upload-clip.mjs` を先に実行するか `--url` を渡す |
 | 2本目のタイトルが1本目と同じ | ファイル名が `magicalfm-N-clip-2.mp4` になっているか確認（プランは `plans/ep-N-2.json`） |
