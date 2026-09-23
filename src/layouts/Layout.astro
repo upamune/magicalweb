@@ -1,7 +1,8 @@
 ---
-import { ViewTransitions } from "astro:transitions";
+import { ClientRouter } from "astro:transitions";
 import AudioPlayer from "../components/AudioPlayer";
 import CommandPalette from "../components/CommandPalette";
+import "../styles/global.css";
 
 interface Props {
 	title: string;
@@ -91,7 +92,7 @@ const ogImageUrl = image.startsWith("http")
       />
     </noscript>
 
-    <ViewTransitions />
+    <ClientRouter />
   </head>
   <body class="bg-paper font-sans font-medium text-ink antialiased">
     <div class="min-h-screen flex flex-col">

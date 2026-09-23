@@ -3,7 +3,7 @@
 マヂカル.fm のWebサイトと自動生成OGPが共有するデザイン言語の定義。
 **「お笑いと駄菓子屋のエネルギー。賑やかだが、規則は厳密に統一されている」** が合言葉。
 
-- サイト実装: `tailwind.config.mjs`（トークン）+ `src/layouts/Layout.astro`（CSS変数・共通クラス）
+- サイト実装: `tailwind.config.mjs`（トークン）+ `src/styles/global.css`（@tailwindディレクティブのエントリ。PostCSS経由）+ `src/layouts/Layout.astro`（CSS変数・共通クラス）
 - OGP実装: `scripts/generate-og.jsx`（`C` オブジェクトが本書のトークンと同期）
 
 ---
