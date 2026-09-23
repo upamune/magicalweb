@@ -10,6 +10,12 @@
 				"id": "17929105038164798",
 				"url": "https://www.instagram.com/reel/DdnuCvjE9kP/",
 				"publishedAt": "2026-09-23T06:58:36.606Z"
+			},
+			"youtube": {
+				"id": "wRPBOgu-Uvk",
+				"url": "https://www.youtube.com/shorts/wRPBOgu-Uvk",
+				"privacyStatus": "unlisted",
+				"publishedAt": "2026-09-23T07:13:04.675Z"
 			}
 		}
 	],
@@ -24,6 +30,12 @@
 				"id": "18390224476160345",
 				"url": "https://www.instagram.com/reel/DdnuJEbkpCF/",
 				"publishedAt": "2026-09-23T06:59:18.674Z"
+			},
+			"youtube": {
+				"id": "nalqhSa1xzs",
+				"url": "https://www.youtube.com/shorts/nalqhSa1xzs",
+				"privacyStatus": "unlisted",
+				"publishedAt": "2026-09-23T07:13:13.486Z"
 			}
 		}
 	],
@@ -196,6 +208,12 @@
 				"id": "18458942011186602",
 				"url": "https://www.instagram.com/reel/Ddi-Cv8D_pl/",
 				"publishedAt": "2026-09-21T10:42:01.180Z"
+			},
+			"youtube": {
+				"id": "lzrQWaCUkN8",
+				"url": "https://www.youtube.com/shorts/lzrQWaCUkN8",
+				"privacyStatus": "unlisted",
+				"publishedAt": "2026-09-23T07:13:16.324Z"
 			}
 		}
 	],
@@ -210,6 +228,12 @@
 				"id": "18123610115485277",
 				"url": "https://www.instagram.com/reel/Ddi-JO7FAvx/",
 				"publishedAt": "2026-09-21T10:42:49.649Z"
+			},
+			"youtube": {
+				"id": "keh0lOUFUhA",
+				"url": "https://www.youtube.com/shorts/keh0lOUFUhA",
+				"privacyStatus": "unlisted",
+				"publishedAt": "2026-09-23T07:13:19.192Z"
 			}
 		}
 	],
@@ -224,12 +248,18 @@
 				"id": "17980153122089186",
 				"url": "https://www.instagram.com/reel/Ddi-UezDg_m/",
 				"publishedAt": "2026-09-21T10:44:26.453Z"
+			},
+			"youtube": {
+				"id": "Shkm9J4QyGc",
+				"url": "https://www.youtube.com/shorts/Shkm9J4QyGc",
+				"privacyStatus": "unlisted",
+				"publishedAt": "2026-09-23T07:13:22.153Z"
 			}
 		}
 	],
 	"286": [
 		{
-			"clip": "magicalfm-286-clip-d7643fe4",
+			"clip": "magicalfm-286-clip",
 			"title": "青サギと動じないおばあちゃん",
 			"label": "青サギと動じないおばあちゃん",
 			"url": "https://clips.magical.fm/magicalfm-286-clip-d7643fe4.mp4",
@@ -238,6 +268,12 @@
 				"id": "18026315546889471",
 				"url": "https://www.instagram.com/reel/Ddi65LOAAfx/",
 				"publishedAt": "2026-09-21T10:14:24.387Z"
+			},
+			"youtube": {
+				"id": "Vme7lVuIB5Y",
+				"url": "https://www.youtube.com/shorts/Vme7lVuIB5Y",
+				"privacyStatus": "unlisted",
+				"publishedAt": "2026-09-23T07:13:24.962Z"
 			}
 		}
 	]

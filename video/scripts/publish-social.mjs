@@ -137,7 +137,9 @@ const playbackRank = (() => {
 // 投稿の対象を決める。--pending は clips.json 全体から未投稿を新しい順（--oldest で古い順、--order playback で再生回数順）に拾う
 const selectJobs = () => {
 	if (pendingCount === null) {
-		const base = path.basename(filePathArg, path.extname(filePathArg));
+		const base = path
+			.basename(filePathArg, path.extname(filePathArg))
+			.replace(/-[0-9a-f]{8}$/, "");
 		const samePattern = new RegExp(
 			`^${PUBLIC_BASE_URL}/${base}(-[0-9a-f]{8})?\\.mp4$`,
 		);
