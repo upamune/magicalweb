@@ -20,6 +20,7 @@ description: 実写・街歩き素材と別録り音声から、同期、雑音�
 別checkoutで使う場合はリポジトリルートを特定する。別の番組ならデザインを流用する前に対象を確定する。
 Pythonの同梱ヘルパーは`uv run`、検査ヘルパーは`node`で動く。`ffmpeg`と`ffprobe`が必要。
 資料内の`SKILL_DIR`はこの`SKILL.md`の親ディレクトリの絶対パスに置き換える。
+複数本に分ける旅Vlogを#290と同じ見た目・音声・字幕で作る場合（次回のmichiru_daさんのフランスVlogなど）は、[references/travel-vlog-series.md](references/travel-vlog-series.md)を読む。そこにある時刻や数値は出発点であり、新しい素材で測り直す。
 
 ## 今回からの既定値
 

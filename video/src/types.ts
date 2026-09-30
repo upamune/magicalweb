@@ -43,6 +43,17 @@ export interface EpisodeVideoSegment {
 	sourceStartSec: number;
 }
 
+export type LocationLabelStyle = "pill" | "sticker" | "glass" | "editorial";
+
+// 完成音声の時間軸。地名は文字起こしと映像を確認してから記入する。
+export interface EpisodeLocationCue {
+	startSec: number;
+	endSec: number;
+	name: string;
+	romanized?: string;
+	style?: LocationLabelStyle;
+}
+
 export interface EpisodeData {
 	episode: ClipData["episode"];
 	audioFile: string;
@@ -53,4 +64,5 @@ export interface EpisodeData {
 	envelope: number[];
 	pages: CaptionPage[];
 	videoSegments?: EpisodeVideoSegment[];
+	locationCues?: EpisodeLocationCue[];
 }

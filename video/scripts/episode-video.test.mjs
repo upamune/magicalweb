@@ -5,6 +5,10 @@ import os from "node:os";
 import path from "node:path";
 import test from "node:test";
 import {
+	findActiveLocation,
+	validateLocationCues,
+} from "../src/episode/locationTimeline.mjs";
+import {
 	findActiveVideoSegment,
 	segmentFrames,
 	validateVideoSegments,
@@ -22,6 +26,30 @@ const segment = {
 	timelineEndSec: 770,
 	sourceStartSec: 3.8,
 };
+
+test("location labels follow the master timeline without guessing between places", () => {
+	const cues = [
+		{
+			startSec: 100,
+			endSec: 200,
+			name: "エッサウィラ",
+			romanized: "ESSAOUIRA",
+		},
+		{ startSec: 250, endSec: 300, name: "トドラ峡谷", style: "glass" },
+	];
+	validateLocationCues(cues, 400);
+	assert.equal(findActiveLocation(cues, 99.99), null);
+	assert.equal(findActiveLocation(cues, 100), cues[0]);
+	assert.equal(findActiveLocation(cues, 200), null);
+	assert.equal(findActiveLocation(cues, 250), cues[1]);
+	assert.equal(findActiveLocation(cues, 300), null);
+	assert.throws(() => validateLocationCues([cues[1], cues[0]], 400));
+	assert.throws(() => validateLocationCues([{ ...cues[0], endSec: 401 }], 400));
+	assert.throws(() => validateLocationCues([{ ...cues[0], name: " " }], 400));
+	assert.throws(() =>
+		validateLocationCues([{ ...cues[0], style: "unknown" }], 400),
+	);
+});
 
 test("master timeline: gaps, exact boundaries, adjacent segments and unsorted inputs", () => {
 	const next = { ...segment, timelineStartSec: 770, timelineEndSec: 772 };

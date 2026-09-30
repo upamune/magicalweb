@@ -2,7 +2,8 @@ import { Composition } from "remotion";
 import { Clip, FPS } from "./Clip";
 import { Episode } from "./Episode";
 import clipData from "./data/clip.json";
-import type { ClipData, EpisodeData } from "./types";
+import { LocationLabel } from "./episode/LocationLabel";
+import type { ClipData, EpisodeData, EpisodeLocationCue } from "./types";
 
 const data = clipData as ClipData;
 
@@ -41,6 +42,23 @@ export const RemotionRoot: React.FC = () => {
 					durationInFrames: Math.ceil(props.data.durationSec * props.data.fps),
 					fps: props.data.fps,
 				})}
+			/>
+			<Composition
+				id="LocationLabelAsset"
+				component={LocationLabel}
+				durationInFrames={1}
+				fps={30}
+				width={1920}
+				height={1080}
+				defaultProps={{
+					cue: {
+						startSec: 0,
+						endSec: 1,
+						name: "エッサウィラ",
+						romanized: "ESSAOUIRA",
+						style: "editorial",
+					} satisfies EpisodeLocationCue,
+				}}
 			/>
 		</>
 	);

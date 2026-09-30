@@ -136,6 +136,31 @@ run内のmanifestにはepisode番号とvideoSegments配列を記録する。file
 
 数値は例。master 763.2秒 = clean 0秒の場合、master 767秒の映像はclean 3.8秒。
 
+### 場所名の表示
+
+`src/data/episode.json` に任意の `locationCues` を加えると、実写区間の右上に場所名を表示できる。場所表示は [LocationLabel.tsx](../src/episode/LocationLabel.tsx) の共通コンポーネントで、`pill`、`sticker`、`glass`、`editorial` の4デザインから選べる。未指定時は `editorial`（#290で選んだD案、`LOCATION`の文字なし）。コンポーネントは別の回でも使える。
+
+```json
+"locationCues": [
+  {
+    "startSec": 600,
+    "endSec": 660,
+    "name": "エッサウィラ",
+    "romanized": "ESSAOUIRA",
+    "style": "editorial"
+  }
+]
+```
+
+区間は完成音声の秒数で `[startSec, endSec)`。昇順・非重複とし、場所が不明な区間は空ける。文字起こしで話題を探し、映像がその場所を映しているか確認してから区間を確定する。通過地点や過去の旅先に言及しただけの発話を、現在地として表示しない。地名の綴りは公的観光資料などで照合する。例えば上記の「エッサウィラ / Essaouira」は [UNESCO日本語ページ](https://whc.unesco.org/ja/list/753/) と [在モロッコ日本国大使館](https://www.ma.emb-japan.go.jp/itpr_ja/00_000408.html) の表記に合わせた。`build-episode.mjs` を再実行するとこの手動データは失われるため、作業用の場所リストも別に保管してから再適用する。
+
+DaVinci Resolveの編集では、同じコンポーネントの `LocationLabelAsset` Compositionから透過PNGを書き出して、該当区間の上段トラックに置く。`cue.json` は `{ "cue": { "startSec": 0, "endSec": 1, "name": "エッサウィラ", "romanized": "ESSAOUIRA", "style": "editorial" } }` の形式にする。
+
+```sh
+bunx remotion still src/index.ts LocationLabelAsset /absolute/path/location.png \
+  --props=/absolute/path/cue.json --image-format=png
+```
+
 ```sh
 # 人間が該当clean動画を目視確認した後に実行
 bun scripts/prepare-episode-video.mjs work/ep-N/runs/RUN_ID/manifest.json --reviewed

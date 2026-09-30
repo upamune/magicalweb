@@ -7,6 +7,7 @@ import {
 } from "remotion";
 import { ClassicEpisodeView } from "./episode/ClassicEpisodeView";
 import { StreetVideoView } from "./episode/StreetVideoView";
+import { validateLocationCues } from "./episode/locationTimeline.mjs";
 import {
 	findActiveVideoSegment,
 	validateVideoSegments,
@@ -18,6 +19,7 @@ export const Episode: React.FC<{ data: EpisodeData }> = ({ data }) => {
 	const { fps } = useVideoConfig();
 	const t = frame / fps;
 	validateVideoSegments(data.videoSegments, data.durationSec, fps);
+	validateLocationCues(data.locationCues, data.durationSec);
 	const segment = findActiveVideoSegment(data.videoSegments ?? [], t);
 	return (
 		<AbsoluteFill>
