@@ -32,7 +32,7 @@ OPだけが流れる冒頭は、ユーザーが別の指定をしない限り、
 - 小さい文字の背後に薄い暗がりを敷き、明るいカットでも読めるようにする。
 - 冒頭から30フレームでフェードインし、最後のホワイトアウトまで出し続ける。途中のアクセントで出す案は「後半すぎる」と差し戻された。
 
-実装は制作コピーの`episode-style/video/src/episode/HighlightTitle.tsx`（リポジトリには未反映）。アルファ付きProResで書き出し、ハイライトへ合成する。
+実装はリポジトリの`video/src/episode/HighlightTitle.tsx`で、Compositionは静止画の`HighlightTitleAsset`とアルファ付き動画の`HighlightTitle`。上の小さい文字は`kicker`で渡す。書き出し方は`video/docs/hybrid-episode-video.md`にある。アルファ付きProResで書き出し、ハイライトへ合成する。
 正式タイトルが未定なら仮の文字だと伝える。決まったらハイライトだけ差し替えて書き出し直す。
 
 ## サムネイル
@@ -58,7 +58,7 @@ uv run SKILL_DIR/scripts/stickerize.py /absolute/work/thumb/lifted/name-i1.png /
 デカ文字と吹き出しのコピーは、本編で実際に話している内容か、RSSの概要・タイトルから取る。映像から推測した料理名などは、確認事項として伝える。缶のキャラクターなど目立つ他者の版権物が写っていたら伝える。
 
 案は4つ前後を一覧にし、YouTubeの一覧表示に近い横360pxへ縮めた画像でも読めるかを見せる。
-実装は制作コピーの`episode-style/video/src/episode/Thumbnail.tsx`（リポジトリには未反映）。背景・デカ文字・ステッカー・吹き出しの配置をpropsで渡す。props化などで実装を変えたら、既存のサムネイルを画素単位で比べて変わっていないことを確かめる。
+実装はリポジトリの`video/src/episode/Thumbnail.tsx`（Composition `Thumbnail`）で、T1だけを持つ。背景・デカ文字・ステッカー・吹き出しの配置をpropsで渡し、回ごとの画像は`--public-dir`の素材フォルダから読む。2人のアイコンは`video/public/thumbnail/`にあり、素材フォルダへ`thumbnail/`ごとコピーする。書き出し方とpropsの例は`video/docs/hybrid-episode-video.md`と`video/src/Root.tsx`。実装を変えたら、既存のサムネイル（#293、#290〜#292）を画素単位で比べて変わっていないことを確かめる。
 モロッコ編（#290〜#292）も同じ型で作った。出力は`/Users/upamune/src/tries/2026-09-28-morocco-vlog/out/final-deliveries/`。
 
 ## LISTEN用の文字起こし（VTT／SRT）

@@ -161,6 +161,22 @@ bunx remotion still src/index.ts LocationLabelAsset /absolute/path/location.png 
   --props=/absolute/path/cue.json --image-format=png
 ```
 
+旅Vlogの冒頭ハイライトに重ねるタイトルは `HighlightTitle`（`src/episode/HighlightTitle.tsx`）。`variant` で隅に置く6案と中央に大きく出す6案を切り替えられる。#293で採用したのは `center-stacked` で、`kicker`（例: `SPAIN × FRANCE`）、`title`（`旅の名前 部名` を半角スペースで区切る）、`number`、`romanized` を渡す。案の比較用の静止画は `HighlightTitleAsset`、ハイライトに合成するアルファ付き動画は `HighlightTitle` から書き出す。動画の尺とfpsは `durationInFrames` と `fps` で指定する。
+
+```sh
+bunx remotion render src/index.ts HighlightTitle /absolute/path/title.mov \
+  --props=/absolute/path/title.json --codec=prores --prores-profile=4444 \
+  --pixel-format=yuva444p10le --image-format=png
+```
+
+YouTubeサムネイル（1280×720）は `Thumbnail`（`src/episode/Thumbnail.tsx`）。背景写真と切り抜いたステッカーは回ごとの素材フォルダに置き、`--public-dir` でそのフォルダを渡す。2人のアイコンのステッカーは `public/thumbnail/` にあるので、素材フォルダへ `thumbnail/` ごとコピーしておく。props の例は `src/Root.tsx` の `thumbnail293`。
+
+```sh
+cp -R public/thumbnail /absolute/path/thumb-assets/
+bunx remotion still src/index.ts Thumbnail /absolute/path/thumbnail.png \
+  --props=/absolute/path/thumbnail.json --public-dir=/absolute/path/thumb-assets --image-format=png
+```
+
 ```sh
 # 人間が該当clean動画を目視確認した後に実行
 bun scripts/prepare-episode-video.mjs work/ep-N/runs/RUN_ID/manifest.json --reviewed

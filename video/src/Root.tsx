@@ -2,7 +2,12 @@ import { Composition } from "remotion";
 import { Clip, FPS } from "./Clip";
 import { Episode } from "./Episode";
 import clipData from "./data/clip.json";
+import {
+	HighlightTitle,
+	type HighlightTitleProps,
+} from "./episode/HighlightTitle";
 import { LocationLabel } from "./episode/LocationLabel";
+import { Thumbnail, type ThumbnailProps } from "./episode/Thumbnail";
 import type { ClipData, EpisodeData, EpisodeLocationCue } from "./types";
 
 const data = clipData as ClipData;
@@ -16,6 +21,31 @@ const episodePlaceholder: EpisodeData = {
 	bg: data.bg,
 	envelope: [],
 	pages: [],
+};
+
+// 旅Vlogの冒頭ハイライト用タイトルとサムネイル。既定値は #293 の実績で、回ごとに --props で上書きする
+const highlightTitle293: HighlightTitleProps = {
+	variant: "center-stacked",
+	number: "#293",
+	title: "スペイン・フランス旅行 前編",
+	romanized: "MADRID",
+	kicker: "SPAIN × FRANCE",
+	backdrop: true,
+};
+
+const thumbnail293: ThumbnailProps = {
+	number: "#293",
+	series: "スペイン・フランス旅行 前編",
+	bg: "palace.png",
+	line1: "マドリード",
+	line2: "駆け込み旅！",
+	stickers: [
+		{ src: "st-paella-pan.png", x: 830, y: 36, w: 430, r: 8 },
+		{ src: "st-churros.png", x: 820, y: 420, w: 450, r: -7, z: 2 },
+		{ src: "st-fanta.png", x: 650, y: 440, w: 210, r: 12, z: 3 },
+		{ src: "st-squid-i1.png", x: 1010, y: 250, w: 220, r: 10 },
+	],
+	bubble: { text: "チュロス7本！？", x: 350, y: 610 },
 };
 
 export const RemotionRoot: React.FC = () => {
@@ -59,6 +89,44 @@ export const RemotionRoot: React.FC = () => {
 						style: "editorial",
 					} satisfies EpisodeLocationCue,
 				}}
+			/>
+			<Composition
+				id="HighlightTitleAsset"
+				component={HighlightTitle}
+				durationInFrames={1}
+				fps={30}
+				width={1920}
+				height={1080}
+				defaultProps={highlightTitle293}
+			/>
+			<Composition
+				id="HighlightTitle"
+				component={HighlightTitle}
+				durationInFrames={415}
+				fps={30}
+				width={1920}
+				height={1080}
+				defaultProps={{
+					...highlightTitle293,
+					animate: true,
+					fadeOnly: true,
+					enterFrames: 30,
+					exitFrames: 10,
+					durationInFrames: 415,
+				}}
+				calculateMetadata={({ props }) => ({
+					durationInFrames: props.durationInFrames ?? 415,
+					fps: props.fps ?? 30,
+				})}
+			/>
+			<Composition
+				id="Thumbnail"
+				component={Thumbnail}
+				durationInFrames={1}
+				fps={30}
+				width={1280}
+				height={720}
+				defaultProps={thumbnail293}
 			/>
 		</>
 	);
