@@ -101,6 +101,7 @@ export async function verifyDelivery(options) {
 	const target = number(options["target-lufs"] ?? "-16", "target LUFS", -70);
 	assert(target <= -5, "Target LUFS must be between -70 and -5");
 	const offset = number(options["master-offset"] ?? "0", "master offset");
+	const checkIntegrated = !options["skip-loudness"];
 	const duration = frames / fps;
 	assert(
 		duration >= 1,
@@ -224,10 +225,12 @@ export async function verifyDelivery(options) {
 			integratedLUFS: integrated,
 			truePeakDBTP: peak,
 			targetLUFS: target,
+			// A short excerpt cannot meet the whole-program integrated target.
+			integratedChecked: checkIntegrated,
 		};
 		assert(
 			Number.isFinite(integrated) &&
-				Math.abs(integrated - target) <= 0.5 &&
+				(!checkIntegrated || Math.abs(integrated - target) <= 0.5) &&
 				Number.isFinite(peak) &&
 				peak <= -1,
 			"Loudness or true peak outside target",
@@ -354,6 +357,9 @@ export async function verifyDelivery(options) {
 		report.state = "passed-automated-checks";
 		report.note =
 			"Open the sample images; this does not certify full human caption or privacy review.";
+		if (!checkIntegrated)
+			report.note +=
+				" Integrated loudness was not checked; verify it on the full render.";
 		save();
 		console.log(path.join(directory, "report.json"));
 		return report;
@@ -384,12 +390,13 @@ async function main() {
 				"black-review",
 			].map((key) => [key, { type: "string" }]),
 			["require-resolve", { type: "boolean" }],
+			["skip-loudness", { type: "boolean" }],
 			["help", { type: "boolean" }],
 		]),
 	});
 	if (values.help) {
 		console.log(
-			"node verify_delivery.mjs --file VIDEO --master WAV --fps N/D --frames N --report-dir NEW_DIR [--require-resolve] [--drp FILE] [--sample-frames 0,100] [--sync-times 7,22] [--master-offset 100] [--width 1920 --height 1080 --target-lufs -16] [--black-review REVIEW_JSON]",
+			"node verify_delivery.mjs --file VIDEO --master WAV --fps N/D --frames N --report-dir NEW_DIR [--require-resolve] [--drp FILE] [--sample-frames 0,100] [--sync-times 7,22] [--master-offset 100] [--skip-loudness] [--width 1920 --height 1080 --target-lufs -16] [--black-review REVIEW_JSON]",
 		);
 		return;
 	}

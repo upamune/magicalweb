@@ -229,6 +229,40 @@ test("synthetic delivery checks reject clock, origin and black-frame failures", 
 			}),
 			/Not a native Resolve/,
 		);
+		const quiet = path.join(folder, "quiet.mp4");
+		run([
+			"-i",
+			file,
+			"-c:v",
+			"copy",
+			"-af",
+			"volume=-10dB",
+			"-c:a",
+			"aac",
+			"-b:a",
+			"320k",
+			quiet,
+		]);
+		await assert.rejects(
+			verifyDelivery({
+				...base,
+				file: quiet,
+				"report-dir": path.join(folder, "quiet"),
+			}),
+			/Loudness or true peak/,
+		);
+		const excerpt = await verifyDelivery({
+			...base,
+			file: quiet,
+			"skip-loudness": true,
+			"report-dir": path.join(folder, "quiet-excerpt"),
+		});
+		assert.equal(excerpt.state, "passed-automated-checks");
+		assert.equal(excerpt.loudness.integratedChecked, false);
+		assert(excerpt.loudness.integratedLUFS < -20);
+		assert(excerpt.audioSync.every((x) => x.lagMs === 0));
+		assert.match(excerpt.note, /Integrated loudness was not checked/);
+		assert.equal(result.loudness.integratedChecked, true);
 		const dark = path.join(folder, "dark.mp4");
 		run([
 			"-f",
