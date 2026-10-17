@@ -14,6 +14,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
+import cv2
 import numpy as np
 
 ROOT = Path(__file__).parent
@@ -137,6 +138,24 @@ class HelpersTest(unittest.TestCase):
         self.assertLessEqual(float(receipt["verified"]["input_tp"]), -1)
         result = run(sys.executable, ROOT / "master_audio.py", source, output, check=False)
         self.assertNotEqual(result.returncode, 0)
+
+    def test_stickerize_border_and_reject_overwrite(self):
+        lifted, output = self.folder / "lifted.png", self.folder / "sticker.png"
+        rgba = np.zeros((300, 200, 4), np.uint8)
+        cv2.ellipse(rgba, (100, 150), (70, 120), 0, 0, 360, (40, 120, 220, 255), -1)
+        cv2.imwrite(str(lifted), rgba)
+        run("uv", "run", "--quiet", ROOT / "stickerize.py", lifted, output)
+        sticker = cv2.imread(str(output), cv2.IMREAD_UNCHANGED)
+        self.assertEqual(sticker.shape[2], 4)
+        middle = sticker[sticker.shape[0] // 2]
+        opaque = np.flatnonzero(middle[:, 3] == 255)
+        self.assertTrue((middle[opaque[0] + 1, :3] < 80).all(), "ink rim expected at the outer edge")
+        self.assertTrue((middle[opaque[0] + 12, :3] == 255).all(), "white border expected inside the rim")
+        self.assertTrue((sticker[sticker.shape[0] // 2, sticker.shape[1] // 2 - 20, :3] == (40, 120, 220)).all())
+        old = output.read_bytes()
+        result = run("uv", "run", "--quiet", ROOT / "stickerize.py", lifted, output, check=False)
+        self.assertNotEqual(result.returncode, 0)
+        self.assertEqual(output.read_bytes(), old)
 
 
 if __name__ == "__main__":

@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { execFileSync } from "node:child_process";
+import { execFileSync, spawnSync } from "node:child_process";
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
@@ -299,5 +299,23 @@ test("synthetic delivery checks reject clock, origin and black-frame failures", 
 		);
 	} finally {
 		fs.rmSync(folder, { recursive: true }); // Only this disposable test fixture created by mkdtemp.
+	}
+});
+
+test("CLI runs when started through a symlinked skills directory", () => {
+	const here = path.dirname(fileURLToPath(import.meta.url));
+	const folder = fs.mkdtempSync(path.join(os.tmpdir(), "verify-symlink-"));
+	try {
+		const link = path.join(folder, "scripts");
+		fs.symlinkSync(here, link);
+		const result = spawnSync(
+			process.execPath,
+			[path.join(link, "verify_delivery.mjs")],
+			{ encoding: "utf8" },
+		);
+		assert.equal(result.status, 1);
+		assert.match(result.stderr, /Missing --file/);
+	} finally {
+		fs.rmSync(folder, { recursive: true });
 	}
 });

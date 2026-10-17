@@ -1,6 +1,6 @@
 ---
 name: make-live-action-video
-description: 実写・街歩き素材と別録り音声から、同期、雑音低減、LUFS調整、逐語文字起こしを画面用に編集したテロップ、顔ぼかし、DaVinci Resolveでの全編書き出しまで行う。音声のみの番組画面と実写を混ぜる回、完成版のテロップ・ぼかしだけの修正、途中再開にも使う。音声だけの通常回はmake-episode-video、短尺切り抜きはmake-clip。
+description: 実写・街歩き素材と別録り音声から、同期、雑音低減、LUFS調整、逐語文字起こしを画面用に編集したテロップ、顔ぼかし、DaVinci Resolveでの全編書き出しまで行う。旅Vlogの冒頭ハイライト、ステッカー風サムネイル、LISTEN用VTT/SRTも作る。音声のみの番組画面と実写を混ぜる回、完成版のテロップ・ぼかしだけの修正、途中再開にも使う。音声だけの通常回はmake-episode-video、短尺切り抜きはmake-clip。
 ---
 
 # 実写ビデオポッドキャスト制作
@@ -20,7 +20,7 @@ description: 実写・街歩き素材と別録り音声から、同期、雑音�
 別checkoutで使う場合はリポジトリルートを特定する。別の番組ならデザインを流用する前に対象を確定する。
 Pythonの同梱ヘルパーは`uv run`、検査ヘルパーは`node`で動く。`ffmpeg`と`ffprobe`が必要。
 資料内の`SKILL_DIR`はこの`SKILL.md`の親ディレクトリの絶対パスに置き換える。
-複数本に分ける旅Vlogを#290と同じ見た目・音声・字幕で作る場合（次回のmichiru_daさんのフランスVlogなど）は、[references/travel-vlog-series.md](references/travel-vlog-series.md)を読む。そこにある時刻や数値は出発点であり、新しい素材で測り直す。
+複数本に分ける旅Vlog（モロッコ編#290〜#292、スペイン・フランス編#293〜）の続きや同じ見た目の回は、[references/travel-vlog-series.md](references/travel-vlog-series.md)を読む。冒頭ハイライト、ハイライト中のタイトル、サムネイル、LISTEN用文字起こしは[references/highlight-and-thumbnail.md](references/highlight-and-thumbnail.md)を読む。そこにある時刻や数値は出発点であり、新しい素材で測り直す。
 
 ## 今回からの既定値
 
@@ -88,9 +88,11 @@ Resolveで会話を整え、必要なら同梱`master_audio.py`で2パス音量�
 
 長い処理は進捗と出力を確認して最後まで進める。Macロックや未承認の外部送信など、権限が必要な境界では具体的な必要操作を伝える。ローカル素材処理は続行可能なら進める。
 外部公開・アップロード・コミット・pushは別依頼として扱う。
+冒頭など一部だけを直すときは、全編を書き出す前にその部分だけを音つきで書き出して見せる。見た目の案は、まず静止画で複数パターンを並べて見せる。
 最終回答には**最新版の絶対パスの動画リンク**、DRPリンク、実測音量、残る確認を簡潔に示す。旧版は保持する。DRPに素材本体は入っていないことを制作記録へ残す。
 
 ## 参考実績と検証
 
 #289との比較や既存案件の再開には[references/episode-289.md](references/episode-289.md)を読む。そこにある数値は実績であり次回の設定値ではない。
 同梱ヘルパーを変更したときは`uv run scripts/test_helpers.py`と`node --test scripts/verify_delivery.test.mjs`を実行する。
+サムネイル用の`scripts/lift_subject.swift`（Apple Visionの被写体切り抜き）と`scripts/stickerize.py`（ステッカー化）の使い方は[references/highlight-and-thumbnail.md](references/highlight-and-thumbnail.md)にある。
