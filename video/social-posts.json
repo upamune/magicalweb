@@ -276,5 +276,83 @@
 				"publishedAt": "2026-09-23T07:13:24.962Z"
 			}
 		}
+	],
+	"290": [
+		{
+			"clip": "magicalfm-290-market-short",
+			"title": "モロッコの市場で守るべき鉄則",
+			"label": "モロッコの市場で守るべき鉄則",
+			"url": "https://clips.magical.fm/magicalfm-290-market-short-342b0bf0.mp4",
+			"episodeUrl": "https://magical.fm/ep/290",
+			"youtube": {
+				"id": "cRZm6cJ6NCI",
+				"url": "https://www.youtube.com/shorts/cRZm6cJ6NCI",
+				"privacyStatus": "unlisted",
+				"publishedAt": "2026-10-18T14:27:52.134Z"
+			},
+			"instagram": {
+				"id": "18125747491918645",
+				"url": "https://www.instagram.com/reel/Deo5c0ACkgf/",
+				"publishedAt": "2026-10-18T14:29:02.496Z"
+			}
+		},
+		{
+			"clip": "magicalfm-290-airport-short",
+			"title": "イスタンブール空港のパン、いくら？",
+			"label": "イスタンブール空港のパン、いくら？",
+			"url": "https://clips.magical.fm/magicalfm-290-airport-short-0ed56161.mp4",
+			"episodeUrl": "https://magical.fm/ep/290",
+			"youtube": {
+				"id": "h8Pm1lqjJTA",
+				"url": "https://www.youtube.com/shorts/h8Pm1lqjJTA",
+				"privacyStatus": "unlisted",
+				"publishedAt": "2026-10-18T14:30:19.214Z"
+			},
+			"instagram": {
+				"id": "18091275230204100",
+				"url": "https://www.instagram.com/reel/Deo5t45lTin/",
+				"publishedAt": "2026-10-18T14:30:58.147Z"
+			}
+		}
+	],
+	"291": [
+		{
+			"clip": "magicalfm-291-juice-short",
+			"title": "モロッコで一番人気のジュースは何味？",
+			"label": "モロッコで一番人気のジュースは何味？",
+			"url": "https://clips.magical.fm/magicalfm-291-juice-short-0945dc5c.mp4",
+			"episodeUrl": "https://magical.fm/ep/291",
+			"youtube": {
+				"id": "FdpqmoWXKA0",
+				"url": "https://www.youtube.com/shorts/FdpqmoWXKA0",
+				"privacyStatus": "unlisted",
+				"publishedAt": "2026-10-18T14:31:02.491Z"
+			},
+			"instagram": {
+				"id": "18135253741677784",
+				"url": "https://www.instagram.com/reel/Deo5yysj4sw/",
+				"publishedAt": "2026-10-18T14:31:57.118Z"
+			}
+		}
+	],
+	"292": [
+		{
+			"clip": "magicalfm-292-sahara-short",
+			"title": "サハラ砂漠の朝が人生ベストだった",
+			"label": "サハラ砂漠の朝が人生ベストだった",
+			"url": "https://clips.magical.fm/magicalfm-292-sahara-short-698dfd4b.mp4",
+			"episodeUrl": "https://magical.fm/ep/292",
+			"youtube": {
+				"id": "Yo6cKO0KN3I",
+				"url": "https://www.youtube.com/shorts/Yo6cKO0KN3I",
+				"privacyStatus": "unlisted",
+				"publishedAt": "2026-10-18T14:29:13.941Z"
+			},
+			"instagram": {
+				"id": "18136492303630606",
+				"url": "https://www.instagram.com/reel/Deo5lnHFbq0/",
+				"publishedAt": "2026-10-18T14:30:13.499Z"
+			}
+		}
 	]
 }

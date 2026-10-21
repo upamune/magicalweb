@@ -7,6 +7,10 @@ YouTube は既定で限定公開なので、内容を確認してから YouTube 
 
 | 話数 | クリップ | YouTube | Instagram | 動画 |
 | --- | --- | --- | --- | --- |
+| [#292](https://magical.fm/ep/292) | サハラ砂漠の朝が人生ベストだった | [限定公開](https://www.youtube.com/shorts/Yo6cKO0KN3I) 2026/10/18 | [公開](https://www.instagram.com/reel/Deo5lnHFbq0/) 2026/10/18 | [mp4](https://clips.magical.fm/magicalfm-292-sahara-short-698dfd4b.mp4) |
+| [#291](https://magical.fm/ep/291) | モロッコで一番人気のジュースは何味？ | [限定公開](https://www.youtube.com/shorts/FdpqmoWXKA0) 2026/10/18 | [公開](https://www.instagram.com/reel/Deo5yysj4sw/) 2026/10/18 | [mp4](https://clips.magical.fm/magicalfm-291-juice-short-0945dc5c.mp4) |
+| [#290](https://magical.fm/ep/290) | モロッコの市場で守るべき鉄則 | [限定公開](https://www.youtube.com/shorts/cRZm6cJ6NCI) 2026/10/18 | [公開](https://www.instagram.com/reel/Deo5c0ACkgf/) 2026/10/18 | [mp4](https://clips.magical.fm/magicalfm-290-market-short-342b0bf0.mp4) |
+| [#290](https://magical.fm/ep/290) | イスタンブール空港のパン、いくら？ | [限定公開](https://www.youtube.com/shorts/h8Pm1lqjJTA) 2026/10/18 | [公開](https://www.instagram.com/reel/Deo5t45lTin/) 2026/10/18 | [mp4](https://clips.magical.fm/magicalfm-290-airport-short-0ed56161.mp4) |
 | [#286](https://magical.fm/ep/286) | 青サギと動じないおばあちゃん | [限定公開](https://www.youtube.com/shorts/Vme7lVuIB5Y) 2026/09/23 | [公開](https://www.instagram.com/reel/Ddi65LOAAfx/) 2026/09/21 | [mp4](https://clips.magical.fm/magicalfm-286-clip-d7643fe4.mp4) |
 | [#285](https://magical.fm/ep/285) | 端にしか寝たくない5人 | [限定公開](https://www.youtube.com/shorts/Shkm9J4QyGc) 2026/09/23 | [公開](https://www.instagram.com/reel/Ddi-UezDg_m/) 2026/09/21 | [mp4](https://clips.magical.fm/magicalfm-285-clip-819e3817.mp4) |
 | [#284](https://magical.fm/ep/284) | PCを持たずに会えない二人 | [限定公開](https://www.youtube.com/shorts/keh0lOUFUhA) 2026/09/23 | [公開](https://www.instagram.com/reel/Ddi-JO7FAvx/) 2026/09/21 | [mp4](https://clips.magical.fm/magicalfm-284-clip-9b9710ef.mp4) |

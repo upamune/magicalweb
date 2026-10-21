@@ -194,7 +194,10 @@ const truncate = (text, limit) =>
 	text.length <= limit ? text : `${text.slice(0, limit - 1)}…`;
 
 const buildMetadata = ({ episode, clipEntry, base }) => {
-	const ep = episodes.find((e) => e.number === Number(episode));
+	// LISTEN のタイトルに「#N:」が無い回は number 0 で取り込まれ、customPath に話数が入る
+	const ep = episodes.find(
+		(e) => e.number === Number(episode) || e.customPath === String(episode),
+	);
 	if (!ep) throw new Error(`Episode #${episode} not found in episodes.json`);
 
 	// 表示用タイトルは先頭の「#279: 」を落とす（サイトの getEpisodeDisplayTitle と同じ規則）
