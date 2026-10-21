@@ -27,3 +27,4 @@ pnpm-debug.log*
 og-variants/
 
 z/
+__pycache__/
