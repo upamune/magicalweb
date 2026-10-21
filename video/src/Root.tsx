@@ -8,6 +8,7 @@ import {
 } from "./episode/HighlightTitle";
 import { LocationLabel } from "./episode/LocationLabel";
 import { Thumbnail, type ThumbnailProps } from "./episode/Thumbnail";
+import { LiveShort, type LiveShortProps } from "./short/LiveShort";
 import type { ClipData, EpisodeData, EpisodeLocationCue } from "./types";
 
 const data = clipData as ClipData;
@@ -46,6 +47,18 @@ const thumbnail293: ThumbnailProps = {
 		{ src: "st-squid-i1.png", x: 1010, y: 250, w: 220, r: 10 },
 	],
 	bubble: { text: "チュロス7本！？", x: 350, y: 610 },
+};
+
+// 旅Vlogの実写ショート。実際の映像・字幕は --props で渡し、--public-dir で素材フォルダを指す
+const liveShortPlaceholder: LiveShortProps = {
+	layout: "band",
+	video: "short.mp4",
+	durationInFrames: 90,
+	bg: "candy",
+	number: "#291",
+	series: "モロッコ旅行 中編",
+	hookLines: ["モロッコで一番人気の", "ジュースは何味？"],
+	captions: [],
 };
 
 export const RemotionRoot: React.FC = () => {
@@ -127,6 +140,18 @@ export const RemotionRoot: React.FC = () => {
 				width={1280}
 				height={720}
 				defaultProps={thumbnail293}
+			/>
+			<Composition
+				id="LiveShort"
+				component={LiveShort}
+				durationInFrames={liveShortPlaceholder.durationInFrames}
+				fps={30}
+				width={1080}
+				height={1920}
+				defaultProps={liveShortPlaceholder}
+				calculateMetadata={({ props }) => ({
+					durationInFrames: props.durationInFrames,
+				})}
 			/>
 		</>
 	);
