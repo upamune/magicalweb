@@ -80,6 +80,9 @@ nohup bun scripts/render-episode.mjs N > /tmp/render-N.log 2>&1 &
 ### 6. 完成報告とコミット
 
 - 完成ファイルは 30MB を超えるので添付できない。`open` で開いてユーザーに見てもらう
+- LISTEN へは `bun scripts/listen-draft.mjs out/magicalfm-N-episode.mp4 --thumbnail out/magicalfm-N-thumbnail.png`
+  で次の配信枠（月・木 4:00）の下書きを作る（`#N: 仮` / 説明 `TBD`、`--vtt` で字幕と要約も）。
+  外部への送信なので、ユーザーに頼まれてから実行する。先に `--dry-run` で話数と配信日を見せる
 - Spotify へは Spotify for Creators の「エピソード」→ 三点メニュー →「動画をアップロード」で手で上げる
   （公開 API が無くブラウザ操作のみ。RSS は LISTEN のままでよく、動画は Spotify 内だけで再生される）。
   このときサムネイルを求められるので `out/magicalfm-N-thumbnail.png` を渡す

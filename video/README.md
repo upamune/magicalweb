@@ -93,6 +93,25 @@ bun scripts/render-episode.mjs 278        # 2000フレームずつ分割レン�
   一発の `remotion render` は数千フレームで Chrome がメモリ不足で落ちる（Target closed）ので、
   `render-episode.mjs` がチャンク分割して ffmpeg で結合する。落ちても同じコマンドで再開できる
 
+### 4c. LISTEN に下書きを作る
+
+完成した横動画を LISTEN の REST API で上げ、次の配信枠（月・木 4:00 JST）の下書きエピソードを作る。
+タイトルは `#N: 仮`、説明は `TBD`。VTT を渡すと字幕を取り込み、その字幕から要約を作り直す:
+
+```bash
+cd video
+bun scripts/listen-draft.mjs out/magicalfm-295-episode.mp4 --dry-run   # 話数と配信日の確認だけ
+bun scripts/listen-draft.mjs out/magicalfm-295-episode.mp4 \
+  --thumbnail out/magicalfm-295-thumbnail.png --vtt path/to/ep-295.vtt
+```
+
+- 話数は LISTEN 上の最大話数 + 1、配信日は既存回（下書き・予約を含む）の最終配信日より後の最初の月曜か木曜。
+  `--number` / `--date YYYY-MM-DD` で上書きできる
+- `.env` に `LISTEN_API_TOKEN`（read / create / update 権限）が必要
+- 進捗は `out/listen-draft-<動画名>.json` に残る。落ちても同じコマンドで続きから再開し、二重に作らない
+- 字幕は自動文字起こし・メディア処理の最中だと 422 で弾かれるので、通るまで 1 分おきに最大 30 分再試行する
+- 要約の再生成は 1 エピソード 1 時間 3 回まで
+
 ### 5. アップロードと配信
 
 レンダリングした動画は Cloudflare R2（`clips.magical.fm`）にアップロードし、
