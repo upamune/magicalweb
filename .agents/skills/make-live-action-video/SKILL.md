@@ -1,6 +1,6 @@
 ---
 name: make-live-action-video
-description: 実写・街歩き素材と別録り音声から、同期、雑音低減、LUFS調整、逐語文字起こしを画面用に編集したテロップ、顔ぼかし、DaVinci Resolveでの全編書き出しまで行う。旅Vlogの冒頭ハイライト、ステッカー風サムネイル、LISTEN用VTT/SRTも作る。音声のみの番組画面と実写を混ぜる回、完成版のテロップ・ぼかしだけの修正、途中再開にも使う。音声だけの通常回はmake-episode-video、短尺切り抜きはmake-clip。
+description: 実写・街歩き素材と別録り音声から、同期、雑音低減、LUFS調整、逐語文字起こしを画面用に編集したテロップ、顔ぼかし、DaVinci Resolveでの全編書き出しまで行う。旅Vlogの冒頭ハイライト、ステッカー風サムネイル、LISTEN用VTT/SRTも作る。音声のみの番組画面と実写を混ぜる回、画面録画とマイク収録を合わせる回、完成版のテロップ・ぼかしだけの修正、途中再開にも使う。音声だけの通常回はmake-episode-video、短尺切り抜きはmake-clip。
 ---
 
 # 実写ビデオポッドキャスト制作
@@ -20,7 +20,7 @@ description: 実写・街歩き素材と別録り音声から、同期、雑音�
 別checkoutで使う場合はリポジトリルートを特定する。別の番組ならデザインを流用する前に対象を確定する。
 Pythonの同梱ヘルパーは`uv run`、検査ヘルパーは`node`で動く。`ffmpeg`と`ffprobe`が必要。
 資料内の`SKILL_DIR`はこの`SKILL.md`の親ディレクトリの絶対パスに置き換える。
-複数本に分ける旅Vlog（モロッコ編#290〜#292、スペイン・フランス編#293〜）の続きや同じ見た目の回は、[references/travel-vlog-series.md](references/travel-vlog-series.md)を読む。冒頭ハイライト、ハイライト中のタイトル、サムネイル、LISTEN用文字起こしは[references/highlight-and-thumbnail.md](references/highlight-and-thumbnail.md)を読む。そこにある時刻や数値は出発点であり、新しい素材で測り直す。
+複数本に分ける旅Vlog（モロッコ編#290〜#292、スペイン・フランス編#293〜）の続きや同じ見た目の回は、[references/travel-vlog-series.md](references/travel-vlog-series.md)を読む。冒頭ハイライト、ハイライト中のタイトル、サムネイル、LISTEN用文字起こしは[references/highlight-and-thumbnail.md](references/highlight-and-thumbnail.md)を読む。画面録画（ブラウザで資料を映しながら話す#296など）とマイク収録を合わせる回は[references/screen-recording.md](references/screen-recording.md)を読む。顔ぼかしの工程は通らない。そこにある時刻や数値は出発点であり、新しい素材で測り直す。
 
 ## 今回からの既定値
 
