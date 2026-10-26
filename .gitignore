@@ -28,3 +28,4 @@ og-variants/
 
 z/
 __pycache__/
+.envrc.local
