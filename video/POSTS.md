@@ -7,6 +7,8 @@ YouTube は既定で限定公開なので、内容を確認してから YouTube 
 
 | 話数 | クリップ | YouTube | Instagram | 動画 |
 | --- | --- | --- | --- | --- |
+| [#295](https://magical.fm/ep/295) | パリの電車で突然生演奏が… | — | [公開](https://www.instagram.com/reel/DfLioORDLmd/) 2026/11/01 | [mp4](https://clips.magical.fm/magicalfm-295-violin-short-297f9547.mp4) |
+| [#294](https://magical.fm/ep/294) | スペインの駅でクレカを落としたら | — | [公開](https://www.instagram.com/reel/DfLigrFkTUw/) 2026/11/01 | [mp4](https://clips.magical.fm/magicalfm-294-card-short-fc594ccf.mp4) |
 | [#292](https://magical.fm/ep/292) | サハラ砂漠の朝が人生ベストだった | [限定公開](https://www.youtube.com/shorts/Yo6cKO0KN3I) 2026/10/18 | [公開](https://www.instagram.com/reel/Deo5lnHFbq0/) 2026/10/18 | [mp4](https://clips.magical.fm/magicalfm-292-sahara-short-698dfd4b.mp4) |
 | [#291](https://magical.fm/ep/291) | モロッコで一番人気のジュースは何味？ | [限定公開](https://www.youtube.com/shorts/FdpqmoWXKA0) 2026/10/18 | [公開](https://www.instagram.com/reel/Deo5yysj4sw/) 2026/10/18 | [mp4](https://clips.magical.fm/magicalfm-291-juice-short-0945dc5c.mp4) |
 | [#290](https://magical.fm/ep/290) | モロッコの市場で守るべき鉄則 | [限定公開](https://www.youtube.com/shorts/cRZm6cJ6NCI) 2026/10/18 | [公開](https://www.instagram.com/reel/Deo5c0ACkgf/) 2026/10/18 | [mp4](https://clips.magical.fm/magicalfm-290-market-short-342b0bf0.mp4) |
