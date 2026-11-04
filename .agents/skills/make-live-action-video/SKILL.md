@@ -1,6 +1,6 @@
 ---
 name: make-live-action-video
-description: 実写・街歩き素材と別録り音声から、同期、雑音低減、LUFS調整、逐語文字起こしを画面用に編集したテロップ、顔ぼかし、DaVinci Resolveでの全編書き出しまで行う。旅Vlogの冒頭ハイライト、ステッカー風サムネイル、LISTEN用VTT/SRTも作る。音声のみの番組画面と実写を混ぜる回、画面録画とマイク収録を合わせる回、完成版のテロップ・ぼかしだけの修正、途中再開にも使う。音声だけの通常回はmake-episode-video、短尺切り抜きはmake-clip。
+description: 実写・街歩き素材と別録り音声から、同期、雑音低減、LUFS調整、逐語文字起こしを画面用に編集したテロップ、顔ぼかし、DaVinci Resolveでの全編書き出しまで行う。旅Vlogの冒頭ハイライト、ステッカー風サムネイル、LISTEN用VTT/SRT、LISTEN下書きの動画差し替えも行う。音声のみの番組画面と実写を混ぜる回、画面録画とマイク収録を合わせる回、完成版のテロップ・ぼかしだけの修正、途中再開にも使う。音声だけの通常回はmake-episode-video、短尺切り抜きはmake-clip。
 ---
 
 # 実写ビデオポッドキャスト制作
@@ -20,7 +20,7 @@ description: 実写・街歩き素材と別録り音声から、同期、雑音�
 別checkoutで使う場合はリポジトリルートを特定する。別の番組ならデザインを流用する前に対象を確定する。
 Pythonの同梱ヘルパーは`uv run`、検査ヘルパーは`node`で動く。`ffmpeg`と`ffprobe`が必要。
 資料内の`SKILL_DIR`はこの`SKILL.md`の親ディレクトリの絶対パスに置き換える。
-複数本に分ける旅Vlog（モロッコ編#290〜#292、スペイン・フランス編#293〜）の続きや同じ見た目の回は、[references/travel-vlog-series.md](references/travel-vlog-series.md)を読む。冒頭ハイライト、ハイライト中のタイトル、サムネイル、LISTEN用文字起こしは[references/highlight-and-thumbnail.md](references/highlight-and-thumbnail.md)を読む。画面録画（ブラウザで資料を映しながら話す#296など）とマイク収録を合わせる回は[references/screen-recording.md](references/screen-recording.md)を読む。顔ぼかしの工程は通らない。そこにある時刻や数値は出発点であり、新しい素材で測り直す。
+複数本に分ける旅Vlog（モロッコ編#290〜#292、スペイン・フランス編#293〜、札幌編#299〜#300）の続きや同じ見た目の回は、[references/travel-vlog-series.md](references/travel-vlog-series.md)を読む。冒頭ハイライトとOPの音量、ハイライト中のタイトル、サムネイル、LISTEN用文字起こし、LISTEN下書きの動画差し替えは[references/highlight-and-thumbnail.md](references/highlight-and-thumbnail.md)を読む。画面録画（ブラウザで資料を映しながら話す#296など）とマイク収録を合わせる回は[references/screen-recording.md](references/screen-recording.md)を読む。顔ぼかしの工程は通らない。そこにある時刻や数値は出発点であり、新しい素材で測り直す。
 
 ## 今回からの既定値
 
@@ -34,8 +34,8 @@ Pythonの同梱ヘルパーは`uv run`、検査ヘルパーは`node`で動く。
 | テロップ文体 | 逐語録をそのまま表示しない。句読点・フィラー・言い直しを画面向けに整理し、意味・話者らしさ・疑問／強調は残す。店名は看板どおりの欧文 |
 | 実写の文字の動き | ページ内は完全固定。読み上げ追従の上下移動・単語強調なし |
 | 実写テロップの表示時間 | 次のページが出るまで消さない。最後のページは本編の終わりまで出す |
-| 顔ぼかし | 小さめの楕円ガウスぼかし、柔らかい外周。中央は100%処理。具体値は顔ぼかし資料 |
-| 音声 | ステレオ48kHz、目標−16 LUFS、最終AACのTrue Peak≤−1 dBTP |
+| 顔ぼかし | 顔枠の1.1倍の楕円ガウスぼかし、柔らかい外周。中央は100%処理。料理・グラス・看板の誤検出は追跡単位で目視して外す。具体値と手順は顔ぼかし資料 |
+| 音声 | ステレオ48kHz、目標−16 LUFS、最終AACのTrue Peak≤−1 dBTP。冒頭OPは声の入りで声の約10dB下まで下げてから消す |
 
 ## 工程と完了条件
 

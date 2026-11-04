@@ -17,8 +17,20 @@ from pathlib import Path
 import cv2
 import numpy as np
 
-STYLE = {"shape": "ellipse", "widthScale": .85, "heightScale": .85,
-         "featherFraction": .22, "gaussianSigmaFraction": .095, "roundness": 0, "opacity": 1}
+STYLE = {"shape": "ellipse", "widthScale": 1.1, "heightScale": 1.1,
+         "featherFraction": .18, "gaussianSigmaFraction": .16, "roundness": 0, "opacity": 1}
+FAST_SIGMA = 6
+
+
+def gaussian(roi, sigma):
+    """Large sigmas blur a downscaled ROI at FAST_SIGMA and scale back (max error about 2/255)."""
+    k = sigma / FAST_SIGMA
+    if k <= 1.5:
+        return cv2.GaussianBlur(roi, (0, 0), sigmaX=sigma, sigmaY=sigma)
+    h, w = roi.shape[:2]
+    small = cv2.resize(roi, (max(1, round(w / k)), max(1, round(h / k))), interpolation=cv2.INTER_AREA)
+    small = cv2.GaussianBlur(small, (0, 0), sigmaX=sigma / k, sigmaY=sigma / k, borderType=cv2.BORDER_REFLECT)
+    return cv2.resize(small, (w, h), interpolation=cv2.INTER_LINEAR)
 
 
 def digest(file):
@@ -71,7 +83,7 @@ def oval_blur(frame, row, style=STYLE):
         edge = np.clip((1 - radius) / style["featherFraction"], 0, 1)
         alpha = (edge * edge * (3 - 2 * edge)).astype(np.float32)[..., None]
         sigma = max(2.2, min(2 * rx, 2 * ry) * style["gaussianSigmaFraction"])
-        blurred = cv2.GaussianBlur(frame[y:b, x:a], (0, 0), sigmaX=sigma, sigmaY=sigma)
+        blurred = gaussian(frame[y:b, x:a], sigma)
         result[y:b, x:a] = np.rint(blurred * alpha + result[y:b, x:a] * (1 - alpha)).astype(np.uint8)
     return result
 
@@ -211,10 +223,10 @@ def main():
         parser.add_argument(name, type=Path)
     parser.add_argument("--first", type=int, default=0)
     parser.add_argument("--frames", type=int)
-    parser.add_argument("--scale", type=float, default=.85)
-    parser.add_argument("--sigma", type=float, default=.095)
+    parser.add_argument("--scale", type=float, default=STYLE["widthScale"])
+    parser.add_argument("--sigma", type=float, default=STYLE["gaussianSigmaFraction"])
     parser.add_argument("--roundness", type=float, default=0, help="0: approved ellipse; 1: circle preserving the longer radius")
-    parser.add_argument("--feather", type=float, default=.22)
+    parser.add_argument("--feather", type=float, default=STYLE["featherFraction"])
     parser.add_argument("--encoder", choices=["libx264", "videotoolbox"], default="libx264")
     parser.add_argument("--dry-run", action="store_true")
     render(parser.parse_args())
