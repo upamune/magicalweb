@@ -66,6 +66,16 @@ class HelpersTest(unittest.TestCase):
         circles = round_faces.ellipses(displaced, {**round_faces.STYLE, "roundness": 1})
         self.assertTrue(all(rx == ry for _, _, rx, ry in circles))
 
+    def test_large_sigma_downscaled_blur_matches_exact(self):
+        rng = np.random.default_rng(3)
+        roi = cv2.GaussianBlur(rng.integers(0, 256, (300, 260, 3), dtype=np.uint8), (0, 0), 3)
+        sigma = 40
+        exact = cv2.GaussianBlur(roi, (0, 0), sigmaX=sigma, sigmaY=sigma)
+        fast = round_faces.gaussian(roi, sigma)
+        self.assertEqual(fast.shape, roi.shape)
+        self.assertLessEqual(np.abs(fast[40:-40, 40:-40].astype(int) - exact[40:-40, 40:-40].astype(int)).max(), 3)
+        np.testing.assert_array_equal(round_faces.gaussian(roi, 5), cv2.GaussianBlur(roi, (0, 0), sigmaX=5, sigmaY=5))
+
     def test_hollyland_concat_header_and_samples(self):
         candidates = [
             ROOT.parent.parent / "hollyland-audio/scripts/sync_lavs.py",
