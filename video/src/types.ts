@@ -63,6 +63,8 @@ export interface EpisodeData {
 	// フレームごとの RMS（0〜1）。フル尺の音声を Remotion 側でデコードせずに波形を出すため
 	envelope: number[];
 	pages: CaptionPage[];
+	// みちるだの代わりにゲストが出た回。左のアバターがゲストになる
+	guest?: ClipData["guest"];
 	videoSegments?: EpisodeVideoSegment[];
 	locationCues?: EpisodeLocationCue[];
 }

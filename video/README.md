@@ -71,7 +71,7 @@ bunx remotion studio
 ### 4b. フル尺のビデオポッドキャスト（横1920×1080・24fps）
 
 同じ Remotion プロジェクトで、エピソード全編に字幕を付けた横動画も作れる（`Episode` Composition）。
-字幕は人手で校正せず、Ollama Cloud の LLM（既定 `deepseek-v4-flash:cloud`）で誤認識修正と語区切りを行い、
+字幕は人手で校正せず、Ollama Cloud の LLM（既定 `deepseek-v4.1-flash:cloud`）で誤認識修正と語区切りを行い、
 自動でページ化する。ローカルで動かす前提（`ollama` が起動していること）:
 
 ```bash

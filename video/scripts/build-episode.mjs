@@ -1,18 +1,21 @@
-import { execFileSync } from "node:child_process";
+import { execFileSync, spawnSync } from "node:child_process";
 import fs from "node:fs";
 import path from "node:path";
+import { loadDefaultJapaneseParser } from "budoux";
 
 // フル尺のビデオポッドキャスト（横1920×1080）用データを生成する
 //
-//   bun scripts/build-episode.mjs 278 [--transcript transcripts/ep-278.json] [--audio ep.mp3]
-//                                     [--speakers 0=michiru,1=upamune] [--model deepseek-v4-flash:cloud]
+//   bun scripts/build-episode.mjs 278 [--transcript transcripts/ep-278.json] [--audio ep.mp3] [--keep-silence]
+//                                     [--speakers 0=michiru,1=upamune] [--model deepseek-v4.1-flash:cloud]
 //
 // 1. transcripts/ep-N.json（transcribe-cloud.mjs 形式）を読む
-// 2. Ollama（既定: deepseek-v4-flash:cloud）で誤認識を校正し、語区切り「|」を入れてもらう
+// 2. Ollama（既定: deepseek-v4.1-flash:cloud）で誤認識を校正し、語区切り「|」を入れてもらう
 //    結果は transcripts/ep-N.proofread.json にキャッシュし、再実行時は未校正分だけ問い合わせる
 // 3. 横画面向けに自動ページ化して src/data/episode.json に出力
 // 4. 音声を public/episode.mp3 に置き、波形用の RMS エンベロープを埋め込む
+//    既定で無音区間（-28dB・1.2秒以上）を前後0.2秒残して削除し、字幕の時刻も詰める（--keep-silence で無効）
 
+const parser = loadDefaultJapaneseParser();
 const videoDir = path.resolve(import.meta.dirname, "..");
 const root = path.resolve(videoDir, "..");
 
@@ -24,14 +27,21 @@ const opt = (name, fallback) => {
 };
 const model = opt(
 	"--model",
-	process.env.OLLAMA_MODEL ?? "deepseek-v4-flash:cloud",
+	process.env.OLLAMA_MODEL ?? "deepseek-v4.1-flash:cloud",
 );
 const speakersArg = opt("--speakers", null);
 const audioArg = opt("--audio", null);
 const transcriptArg = opt("--transcript", null);
 const episodeMetaArg = opt("--episode-meta", null);
+// ゲスト回: --guest 黄身子:guest-kimiko.png と --speakers <ID>=guest で、画面の左のアバターと字幕色をゲストにする
+const [guestName, guestAvatar] = opt("--guest", "").split(":");
 const noProofread = argv.includes("--no-proofread");
 if (noProofread) argv.splice(argv.indexOf("--no-proofread"), 1);
+const keepSilence = argv.includes("--keep-silence");
+if (keepSilence) argv.splice(argv.indexOf("--keep-silence"), 1);
+const SILENCE_DB = Number(opt("--silence-db", -28));
+const SILENCE_MIN_SEC = Number(opt("--silence-min", 1.2));
+const SILENCE_PAD_SEC = Number(opt("--silence-pad", 0.2));
 if (audioArg && !fs.existsSync(audioArg))
 	throw new Error(`Master audio not found: ${audioArg}`);
 const number = Number(argv[0]);
@@ -73,6 +83,74 @@ const transcriptPath =
 const proofreadPath = transcriptPath.replace(/\.json$/, ".proofread.json");
 const transcript = JSON.parse(fs.readFileSync(transcriptPath, "utf8"));
 const segments = transcript.segments.filter((s) => s.words?.length);
+
+// ---------- 0. 無音区間の削除（Logic Pro の「無音部分を削除」相当） ----------
+// しきい値・最短無音・前後の余白は Logic の設定（-28dB / 1.2秒 / 0.2秒）に合わせる。
+// 音声を切ったぶん、字幕の時刻も詰める
+
+const sourceAudioPath =
+	audioArg ?? path.join(videoDir, "transcripts", `ep-${number}.mp3`);
+
+const detectSilences = (file) => {
+	const res = spawnSync(
+		"ffmpeg",
+		[
+			"-hide_banner",
+			"-nostats",
+			"-i",
+			file,
+			"-af",
+			`silencedetect=n=${SILENCE_DB}dB:d=${SILENCE_MIN_SEC}`,
+			"-f",
+			"null",
+			"-",
+		],
+		{ encoding: "utf8", maxBuffer: 1 << 28 },
+	);
+	const out = [];
+	let start = null;
+	for (const line of res.stderr.split("\n")) {
+		const a = line.match(/silence_start: (-?[\d.]+)/);
+		if (a) start = Math.max(0, Number(a[1]));
+		const b = line.match(/silence_end: ([\d.]+)/);
+		if (b && start != null) {
+			out.push([start, Number(b[1])]);
+			start = null;
+		}
+	}
+	return out;
+};
+
+let cuts = [];
+if (!keepSilence && fs.existsSync(sourceAudioPath)) {
+	cuts = detectSilences(sourceAudioPath)
+		.map(([a, b]) => [a + SILENCE_PAD_SEC, b - SILENCE_PAD_SEC])
+		.filter(([a, b]) => b - a > 0.05);
+	const removed = cuts.reduce((sum, [a, b]) => sum + (b - a), 0);
+	console.error(
+		`silence: ${cuts.length} cuts, -${removed.toFixed(1)}s (${SILENCE_DB}dB / ${SILENCE_MIN_SEC}s / pad ${SILENCE_PAD_SEC}s)`,
+	);
+}
+
+const shiftTime = (t) => {
+	let removed = 0;
+	for (const [a, b] of cuts) {
+		if (t >= b) removed += b - a;
+		else if (t > a) return a - removed;
+		else break;
+	}
+	return t - removed;
+};
+if (cuts.length) {
+	for (const seg of segments) {
+		seg.start = shiftTime(seg.start);
+		seg.end = shiftTime(seg.end);
+		for (const w of seg.words) {
+			w.start = shiftTime(w.start);
+			w.end = shiftTime(w.end);
+		}
+	}
+}
 
 // ---------- 1. 校正（Ollama） ----------
 
@@ -217,6 +295,46 @@ const REPLACEMENTS = [
 	["即探せない", "サクッと探せない"],
 	["ハッシュタグマヂカルFM全部小文字", "ハッシュタグmagicalfm（全部小文字）"],
 	["オタレフォーム", "おたよりフォーム"],
+	["関西人（はてな）", "関西人(?)"],
+	["関西人(はてな)", "関西人(?)"],
+	["関西人（?）", "関西人(?)"],
+	["関西人カッコはてな", "関西人(?)"],
+	["関西人カッコハテナ", "関西人(?)"],
+	["二千年版", "2009年版"],
+	["二千九年版", "2009年版"],
+	["二千六年", "2006年"],
+	["二千二年", "2002年"],
+	["掃除の話するわけねーだろ", "相似の話するわけねーだろ"],
+	["掃除、掃除と合同", "相似、相似と合同"],
+	["掃除はなんか縮尺", "相似はなんか縮尺"],
+	["グロックボット", "Grok Bot"],
+	["GlockBot", "Grok Bot"],
+	["Glockbot", "Grok Bot"],
+	["GrokBot", "Grok Bot"],
+	["ドッツ", "Dots"],
+	["ビッシュ", "BiSH"],
+	["ジェブ状態", "Jev状態"],
+	["オブツポケ", "Osmo Pocket"],
+	["時価のやつか", "実家のやつか"],
+	["おこたんベコン", "オコタンペ湖"],
+	[
+		"ハッシュタグマヂカル.fm、全部小文字",
+		"ハッシュタグmagicalfm（全部小文字）",
+	],
+	["だって春日とか", "だってハルヒとか"],
+	["結構春日は", "結構ハルヒは"],
+	["悲し--", "悲し…"],
+	["九月すよね", "9月っすよね"],
+	["九月ですね", "9月ですね"],
+	["パルコヤ上の？", "PARCO_ya上野？"],
+	["パルコヤ上の、", "PARCO_ya上野の、"],
+	["六千、七千円、六千円", "6000、7000円、6000円"],
+	["上野名前は", "上野の前は"],
+	["池袋に去年の四月で", "池袋で去年の4月に"],
+	["全千百三十五公演", "全1135公演"],
+	["UZUProduction", "UZU Production"],
+	["十二月十二日", "12月12日"],
+	["合格率十パー", "合格率10パー"],
 ];
 const escapeRe = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 const applyReplacements = (text) => {
@@ -515,15 +633,45 @@ for (let i = 0; i < pages.length; i++) {
 
 // ---------- 4. 音声とエンベロープ ----------
 
-const audioPath =
-	audioArg ?? path.join(videoDir, "transcripts", `ep-${number}.mp3`);
+const audioPath = sourceAudioPath;
 if (!fs.existsSync(audioPath)) {
 	console.error(`downloading ${episode.audioUrl} -> ${audioPath}`);
 	const res = await fetch(episode.audioUrl);
 	fs.writeFileSync(audioPath, Buffer.from(await res.arrayBuffer()));
 }
 const outAudio = path.join(videoDir, "public", "episode.mp3");
-fs.copyFileSync(audioPath, outAudio);
+if (cuts.length) {
+	const drop = cuts.map(([a, b]) => `between(t,${a},${b})`).join("+");
+	execFileSync("ffmpeg", [
+		"-v",
+		"error",
+		"-y",
+		"-i",
+		audioPath,
+		"-af",
+		`aselect='not(${drop})',asetpts=N/SR/TB`,
+		"-c:a",
+		"libmp3lame",
+		"-b:a",
+		"192k",
+		outAudio,
+	]);
+} else {
+	fs.copyFileSync(audioPath, outAudio);
+}
+const sourceDurationSec = Number(
+	execFileSync("ffprobe", [
+		"-v",
+		"error",
+		"-show_entries",
+		"format=duration",
+		"-of",
+		"csv=p=0",
+		audioPath,
+	])
+		.toString()
+		.trim(),
+);
 
 const durationSec = Number(
 	execFileSync("ffprobe", [
@@ -541,10 +689,10 @@ const durationSec = Number(
 // LISTEN は公開後に音声を差し替えることがある。文字起こし時と別の音声なら字幕がずれるので止める
 if (
 	transcript.audioDuration &&
-	Math.abs(transcript.audioDuration - durationSec) > 1.5
+	Math.abs(transcript.audioDuration - sourceDurationSec) > 1.5
 ) {
 	throw new Error(
-		`音声の長さが文字起こし時（${transcript.audioDuration}s）と ${audioPath}（${durationSec}s）で食い違っています。同じ音声で文字起こしをやり直してください`,
+		`音声の長さが文字起こし時（${transcript.audioDuration}s）と ${audioPath}（${sourceDurationSec}s）で食い違っています。同じ音声で文字起こしをやり直してください`,
 	);
 }
 
@@ -595,7 +743,7 @@ const data = {
 	episode: {
 		number,
 		title: displayTitle,
-		titleLines: wrapTitle(mainTitle, 11),
+		titleLines: wrapTitle(mainTitle, 13),
 		date: episode.pubDate,
 	},
 	audioFile: "episode.mp3",
@@ -604,12 +752,39 @@ const data = {
 	bg: bgs[number % 4],
 	envelope,
 	pages,
+	...(guestName && { guest: { name: guestName, avatar: guestAvatar } }),
 };
 
+// 行数を増やさない範囲で最大幅を詰め、行の長さをそろえる（「冷笑|野郎」のような泣き別れを避ける）
 function wrapTitle(text, max) {
+	let best = wrapGreedy(text, max);
+	const longest = Math.max(...parser.parse(text).map((p) => p.length));
+	for (let m = max - 1; m >= longest; m--) {
+		const lines = wrapGreedy(text, m);
+		if (lines.length > best.length) break;
+		best = lines;
+	}
+	return best.slice(0, 3);
+}
+
+function wrapGreedy(text, max) {
 	const lines = [];
-	for (let i = 0; i < text.length; i += max) lines.push(text.slice(i, i + max));
-	return lines.slice(0, 3);
+	let line = "";
+	for (const phrase of parser.parse(text)) {
+		if (line && line.length + phrase.length > max) {
+			lines.push(line);
+			line = "";
+		}
+		for (const ch of phrase) {
+			if (line.length >= max) {
+				lines.push(line);
+				line = "";
+			}
+			line += ch;
+		}
+	}
+	if (line) lines.push(line);
+	return lines;
 }
 
 const dataPath = path.join(videoDir, "src", "data", "episode.json");

@@ -239,11 +239,14 @@ const buildSegments = (words) => {
 	const segments = [];
 	let cur = null;
 	for (const w of words) {
+		// ElevenLabs は文末の「？」を間を空けて返すことがあり、そこで切ると「？」だけの字幕ページになる
+		const punctOnly = /^[。、！？!?]+$/.test(w.word);
 		const breakHere =
 			!cur ||
-			w.speaker !== cur.speaker ||
-			w.start - cur.end > 0.7 ||
-			/[。！？!?]$/.test(cur.words.at(-1).word);
+			(!punctOnly &&
+				(w.speaker !== cur.speaker ||
+					w.start - cur.end > 0.7 ||
+					/[。！？!?]$/.test(cur.words.at(-1).word)));
 		if (breakHere) {
 			cur = { start: w.start, end: w.end, speaker: w.speaker, words: [] };
 			segments.push(cur);

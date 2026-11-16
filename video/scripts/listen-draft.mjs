@@ -9,8 +9,16 @@ import { parseArgs } from "node:util";
 //   bun scripts/listen-draft.mjs out/magicalfm-295-episode.mp4 \
 //     --thumbnail out/magicalfm-295-thumbnail.png --vtt out/ep-295.vtt
 //
+// 動画の月間上限を超えると作成時に 422 が返る。そのときは .mp3 を渡せば音声だけの回になる
+// （--thumbnail は動画用なので無視する）
+//
 //   --number N        話数（既定: LISTEN 上の最大話数 + 1）
 //   --date YYYY-MM-DD 配信日（既定: 既存回の最終配信日より後の最初の月曜か木曜）
+//   --title / --description  タイトルと説明（既定: 「#N: 仮」/ TBD）
+//   --schedule        下書きではなく、配信日に自動公開される予約（status: scheduled + scheduled_at）で作る。
+//                     下書きは日時を持てない仕様なので、付けなければ配信日はダッシュボードで入れる
+//                     https://listen.style/api-docs/episodes
+//   --update          作成済みの下書きの動画・サムネイルを差し替える（--title / --description も反映）
 //   --dry-run         話数・配信日を表示するだけで、何も送らない
 //
 // 進捗は out/listen-draft-<動画名>.json に残す。途中で落ちても同じコマンドで続きから再開し、
@@ -33,6 +41,10 @@ const { values: opts, positionals } = parseArgs({
 		vtt: { type: "string" },
 		number: { type: "string" },
 		date: { type: "string" },
+		title: { type: "string" },
+		description: { type: "string" },
+		update: { type: "boolean", default: false },
+		schedule: { type: "boolean", default: false },
 		"dry-run": { type: "boolean", default: false },
 	},
 });
@@ -40,10 +52,11 @@ const { values: opts, positionals } = parseArgs({
 const [videoPath] = positionals;
 if (!videoPath) {
 	console.error(
-		"Usage: bun scripts/listen-draft.mjs <episode.mp4> [--thumbnail png] [--vtt file] [--number N] [--date YYYY-MM-DD] [--dry-run]",
+		"Usage: bun scripts/listen-draft.mjs <episode.mp4|episode.mp3> [--thumbnail png] [--vtt file] [--number N] [--date YYYY-MM-DD] [--title text] [--description text] [--dry-run]",
 	);
 	process.exit(1);
 }
+const audioOnly = path.extname(videoPath).toLowerCase() === ".mp3";
 for (const file of [videoPath, opts.thumbnail, opts.vtt].filter(Boolean)) {
 	if (!fs.existsSync(file)) {
 		console.error(`File not found: ${file}`);
@@ -311,39 +324,77 @@ if (!state.episodeId) {
 	state.releaseAt = releaseAt.toISOString();
 	save();
 
-	const video = await uploadOnce("video", videoPath, "VIDEO", "video/mp4");
-	const thumbnail = opts.thumbnail
-		? await uploadOnce("thumbnail", opts.thumbnail, "IMAGE", "image/png")
-		: undefined;
+	const media = audioOnly
+		? {
+				audio_path: await uploadOnce("audio", videoPath, "AUDIO", "audio/mpeg"),
+			}
+		: {
+				video: {
+					path: await uploadOnce("video", videoPath, "VIDEO", "video/mp4"),
+					...(opts.thumbnail
+						? {
+								thumbnail_path: await uploadOnce(
+									"thumbnail",
+									opts.thumbnail,
+									"IMAGE",
+									"image/png",
+								),
+							}
+						: {}),
+				},
+			};
 
 	const { data: created } = await api(
 		"POST",
 		`/podcasts/${podcast.id}/episodes`,
 		{
-			title: `#${number}: 仮`,
-			description: "TBD",
+			title: opts.title ?? `#${number}: 仮`,
+			description: opts.description ?? "TBD",
 			visibility: "public",
-			status: "draft",
 			episode_number: number,
-			published_at: toIsoJst(releaseAt),
-			media: {
-				video: {
-					path: video,
-					...(thumbnail ? { thumbnail_path: thumbnail } : {}),
-				},
-			},
+			media,
+			...(opts.schedule
+				? { status: "scheduled", scheduled_at: toIsoJst(releaseAt) }
+				: { status: "draft" }),
 		},
 	);
 	state.episodeId = created.id;
 	save();
 	console.log(`created: ${created.id} "${created.title}" (${created.status})`);
-	if (Date.parse(created.published_at ?? "") !== releaseAt.getTime()) {
+	if (!opts.schedule) {
+		console.log("draft has no release date: set it on the LISTEN dashboard");
+	} else if (Date.parse(created.scheduled_at ?? "") !== releaseAt.getTime()) {
 		console.warn(
-			`warning: release date was not stored (published_at=${created.published_at}). Set it on the LISTEN dashboard.`,
+			`warning: scheduled_at=${created.scheduled_at} differs from ${toIsoJst(releaseAt)}`,
 		);
 	}
 } else {
 	console.log(`resuming episode ${state.episodeId} (#${state.number})`);
+}
+
+if (opts.update) {
+	const { data: current } = await api("GET", `/episodes/${state.episodeId}`);
+	console.log(`updating: "${current.title}" (${current.status})`);
+	state.uploads = undefined;
+	const video = {
+		path: await uploadOnce("video", videoPath, "VIDEO", "video/mp4"),
+		...(opts.thumbnail
+			? {
+					thumbnail_path: await uploadOnce(
+						"thumbnail",
+						opts.thumbnail,
+						"IMAGE",
+						"image/png",
+					),
+				}
+			: {}),
+	};
+	const { data: updated } = await api("PATCH", `/episodes/${state.episodeId}`, {
+		...(opts.title ? { title: opts.title } : {}),
+		...(opts.description ? { description: opts.description } : {}),
+		media: { video },
+	});
+	console.log(`updated: "${updated.title}" (${updated.status})`);
 }
 
 if (vttText && !state.transcriptImportedAt) {

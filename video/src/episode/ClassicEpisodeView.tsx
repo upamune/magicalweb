@@ -245,7 +245,9 @@ export const ClassicEpisodeView: React.FC<{ data: EpisodeData; t: number }> = ({
 						>
 							<Sticker entrance={1}>#{data.episode.number}</Sticker>
 							<div style={{ fontSize: 88 }}>
-								{data.episode.titleLines.join("")}
+								{data.episode.titleLines.map((line) => (
+									<div key={line}>{line}</div>
+								))}
 							</div>
 						</div>
 					) : (
@@ -316,8 +318,8 @@ export const ClassicEpisodeView: React.FC<{ data: EpisodeData; t: number }> = ({
 				</div>
 				<div style={{ flexGrow: 1 }} />
 				<SpeakerAvatar
-					{...HOSTS.michiru}
-					active={activeSpeaker === "michiru"}
+					{...(data.guest ?? HOSTS.michiru)}
+					active={activeSpeaker === (data.guest ? "guest" : "michiru")}
 					activeSinceFrame={speakerSince}
 					frame={frame}
 					fps={fps}

@@ -12,7 +12,7 @@ description: エピソード全編に字幕を付けた横動画（1920×1080・
 
 ## 前提
 
-- `ollama` が起動していて `deepseek-v4-flash:cloud` が使えること（`ollama list` で確認）
+- `ollama` が起動していて `deepseek-v4.1-flash:cloud` が使えること（`ollama list` で確認）
 - `video/.env` に `ELEVENLABS_API_KEY`（Speech to Text 権限付きのキー）
 - `ffmpeg` / `ffprobe`
 
@@ -38,6 +38,9 @@ bun scripts/build-episode.mjs N
 - LLM 校正は `transcripts/ep-N.proofread.json` にキャッシュされる。やり直すときはこのファイルを消す
 - 出力の `speakers: {"A":"michiru","B":"upamune"}` を見て、冒頭の「関西人のプロダクトマネージャー
   みちるだと〜」を話している側が michiru になっているか確認。逆なら `--speakers A=upamune,B=michiru`
+- 無音区間は既定で削除される（Logic Pro と同じ -28dB・1.2秒以上・前後0.2秒を残す。`--silence-db/--silence-min/--silence-pad` で調整、`--keep-silence` で無効）。音声を切ったぶん字幕時刻も詰めるので、完成動画は元の mp3 より短くなる（LISTEN の音声とは長さが合わない）
+- みちるだの代わりにゲストが出た回は `--guest 黄身子:guest-kimiko.png --speakers <ゲストのID>=guest`。
+  左のアバターと字幕色がゲストになり、`build-vtt.mjs` の話者名もゲスト名になる
 - 生成物 `src/data/episode.json` / `public/episode.mp3` は git 管理外
 
 ### 3. 表記チェック（重要）
