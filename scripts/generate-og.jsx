@@ -13,6 +13,7 @@ import episodesData from "../src/data/episodes.json" with { type: "json" };
 // 組版: BudouX での文節分割に加えて、
 //   - 文字種ごとの幅テーブルによるフォントサイズの段階決定
 //   - 孤立行（行末に1〜2文字だけ残る）の再調整
+//   - 行の長さをそろえる（句読点・空白での改行を優先）
 //   - 助詞を道連れにする「…」省略
 //   - 約物（括弧・句読点）の全角アキ詰め
 // を自前で行い、行の組み方を完全にコントロールする。
@@ -252,6 +253,36 @@ function hasOrphan(lines) {
 	);
 }
 
+// 句読点や空白の直後で改行している行の数
+function countCleanBreaks(lines) {
+	return lines
+		.slice(0, -1)
+		.filter(
+			(line, i) =>
+				/[、。，．！？!?・\s]$/.test(line) || /^\s/.test(lines[i + 1]),
+		).length;
+}
+
+// 行数を変えない範囲で行幅を詰め、行の長さをそろえる。
+// greedy だと「…はずが冷笑／野郎になった」のように意味の途中で泣き別れするため。
+// ただし句読点・空白で折れる組み方を優先する（「悪魔の実、／能力クイズ」を「悪魔の／実、」にしない）
+function balanceLines(segments, lines, maxWidthEm) {
+	if (lines.length < 2) return lines;
+	const minWidthEm = Math.max(...segments.map(textWidth));
+	let best = lines;
+	let bestClean = countCleanBreaks(lines);
+	for (let w = maxWidthEm - 0.25; w >= minWidthEm; w -= 0.25) {
+		const retry = composeLines(segments, w);
+		if (retry.length > lines.length) break;
+		const clean = countCleanBreaks(retry);
+		if (clean >= bestClean) {
+			best = retry;
+			bestClean = clean;
+		}
+	}
+	return best;
+}
+
 // 助詞を道連れにしながら「…」で省略する
 function truncateWithEllipsis(segments, maxWidthEm, maxLines) {
 	const graphemes = toGraphemes(segments.join(""));
@@ -303,7 +334,7 @@ function layoutText(text, { sizes, containerWidthPx, maxLines }) {
 			}
 		}
 		if (lines.length <= maxLines) {
-			return { size, lines };
+			return { size, lines: balanceLines(segments, lines, maxWidthEm) };
 		}
 	}
 
