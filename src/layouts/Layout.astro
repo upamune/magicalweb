@@ -10,6 +10,8 @@ interface Props {
 	image?: string;
 	type?: "website" | "article";
 	publishedTime?: string;
+	// 同じページを複数のURLで出すときに正規URLを指定する（例: /ep/heisei → /ep/302）
+	canonicalPath?: string;
 }
 
 const {
@@ -18,9 +20,10 @@ const {
 	image = "https://www.magical.fm/ogp.png",
 	type = "website",
 	publishedTime,
+	canonicalPath = Astro.url.pathname,
 } = Astro.props;
 
-const canonicalURL = new URL(Astro.url.pathname, "https://www.magical.fm");
+const canonicalURL = new URL(canonicalPath, "https://www.magical.fm");
 
 // 画像URLが相対パスの場合は絶対URLに変換
 const ogImageUrl = image.startsWith("http")

@@ -33,17 +33,31 @@ const parser = new Parser({
 	},
 });
 
-function extractEpisodeNumber(title) {
-	const match = title.match(/(\d+):/);
-	if (match) {
-		return Number.parseInt(match[1], 10);
+// 話数は「#263: 〜」のようなタイトル先頭の番号を優先する。
+// 最近はタイトルに番号を入れないので、その場合は <itunes:episode> から取る。
+// （古い回は itunes:episode がタイトルの番号とずれていることがあるため、タイトル優先）
+function extractEpisodeNumber(item) {
+	const titleMatch = (item.title ?? "").match(/^#?(\d+):/);
+	if (titleMatch) {
+		return Number.parseInt(titleMatch[1], 10);
 	}
-	return 0;
+	const itunesEpisode = Number.parseInt(
+		item.episode ?? item.itunes?.episode ?? "",
+		10,
+	);
+	return Number.isNaN(itunesEpisode) ? 0 : itunesEpisode;
+}
+
+// タイトル先頭の「#263: 」「263: 」を除いた本文
+function stripEpisodePrefix(title) {
+	return title.replace(/^#?\d+:\s*/, "").trim();
 }
 
 function extractListenId(content) {
 	if (!content) return null;
-	const match = content.match(/https:\/\/listen\.style\/p\/magicalfm\/([a-z0-9]+)/);
+	const match = content.match(
+		/https:\/\/listen\.style\/p\/magicalfm\/([a-z0-9]+)/,
+	);
 	return match ? match[1] : null;
 }
 
@@ -57,22 +71,19 @@ async function fetchAndSaveEpisodes() {
 		try {
 			const customPathsContent = await fs.readFile(
 				path.join(OUTPUT_DIR, CUSTOM_PATHS_FILE),
-				"utf-8"
+				"utf-8",
 			);
 			customPathsMap = JSON.parse(customPathsContent);
 		} catch (error) {
-			console.log("No custom paths file found, continuing without custom paths");
+			console.log(
+				"No custom paths file found, continuing without custom paths",
+			);
 		}
 
 		const episodes = feed.items.map((item) => {
-			const number = extractEpisodeNumber(item.title ?? "");
-			const titleContent =
-				item.title?.split(":").slice(1).join(":").trim() || item.title;
-			const title = item.title?.startsWith("#")
-				? item.title
-				: number === 0
-					? titleContent
-					: `#${number}: ${titleContent}`;
+			const number = extractEpisodeNumber(item);
+			const titleContent = stripEpisodePrefix(item.title ?? "");
+			const title = number === 0 ? titleContent : `#${number}: ${titleContent}`;
 
 			// Parse the date and validate it before formatting
 			const dateObj = new Date(item.pubDate ?? new Date());
@@ -81,11 +92,12 @@ async function fetchAndSaveEpisodes() {
 			// Extract LISTEN ID and check for custom path
 			const listenId = extractListenId(item.content ?? "");
 			// 優先順位: 1. 手動設定 (custom-paths.json) 2. 番号なしの場合はLISTEN ID 3. undefined
-			const customPath = listenId && customPathsMap[listenId]
-				? customPathsMap[listenId]
-				: (number === 0 && listenId)
-					? listenId
-					: undefined;
+			const customPath =
+				listenId && customPathsMap[listenId]
+					? customPathsMap[listenId]
+					: number === 0 && listenId
+						? listenId
+						: undefined;
 
 			const episode = {
 				title,

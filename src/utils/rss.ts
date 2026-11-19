@@ -1,7 +1,11 @@
 import { format, parseISO } from "date-fns";
 import { ja } from "date-fns/locale";
 import DOMPurify from "isomorphic-dompurify";
+import episodeAliases from "../data/episode-aliases.json";
 import episodesData from "../data/episodes.json";
+
+// 以前のURL（話数が取れていなかった頃の /ep/heisei など）→ 話数
+const aliasToNumber: Record<string, number> = episodeAliases;
 
 export interface Episode {
 	title: string;
@@ -121,6 +125,11 @@ export async function getEpisodeBySlug(slug: string): Promise<Episode | null> {
 	// First try to find by custom path
 	let episode = episodesData.find((ep) => ep.customPath === slug);
 
+	// 以前のURLも同じ回として扱う
+	if (!episode && Object.hasOwn(aliasToNumber, slug)) {
+		episode = episodesData.find((ep) => ep.number === aliasToNumber[slug]);
+	}
+
 	// If not found, try to parse as number
 	if (!episode) {
 		const number = Number.parseInt(slug);
@@ -173,5 +182,8 @@ export function toEpisodeListItem(episode: Episode) {
 }
 
 export async function getAllEpisodeSlugs(): Promise<string[]> {
-	return episodesData.map((episode) => getEpisodeSlug(episode));
+	return [
+		...episodesData.map((episode) => getEpisodeSlug(episode)),
+		...Object.keys(aliasToNumber),
+	];
 }
