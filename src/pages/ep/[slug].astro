@@ -86,6 +86,7 @@ const jsonLd = JSON.stringify({
 	image={ogImage}
 	type="article"
 	publishedTime={publishedIso}
+	canonicalPath={`/ep/${episodeSlug}`}
 >
 	<script type="application/ld+json" set:html={jsonLd} is:inline />
 	<Header client:load />

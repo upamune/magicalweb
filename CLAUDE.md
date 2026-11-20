@@ -20,7 +20,7 @@ bun scripts/generate-og.jsx --thumbnail 280 # 動画用サムネイル(16:9)を 
 
 ## アーキテクチャの要点
 
-- **データフロー**: GitHub Actions が `scripts/fetch-episodes.js` で RSS → `src/data/episodes.json` を更新 → 全ページ静的生成。エピソードURLは `src/data/custom-paths.json` の `customPath` が優先され、なければ話数
+- **データフロー**: GitHub Actions が `scripts/fetch-episodes.js` で RSS → `src/data/episodes.json` を更新 → 全ページ静的生成。エピソードURLは `src/data/custom-paths.json` の `customPath` が優先され、なければ話数。話数はタイトル先頭の `#N:` を優先し、なければ RSS の `<itunes:episode>`。URLが変わった回の旧URLは `src/data/episode-aliases.json` で残す（canonical は正規URL）
 - **`src/utils/rss.ts`** がエピソード取得の唯一の入口。表示用タイトルは `getEpisodeDisplayTitle()`（先頭の `#263:` を除去。話数は別途チップで表示するため）、一覧用の軽量データは `toEpisodeListItem()` を使う
 - **React island は4つだけ**（Header / EpisodeList / PlayButton / AudioPlayer）。静的にできるUIは Astro コンポーネントにする
 - **AudioPlayer は Layout.astro 内で `transition:persist`** しており、ページ遷移しても再生が途切れない。再生状態は `src/store/audioStore.ts`（zustand + localStorage）で共有され、EpisodeList / PlayButton は同じストアを見て再生中表示を同期する
