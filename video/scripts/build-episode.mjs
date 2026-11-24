@@ -363,7 +363,10 @@ const REPLACEMENTS = [
 	["リポジトと", "リポジトリと"],
 	["ミューズ", "Muse"],
 	["なんかdotでも", "なんかDotsでも"],
-	["ハッシュタグ「マヂカル.fm」全部小文字、", "ハッシュタグmagicalfm（全部小文字）"],
+	[
+		"ハッシュタグ「マヂカル.fm」全部小文字、",
+		"ハッシュタグmagicalfm（全部小文字）",
+	],
 ];
 const escapeRe = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 const applyReplacements = (text) => {
