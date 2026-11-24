@@ -657,15 +657,31 @@ if (!fs.existsSync(audioPath)) {
 }
 const outAudio = path.join(videoDir, "public", "episode.mp3");
 if (cuts.length) {
-	const drop = cuts.map(([a, b]) => `between(t,${a},${b})`).join("+");
+	// aselect はフレーム（約23ms）単位でしか切れず、字幕の時刻（shiftTime）とずれていくので atrim で切る
+	const keep = [];
+	let pos = 0;
+	for (const [a, b] of cuts) {
+		if (a > pos) keep.push([pos, a]);
+		pos = Math.max(pos, b);
+	}
+	keep.push([pos, null]);
+	const graph = [
+		...keep.map(
+			([a, b], i) =>
+				`[0:a]atrim=start=${a}${b == null ? "" : `:end=${b}`},asetpts=PTS-STARTPTS[k${i}]`,
+		),
+		`${keep.map((_, i) => `[k${i}]`).join("")}concat=n=${keep.length}:v=0:a=1[out]`,
+	].join(";");
 	execFileSync("ffmpeg", [
 		"-v",
 		"error",
 		"-y",
 		"-i",
 		audioPath,
-		"-af",
-		`aselect='not(${drop})',asetpts=N/SR/TB`,
+		"-filter_complex",
+		graph,
+		"-map",
+		"[out]",
 		"-c:a",
 		"libmp3lame",
 		"-b:a",
