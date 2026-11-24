@@ -31,15 +31,11 @@ const stamp = (t) => {
 const cues = [];
 for (const page of data.pages) {
 	for (const line of page.lines) {
-		let text = line
+		const text = line
 			.map((w) => w.text)
 			.join("")
 			.trim();
 		if (!text) continue;
-		// うぱは「みちるださん」と表記する。ゲストが本当に「みちるさん」と呼ぶ発話はそのまま
-		if (page.speaker === "upamune") {
-			text = text.replaceAll("みちるさん", "みちるださん");
-		}
 		cues.push({
 			start: line[0].start,
 			end: line.at(-1).end,

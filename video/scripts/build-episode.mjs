@@ -351,6 +351,19 @@ const REPLACEMENTS = [
 	["の、なん-なにが？", "(?)の、なん…なにが？"],
 	["入ら-入らない", "入…入らない"],
 	["magicalfm、全部小文字", "magicalfm（全部小文字）"],
+	["11に出してきたよ", "に出してきたよ"],
+	["SpaceXEye", "SpaceX AI"],
+	["伊勢言", "いせ源"],
+	["伊勢源", "いせ源"],
+	["トポロジー", "TOPOLOGIE"],
+	["猫のしっぽ", "ねこのしっぽ"],
+	["ウタリフォーム", "おたよりフォーム"],
+	["ビックラブ", "ビッグラブ"],
+	["クラウドコード", "Claude Code"],
+	["リポジトと", "リポジトリと"],
+	["ミューズ", "Muse"],
+	["なんかdotでも", "なんかDotsでも"],
+	["ハッシュタグ「マヂカル.fm」全部小文字、", "ハッシュタグmagicalfm（全部小文字）"],
 ];
 const escapeRe = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 const applyReplacements = (text) => {
@@ -569,7 +582,11 @@ const mergeShort = (parts) => {
 };
 
 const chunksOf = (seg) => {
-	const text = applyReplacements(proofread[seg.id] ?? seg.text);
+	let text = applyReplacements(proofread[seg.id] ?? seg.text);
+	// うぱは「みちるださん」と表記する。ゲストが本当に「みちるさん」と呼ぶ発話はそのまま
+	if (speakerMap[seg.speaker] === "upamune") {
+		text = text.replace(/みちる(\|?)さん/g, "みちるだ$1さん");
+	}
 	const parts = mergeShort(
 		text
 			.split("|")

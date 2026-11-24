@@ -79,7 +79,7 @@ bun scripts/build-episode.mjs N
 - 無音区間は既定で削除される（Logic Pro と同じ -28dB・1.2秒以上・前後0.2秒を残す。`--silence-db/--silence-min/--silence-pad` で調整、`--keep-silence` で無効）。音声を切ったぶん字幕時刻も詰めるので、完成動画は元の mp3 より短くなる（LISTEN の音声とは長さが合わない）
 - みちるだの代わりにゲストが出た回は `--guest 黄身子:guest-kimiko.png --speakers kimiko=guest,upamune=upamune`
   （アバターは `public/guest-*.png`）。左のアバターと字幕色がゲストになり、`build-vtt.mjs` の話者名もゲスト名になる。
-  ゲストが「みちるさん」と呼ぶのは本人の呼び方なので直さない（VTT はうぱの発話だけ「みちるださん」にする）
+  ゲストが「みちるさん」と呼ぶのは本人の呼び方なので直さない（`build-episode.mjs` がうぱの発話だけ「みちるださん」にする）
 - 生成物 `src/data/episode.json` / `public/episode.mp3` は git 管理外
 
 ### 3. 表記チェック（重要）
