@@ -16,7 +16,7 @@ description: R2 公開済みの切り抜きクリップを YouTube Shorts と In
 | 依頼 | コマンド |
 |---|---|
 | 「未投稿を1本」「続き」「何か上げて」 | `--pending 1 --order playback`（再生回数順が既定。話数順なら `--oldest`） |
-| 「#279 上げて」 | `out/magicalfm-279-clip.mp4 279`（2本目は `-clip-2`） |
+| 「#279 上げて」 | `bun scripts/publish-social.mjs out/magicalfm-279-clip.mp4 279`（2本目は `-clip-2`） |
 | 片方のプラットフォームだけ | `--to youtube` / `--to instagram`（未投稿側だけ `--pending` が拾う） |
 | make-clip 直後 | 今レンダリングした `out/magicalfm-N-clip*.mp4` |
 
