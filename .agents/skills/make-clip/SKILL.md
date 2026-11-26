@@ -29,13 +29,15 @@ mp3 をスクラッチパッドにダウンロードする。
 **予約投稿（未公開エピソード）の場合**: RSSにまだ載っていないので episodes.json は使えない。
 
 **LISTENのプレビュー共有URL**（`https://listen.style/p/magicalfm/<slug>/<共有トークン>` の
-4セグメント形式）をユーザーからもらえれば、**ログイン不要の curl 1発で全情報が取れる**:
+4セグメント形式）をユーザーからもらえれば、**ログイン不要の curl 1発で全情報が取れる**。
+`fetch-listen-transcript.mjs` は `video/scripts/` 配下なので、このブロックは `video/` で実行する:
 
 ```bash
+cd video   # リポジトリルートから
 curl -sL "<プレビューURL>" -o $SCRATCHPAD/preview.html
-grep -o '<title>[^<]*</title>' preview.html                 # 「N: タイトル - マヂカル.fm - LISTEN」→ number/title
-grep -oE 'https://[^"]*\.mp3' preview.html | head -1         # 音声のCDN URL（これをDLする）
-grep -oE '202[0-9]-[0-9]{2}-[0-9]{2}' preview.html | sort -u # 配信予定日
+grep -o '<title>[^<]*</title>' $SCRATCHPAD/preview.html                 # 「N: タイトル - マヂカル.fm - LISTEN」→ number/title
+grep -oE 'https://[^"]*\.mp3' $SCRATCHPAD/preview.html | head -1         # 音声のCDN URL（これをDLする）
+grep -oE '202[0-9]-[0-9]{2}-[0-9]{2}' $SCRATCHPAD/preview.html | sort -u # 配信予定日
 bun scripts/fetch-listen-transcript.mjs $SCRATCHPAD/preview.html listen.json  # 話者分離もこのHTMLから取れる
 ```
 
@@ -76,7 +78,7 @@ $SCRATCHPAD/venv/bin/mlx_whisper ep.mp3 \
 ### 3. ハイライト候補の検出
 
 ```bash
-cd video && bun scripts/find-highlights.mjs <ep.mp3> <whisper.json> --top 5
+cd video && bun scripts/find-highlights.mjs <ep.mp3> <文字起こしJSON> --top 5
 ```
 
 RMSエネルギー（最大値で正規化）に窓内の `[笑い]` イベント数を加点したスコア上位の窓が文字起こし付きで出る。**スコアはあくまで候補**。
@@ -91,10 +93,10 @@ RMSエネルギー（最大値で正規化）に窓内の `[笑い]` イベン�
 
 ### 4. 字幕プランの作成（最重要・品質の核）
 
-選んだ窓の単語タイムスタンプを whisper JSON から抽出し、
+選んだ窓の単語タイムスタンプを文字起こしJSON から抽出し、
 `video/plans/ep-N.json` を**手組み**する（既存の `ep-263.json` が見本）。
 
-**校正（必須）**: Whisper の生出力は誤認識があるため、文脈から必ず直す:
+**校正（必須）**: 文字起こしの生出力は誤認識があるため、文脈から必ず直す:
 
 - 固有名詞（マヂカル.fm / michiru_da / upamune / Slack用語 など）
 - 数字・記号の表記（例: プラ1 → +1）
@@ -153,7 +155,7 @@ bunx remotion render src/index.ts Clip out/magicalfm-N-clip.mp4
 
 ### 6. 検証（スキップ禁止）
 
-- `ffmpeg -ss <秒> -i out.mp4 -frames:v 1 check.png` で **3フレーム以上** 抽出して確認:
+- `ffmpeg -ss <秒> -i out/magicalfm-N-clip.mp4 -frames:v 1 check.png` で **3フレーム以上** 抽出して確認:
   - 字幕のハイライトが発話タイミングと合っているか（wordのstart/endと照合）
   - 行がカードからはみ出していないか
   - オチページが特大・中央になっているか

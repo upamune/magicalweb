@@ -23,7 +23,7 @@ description: エピソード全編に字幕を付けた横動画（1920×1080・
 
 素材は2通りある。
 
-- **収録データ**（`magicalfm/magicutils/mready/output/epN_*/` に話者ごとの `<名前>_normalized.wav`）: 手順 0 から
+- **収録データ**（`~/magicalfm/magicutils/mready/output/epN_*/` に話者ごとの `<名前>_normalized.wav`）: 手順 0 から
 - **公開済みの回**（LISTEN の音声）: 手順 1 から
 
 ### 0. 収録データから音声を作る（Logic Pro の手順の再現）

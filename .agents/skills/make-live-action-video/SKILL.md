@@ -85,7 +85,7 @@ Resolveで会話を整え、必要なら同梱`master_audio.py`で2パス音量�
 
 工程状態は`inputs-checked → synced → master-ready → captions-ready → preview-approved → assets-ready → resolve-rendering → render-complete → verified-local-render`を目安に、対象ファイル・ハッシュ・処理範囲・ジョブIDとともに記録する。必要な工程がない修正は省略できる。
 `privacyReview`は別フィールドで管理し、人間が全使用区間を確認するまで`pending-human-review`を保つ。
-`prepare-episode-video.mjs --reviewed`はその確認が伝えられた素材にだけ使う。ローカル確認用を作るためにレビュー済みreceiptを偽造しない。
+`video/scripts/prepare-episode-video.mjs --reviewed`はその確認が伝えられた素材にだけ使う。ローカル確認用を作るためにレビュー済みreceiptを偽造しない。
 
 長い処理は進捗と出力を確認して最後まで進める。Macロックや未承認の外部送信など、権限が必要な境界では具体的な必要操作を伝える。ローカル素材処理は続行可能なら進める。
 外部公開・アップロード・コミット・pushは別依頼として扱う。
