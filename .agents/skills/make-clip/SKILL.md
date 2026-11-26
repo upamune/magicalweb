@@ -132,16 +132,16 @@ RMSエネルギー（最大値で正規化）に窓内の `[笑い]` イベン�
 
 ```bash
 # エピソード説明文の「LISTENで開く」リンクのURLを渡す
-bun scripts/fetch-listen-transcript.mjs https://listen.style/p/magicalfm/<slug> listen.json
+cd video && bun scripts/fetch-listen-transcript.mjs https://listen.style/p/magicalfm/<slug> listen.json
 ```
 
 - 出力は `[{start, end, speaker(0|1), text}]`。**0/1 が誰かはエピソードごとに任意**なので、
   会話の文脈（誰が質問しているか・名前の呼びかけ）か F0（michiru ≈ 167Hz / upamune ≈ 115Hz、
   librosa の yin で確認）でそのエピソードのラベル対応を決める
 - **話者が変わるところでページを割る**。1ページ内に相槌が混ざる場合は分割する
-- LISTEN のテキストは Whisper と独立した第二のASRなので、**校正の突き合わせにも使う**
+- LISTEN のテキストは文字起こしと独立した第二のASRなので、**校正の突き合わせにも使う**
   （両者が食い違う箇所は要注意ポイント）
-- LISTEN の時刻は秒単位で丸いので、カラオケ用の単語タイムスタンプは引き続き Whisper を使う
+- LISTEN の時刻は秒単位で丸いので、カラオケ用の単語タイムスタンプは引き続き文字起こしJSONを使う
 - 笑いながらの発話はF0が上がり誤判定しやすい。ツッコミの話者は特にLISTEN側を信頼する
 
 ### 5. ビルドとレンダリング
