@@ -37,7 +37,7 @@ T=.agents/skills/make-episode-video/scripts/tracks.py
 uv run $T mix <mready の epN_* フォルダ> <work>                 # ゲート→ミックス→無音カット。<work>/head.mp3（冒頭1分）も書く
 # head.mp3 を ElevenLabs で文字起こしし、「マヂカル.fm は関西人の〜」の名乗りの直前の秒数を決める。
 # 名乗り前の音量チェックや言い直しは切る。名乗り自体の噛み・言い直しは面白いので残す
-uv run $T master <work> video/transcripts/ep-N.mp3 --trim <秒>  # 冒頭カット→OP（op_env.py、声は8秒目から）→ -17 LUFS の mp3
+uv run $T master <work> video/transcripts/ep-N.mp3 --trim <秒>  # 冒頭カット→OP（op_env.py、声は8秒目から。声の前だけ `--intro-db -6`）→ -17 LUFS の mp3
 ```
 
 続けて全体を ElevenLabs に送り、話者は**トラックの音量で決め直す**（ミックス上の diarize はほぼ1人に寄って使えない）:

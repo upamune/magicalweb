@@ -25,6 +25,8 @@ import soundfile as sf
 SILENCE_DB, SILENCE_MIN, SILENCE_PAD = -28, 1.2, 0.2
 FADE_SEC = 0.005
 OP_VOICE_START = 8.0
+# 声が入る前の OP だけを下げる。+8dB のままだと本編の会話より約6dB大きかった（#305 実測: OP冒頭 -12.3 LUFS、会話 約-18 LUFS）
+OP_INTRO_DB = -6
 VOICE_DELAY = 7.8
 OP_ENV = Path(__file__).resolve().parents[2] / "make-live-action-video/scripts/op_env.py"
 
@@ -127,7 +129,7 @@ def cmd_master(args):
     (work / "tracks.json").write_text(json.dumps(state, indent=1))
     op = work / "op_env.wav"
     op.unlink(missing_ok=True)
-    run("uv", "run", str(OP_ENV), str(op), str(OP_VOICE_START))
+    run("uv", "run", str(OP_ENV), str(op), str(OP_VOICE_START), "--intro-db", str(OP_INTRO_DB))
     delay = int(VOICE_DELAY * 1000)
     run("ffmpeg", "-y", "-v", "error", "-ss", str(args.trim), "-i", str(work / "voice.wav"), "-af", f"aresample=48000,adelay={delay}|{delay}", "-c:a", "pcm_f32le", str(work / "voice_trim.wav"))
     raw = work / "master_raw.wav"
