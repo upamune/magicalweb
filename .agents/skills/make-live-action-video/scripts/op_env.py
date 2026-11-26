@@ -18,8 +18,9 @@ UNDER_VOICE_DB = -17
 FADE = [(28, -18), (40, -20), (52, -22), (62, -24), (76, -28), (86, -33), (93, -42)]
 
 
-def envelope(seconds, voice, duration, highlight_db):
-    points = [(0, 0), (voice, 0), (voice + 0.6, UNDER_VOICE_DB)] + [p for p in FADE if p[0] > voice + 0.6] + [(duration, -70)]
+def envelope(seconds, voice, duration, highlight_db, intro_db=0):
+    # intro_db shifts only the part before the first voice; the bed under the voice stays relative to highlight_db.
+    points = [(0, intro_db), (voice, intro_db), (voice + 0.6, UNDER_VOICE_DB)] + [p for p in FADE if p[0] > voice + 0.6] + [(duration, -70)]
     return highlight_db + np.interp(seconds, [p[0] for p in points], [p[1] for p in points]), points
 
 
@@ -29,17 +30,18 @@ def main():
     parser.add_argument("voice_start", type=float, help="first voice in the output timeline, seconds from the OP start")
     parser.add_argument("--op", default=OP)
     parser.add_argument("--highlight-db", type=float, default=8)
+    parser.add_argument("--intro-db", type=float, default=0, help="extra dB for the part before the first voice only")
     args = parser.parse_args()
     if args.output.exists():
         raise SystemExit("Use a new output name")
     audio, rate = sf.read(args.op, dtype="float32", always_2d=True)
     seconds = np.arange(len(audio)) / rate
-    gain_db, points = envelope(seconds, args.voice_start, len(audio) / rate, args.highlight_db)
+    gain_db, points = envelope(seconds, args.voice_start, len(audio) / rate, args.highlight_db, args.intro_db)
     gain = 10 ** (gain_db / 20)
     tail = min(len(gain), int(0.5 * rate))
     gain[-tail:] *= np.linspace(1, 0, tail)
     sf.write(args.output, (audio * gain[:, None]).astype(np.float32), rate, subtype="FLOAT")
-    args.output.with_suffix(".json").write_text(json.dumps({"op": args.op, "voiceStart": args.voice_start, "highlightDb": args.highlight_db, "pointsDb": points}, indent=1) + "\n")
+    args.output.with_suffix(".json").write_text(json.dumps({"op": args.op, "voiceStart": args.voice_start, "highlightDb": args.highlight_db, "introDb": args.intro_db, "pointsDb": points}, indent=1) + "\n")
     print(json.dumps({"output": str(args.output), "sampleRate": rate, "seconds": round(len(audio) / rate, 3)}))
 
 
